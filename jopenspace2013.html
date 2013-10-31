@@ -53,6 +53,7 @@
                             <li>stavíte platformu</li>
                             <li>vyvíjíte obří jedno-kontejnerovou aplikaci</li>
                             <li>chcete rozbít a postupně povyměňovat legacy kód</li>
+                            <li>chcete dát příležitost dodavatelům 3tích stran</li>
                         </ul>
                     </div>
                     <div style="width: 48%; display: inline-block; vertical-align: top;">
@@ -71,7 +72,6 @@
                         <ul style="height: 70%">
                             <li>stavěli jsme na tom, co známe</li>
                             <li>neměli jsme žádné velké ambice</li>
-                            <li>začali jsme s málem</li>
                             <li>byli jsme si vědomi limitů</li>
                         </ul>
                         <h3 style="margin-top: 1em; color: green">customizace Spring Frameworku</h3>
@@ -103,7 +103,7 @@
                     <h2>Nejdůležitější je</h2>
                     <img src="img/jopenspace2013/Bill-of-Rights-scroll.png" style="float: left; height: 280px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
                     <ol style="width: 70%">
-                        <li>dokonalá izolace
+                        <li>kvalitní izolace
                             <ul style="font-size: 0.8em; line-height: 1.2em">
                                 <li>tak aby nešla jednoduše obejít</li>
                                 <li>když to obejít půjde, tak to někdo udělá</li>
@@ -126,18 +126,56 @@
                     </ol>
                     <p class="fragment" style="margin-top: 1em">... a možnost změny za běhu aplikace se šikne!</p>
                 </section>
-                <section data-background="img/backgrounds/black.jpg">
-                    <img src="img/jopenspace2013/burger.png" style="position: absolute; left: -300px; top: 0px; border: 0px; margin: 0px; background-color: transparent; box-shadow: none"/>
-                    <h2>Zapouzdřit modul ve všech ohledech</h2>
-                    <p>... je pěkný oříšek a zamotá vám hlavu, stejně jako nám.</p>
-                    <ul style="margin-top: 1em; font-size: 110%; line-height: 120%; width: 80%">
-                        <li>evoluce datového modelu - verzování (ala&nbsp;<a href="http://www.liquibase.org/">Liquibase</a>)</li>
-                        <li>rozšiřování datového modelu bez obavy z narušení stávající logiky</li>
-                        <li>zapouzdření view do modulu (FreeMarker, <span style="text-decoration: line-through">JSP</span>)</li>
-                        <li>dynamická registrace servletů a filtrů (<span style="text-decoration: line-through">Servlet 3.0</span>)</li>
-                        <li>web frameworky s modularizací nepočítají</li>
-                    </ul>
-                    <p style="margin-top: 1em; font-size: 110%">Ultimátní meta: mít možnost nastartovat stejný modul vícekrát.</p>
+                <section>
+                    <section data-background="img/backgrounds/black.jpg">
+                        <img src="img/jopenspace2013/burger.png" style="position: absolute; left: -300px; top: 0px; border: 0px; margin: 0px; background-color: transparent; box-shadow: none"/>
+                        <h2>Zapouzdřit modul ve všech ohledech</h2>
+                        <p>... je pěkný oříšek a <a href="http://www.javacodegeeks.com/2011/09/real-modular-web-applications-why-there.html">zamotá vám hlavu</a>, stejně jako nám.</p>
+                        <ul style="margin-top: 1em; font-size: 110%; line-height: 120%; width: 80%">
+                            <li>evoluce datového modelu - verzování (ala&nbsp;<a href="http://www.liquibase.org/">Liquibase</a>)</li>
+                            <li>rozšiřování datového modelu bez obavy z narušení stávající logiky</li>
+                            <li>zapouzdření view do modulu (FreeMarker, <span style="text-decoration: line-through">JSP</span>)</li>
+                            <li>dynamická registrace servletů a filtrů (<span style="text-decoration: line-through"><a
+                                    href="http://stackoverflow.com/questions/4490648/adding-a-dynamic-servlet-using-servlet-3-0-throws-exception">Servlet 3.0</a></span>)</li>
+                            <li>web frameworky s modularizací nepočítají</li>
+                        </ul>
+                        <p style="margin-top: 1em; font-size: 110%"><u>Ultimátní meta:</u> mít možnost nastartovat stejný modul vícekrát.</p>
+                    </section>
+                    <section id="openclosed" data-background="img/jopenspace2013/minecraft.png">
+                        <div  style="background-color: #000000; padding: 1em; box-shadow: 0 0 30px black, 0 0 30px black, 0 0 30px black;">
+                            <h2>Náš přístup k rozšiřitelnosti</h2>
+                            <p>stojí na několika základních kamenech</p>
+                            <ul style="width: 60%">
+                                <li>možnost konfigurovat aplikaci za běhu
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>bez změny WARu, dokážeme kompletně překopat obsah a do značné míry i funkcionalitu webu</li>
+                                        <li>dynamické skládání stromu Spring kontextů</li>
+                                        <li>za plného provozu aplikace - původní kontexty řeší požadavky, zatímco nové startují</li>
+                                    </ul>
+                                </li>
+                                <li>skriptování v Groovy</li>
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>Pandořina skříňka, která zachraňuje životy</li>
+                                    </ul>
+                                <li>vlastní ORM framework (WTF!)
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>Spring JDBC template + Cglib proxies</li>
+                                        <li>bezpečné rozšiřování datového modelu za běhu</li>
+                                        <li>ukládání a dotazování dat v nových sloupcích a tabulkách</li>
+                                    </ul>
+                                </li>
+                                <li>vlastní komponentový framework (WTF!)
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>vlastní servlety + Freemarker</li>
+                                        <li>modifikace struktury stránek (i AOP like)</li>
+                                        <li>přidávání a odebírání stránek za běhu</li>
+                                        <li>lokalizace a změny HTML šablon za běhu</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <img src="img/jopenspace2013/lego.png" style="width: 27%; border: 0px; background-color: transparent;"/>
+                        </div>
+                    </section>
                 </section>
                 <section>
                     <section data-background="img/jopenspace2013/thorns.jpg">
@@ -156,32 +194,6 @@
                             <h2>Seznam použitých modulů na Runczech.com</h2>
                             <img src="img/jopenspace2013/runczech.png" style="width: 130%">
                             <p class="fragment">Kdo napočítal 21 má u mě pivo!<br/>Startup time 70s <img src="img/jopenspace2013/sad-smiley.png" width="40px" style="border: 0px; background-color: transparent; margin: 0px"/></p>
-                        </div>
-                    </section>
-                    <section id="openclosed" data-background="img/jopenspace2013/minecraft.png">
-                        <div  style="background-color: #000000; padding: 1em; box-shadow: 0 0 30px black, 0 0 30px black, 0 0 30px black;">
-                            <h2>Náš přístup k rozšiřitelnosti</h2>
-                            <p>stojí na několika základních kamenech</p>
-                            <ul style="width: 60%">
-                                <li>možnost konfigurovat aplikaci za běhu
-                                    <small>bez změny WARu, dokážeme kompletně překopat obsah a do značné míry i funkcionalitu webu</small>
-                                </li>
-                                <li>skriptování v Groovy</li>
-                                <li>vlastní ORM framework
-                                    <ul style="font-size: 0.6em; line-height: 1.2em">
-                                        <li>bezpečné rozšiřování datového modelu za běhu</li>
-                                        <li>ukládání a dotazování dat v nových sloupcích a tabulkách</li>
-                                    </ul>
-                                </li>
-                                <li>vlastní komponentový framework
-                                    <ul style="font-size: 0.6em; line-height: 1.2em">
-                                        <li>modifikace struktury stránek (i AOP like)</li>
-                                        <li>přidávání a odebírání stránek za běhu</li>
-                                        <li>lokalizace a změny HTML šablon za běhu</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <img src="img/jopenspace2013/lego.png" style="width: 27%; border: 0px; background-color: transparent;"/>
                         </div>
                     </section>
                 </section>
