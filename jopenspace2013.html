@@ -45,128 +45,158 @@
 						<small>Přednáší <a href="http://blog.novoj.net">Honza Novotný</a> z <a href="http://www.fg.cz">FG Forrest</a></small>
 					</p>
 				</section>
+                <section data-background="#000000">
+                    <h2>Modularita je dobrá, když ...</h2>
+                    <div style="width: 48%; display: inline-block; vertical-align: top;">
+                        <img src="img/jopenspace2013/good.png" width="60%" style="border: 0"/>
+                        <ul style="height: 70%">
+                            <li>stavíte platformu</li>
+                            <li>vyvíjíte obří jedno-kontejnerovou aplikaci</li>
+                            <li>chcete rozbít a postupně povyměňovat legacy kód</li>
+                        </ul>
+                    </div>
+                    <div style="width: 48%; display: inline-block; vertical-align: top;">
+                        <img src="img/jopenspace2013/bad.png" width="60%" style="border: 0"/>
+                        <ul style="height: 70%; text-decoration: line-through">
+                            <li>stavíte jednoúčelové aplikace</li>
+                            <li>máte komponentovou architekturu vyššího řádu (SOA, ESB)</li>
+                            <li>nemáte ambice tvořit znovupoužitelné portofolio kódu (NIH haters)</li>
+                        </ul>
+                    </div>
+                </section>
                 <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Princip "good enough"</h1>
-                    <p>
-                        <div style="width: 48%; display: inline-block; vertical-align: top;">
-                            <img src="img/jopenspace2013/ak47.png" width="90%"/>
-                            <div style="height: 70%">
-                                <ul>
-                                    <li>stavíme na tom, co známe</li>
-                                    <li>známe své limity</li>
-                                    <li>od jednoduššího ke složitějšímu</li>
-                                </ul>
-                            </div>
-                            <h3 style="margin-top: 1em; color: green">customizace Spring Frameworku</h3>
-                        </div>
-                        <div style="width: 48%; display: inline-block;">
-                            <img src="img/jopenspace2013/F2000.png" width="90%"/>
-                            <ul style="height: 70%; text-decoration:line-through">
-                                <li>adopce externího modulového rámce</li>
-                                <li>pohybujeme se na neznámé půdě</li>
-                                <li>zjednodušování rámce pro vlastní použití</li>
+                    <h2>Začít se dá s málem</h2>
+                    <div style="width: 48%; display: inline-block; vertical-align: top;">
+                        <img src="img/jopenspace2013/ak47.png" width="90%"/>
+                        <ul style="height: 70%">
+                            <li>stavěli jsme na tom, co známe</li>
+                            <li>neměli jsme žádné velké ambice</li>
+                            <li>začali jsme s málem</li>
+                            <li>byli jsme si vědomi limitů</li>
+                        </ul>
+                        <h3 style="margin-top: 1em; color: green">customizace Spring Frameworku</h3>
+                    </div>
+                    <div style="width: 48%; display: inline-block;">
+                        <img src="img/jopenspace2013/F2000.png" width="90%"/>
+                        <ul style="height: 70%;">
+                            <li>existují industriální standardy s letitou historií</li>
+                            <li>řeší miliony věcí</li>
+                            <li>jen jsou trochu komplikované</li>
+                        </ul>
+                        <h3 style="margin-top: 1em; color: red">OSGI</h3>
+                    </div>
+                </section>
+                <section data-background="#000000">
+                    <h2>Celé je to jen o ...</h2>
+                    <p>aplikaci pravidel objektového návrhu na vyšší úrovni.</p>
+                    <img src="img/jopenspace2013/wordle.png" style="border: 0px;">
+                    <ul style="display: none">
+                        <li title="Single Responsibility Principle, Open-Closed Principle, Liskov Substitute Principle, Interface Segregation Principle, Dependency Inversion Principle">
+                            <a href="http://www.zdrojak.cz/clanky/navrhove-principy-solid/">SOLID</a>
+                        </li>
+                        <li title="Don't Repeat Yourself"><a href="http://www.zdrojak.cz/clanky/navrhove-principy-dry/">DRY</a></li>
+                        <li><a href="http://www.zdrojak.cz/clanky/grasp-2-high-cohesion/">High cohesion</a></li>
+                        <li><a href="http://www.zdrojak.cz/clanky/grasp-3-low-coupling/">Low coupling</a></li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h2>Nejdůležitější je</h2>
+                    <img src="img/jopenspace2013/Bill-of-Rights-scroll.png" style="float: left; height: 280px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
+                    <ol style="width: 70%">
+                        <li>dokonalá izolace
+                            <ul style="font-size: 0.8em; line-height: 1.2em">
+                                <li>tak aby nešla jednoduše obejít</li>
+                                <li>když to obejít půjde, tak to někdo udělá</li>
                             </ul>
-                            <h3 style="margin-top: 1em; color: red">OSGI</h3>
-                        </div>
-                    </p>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Základní listina práv</h1>
-                    <img src="img/jopenspace2013/Bill-of-Rights-scroll.png" style="float: left; height: 300px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
-                    <ul style="margin-top: 1em; font-size: 150%; line-height: 130%">
-                        <li>všichni jsme si rovni</li>
-                        <li>každý má právo na soukromí</li>
-                        <li>musíme se umět domluvit</li>
-                        <li>každý má své poslání</li>
-                        <li>jeden doplňuje druhého</li>
-                        <li>každý má právo na svého dvojníka</li>
-                    </ul>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>A přínosy?</h1>
-                    <img src="img/jopenspace2013/bright-future-ahead.png" style="float: right; height: 300px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
-                    <ul style="margin-top: 1em; font-size: 120%; line-height: 130%; width: 65%">
-                        <li>rozbití monolitu a snížení provázanosti</li>
-                        <li>zpřístupnění programování základního produktu firmy více vývojářům</li>
-                        <li>lepší dělba práce</li>
-                        <li>princip přirozeného výběru</li>
-                        <li>variabilita</li>
-                        <li>kompozice</li>
-                        <li>možnosti zásahů do aplikace za běhu</li>
-                    </ul>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <section data-background="img/backgrounds/brown.jpg">
-                        <h1>Izolace business vrstvy</h1>
-                        <img src="img/jopenspace2013/module-lifecycle.png" style="float: left; height: 500px; background: none; border: none; box-shadow: none;"/>
-                        <ul style="margin-top: 1em; font-size: 120%; line-height: 130%;">
-                            <li>jednotný životní cyklus</li>
-                            <li>oddělení "kontextů" jednotlivých modulů</li>
-                            <li>jednotné principy komunikace</li>
-                            <ul>
+                        </li>
+                        <li class="fragment">standardizovaný způsob komunikace, a.k.a. publikace veřejného rozhraní
+                            <ul style="font-size: 0.8em; line-height: 1.2em">
                                 <li>předávání zpráv (<a href="http://cs.wikipedia.org/wiki/Observer">observer pattern</a>)</li>
                                 <li>přímá volání přes veřená rozhraní</li>
+                                <li>exlicitní deklarace konzumovaných rozhraní</li>
                             </ul>
-                            <li>lokalizace</li>
-                            <li><a href="#/dependencies">závislosti</a></li>
-                        </ul>
-                    </section>
-                    <section id="dependencies" data-background="img/backgrounds/brown.jpg">
-                        <h1>Závislosti</h1>
-                        <img src="img/jopenspace2013/dependencies.png" style="float: left; height: 300px; background: none; border: none; box-shadow: none;"/>
-                        <ol style="margin-top: 1em; font-size: 120%; line-height: 130%; width: 65%">
-                            <li>zprvu neformálně <br/>
-                                <small>&rarr; problém se stanovením pořadí startu modulů</small>
-                            </li>
-                            <li>formalizace na explicitní závislosti <br/>
-                                <small>&rarr; libovolné pořadí s využitím proxy objektů</small>
-                            </li>
-                            <ul>
-                                <li>povinné / nepovinné</li>
-                                <li>deklarace konzumovaného rozhraní</li>
-                            </ul>
-                        </ol>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Izolace datové vrstvy</h1>
-                    <img src="img/jopenspace2013/data.png" style="float: left; height: 300px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
-                    <ul style="margin-top: 1em; font-size: 120%; line-height: 130%; width: 65%">
-                        <li>každý modul se musí postarat o vytvoření úložných struktur.</li>
-                        <li>dvě instance jednoho modulu musí mít svá data oddělená (skriptované DDL)</li>
-                        <li>evoluce datového modelu - verzování (ala&nbsp;<a href="http://www.liquibase.org/">Liquibase</a>)</li>
-                        <li>možnost rozšiřování datového modelu bez narušení funkcionality modulu</li>
-                    </ul>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Izolace UI</h1>
-                    <p>Modul, který poskytuje uživatelské rozhraní, by se o něj měl starat sám. Odhalovat by je měl
-                    až je o to požádán. Rozhraní musí být jednoduše modifikovatelné, protože zákazníci na modularitu
-                    nehledí.</p>
-
-                    <img src="img/jopenspace2013/evil-java.png" style="float: left; height: 300px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
-                    <h2 style="margin-top: 1em">Boj s Java platformou</h2>
-                    <ul style="margin-top: 1em; width: 65%">
-                        <li>JSP ztrácí dech, FreeMarker jediný vyhovuje</li>
-                        <li>komplikace s většinou web frameworků</li>
-                        <li>natahování standardů (ani Servlet 3.0 nám nestačí - start kontejneru != start modulu)</li>
-                        <li>problém s vystavením jednoho UI ve dvou instancích</li>
-                    </ul>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Odvrácená strana mince</h1>
-                    <img src="img/jopenspace2013/coin.png" style="float: right; height: 300px; margin-top: 60px; background: none; border: none; box-shadow: none;"/>
-                    <ul style="margin-top: 1em; font-size: 120%; line-height: 110%; width: 60%">
-                        <li>délka inicializační fáze
-                            <small>Spring Framework není nejrychlejší nebo toho po něm chceme hodně (dynamické proxy, autowiring)</small></li>
-                        <li>náchylnost k memory leakům
-                            <small>jeden špatně se chovající modul stačí</small></li>
-                        <li>transitivní dependence
-                            <small>daň za sdílený classloader - řešíme centralizací verzí a testy</small>
                         </li>
-                        <li>ne všechny moduly mají potřebnou kvalitu
-                            <small>ale naštěstí máme přirozený výběr :)</small></li>
+                        <li class="fragment">určení odpovědnosti/velikosti modulů
+                            <ul style="font-size: 0.8em; line-height: 1.2em">
+                                <li>jasně definovaný účel</li>
+                                <li>malé moduly jdou proti <em>low coupling</em></li>
+                                <li>velké moduly jdou proti <em>single reponsibility principle </em></li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p class="fragment" style="margin-top: 1em">... a možnost změny za běhu aplikace se šikne!</p>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <img src="img/jopenspace2013/burger.png" style="position: absolute; left: -300px; top: 0px; border: 0px; margin: 0px; background-color: transparent; box-shadow: none"/>
+                    <h2>Zapouzdřit modul ve všech ohledech</h2>
+                    <p>... je pěkný oříšek a zamotá vám hlavu, stejně jako nám.</p>
+                    <ul style="margin-top: 1em; font-size: 110%; line-height: 120%; width: 80%">
+                        <li>evoluce datového modelu - verzování (ala&nbsp;<a href="http://www.liquibase.org/">Liquibase</a>)</li>
+                        <li>rozšiřování datového modelu bez obavy z narušení stávající logiky</li>
+                        <li>zapouzdření view do modulu (FreeMarker, <span style="text-decoration: line-through">JSP</span>)</li>
+                        <li>dynamická registrace servletů a filtrů (<span style="text-decoration: line-through">Servlet 3.0</span>)</li>
+                        <li>web frameworky s modularizací nepočítají</li>
                     </ul>
+                    <p style="margin-top: 1em; font-size: 110%">Ultimátní meta: mít možnost nastartovat stejný modul vícekrát.</p>
+                </section>
+                <section>
+                    <section data-background="img/jopenspace2013/thorns.jpg">
+                        <h2>Cesta je trnitá</h2>
+                        <ul class="dark" style="margin-top: 1em; font-size: 120%; line-height: 130%; width: 65%;">
+                            <li>memory leaky</li>
+                            <li>transitivní dependence</li>
+                            <li>vzájemná a zpětná kompatibilita modulů</li>
+                            <li><a href="#/openclosed">rozšiřitelnost je oříšek</a></li>
+                            <li title="autowiring, aop">rychlost startu (<a href="#/runczech">problém námi zvolené technologie</a>)</li>
+                        </ul>
+
+                    </section>
+                    <section id="runczech" data-background="img/jopenspace2013/runczech.jpg">
+                        <div  style="background-color: #000000; padding: 1em; box-shadow: 0 0 30px black, 0 0 30px black, 0 0 30px black;">
+                            <h2>Seznam použitých modulů na Runczech.com</h2>
+                            <img src="img/jopenspace2013/runczech.png" style="width: 130%">
+                            <p class="fragment">Kdo napočítal 21 má u mě pivo!<br/>Startup time 70s <img src="img/jopenspace2013/sad-smiley.png" width="40px" style="border: 0px; background-color: transparent; margin: 0px"/></p>
+                        </div>
+                    </section>
+                    <section id="openclosed" data-background="img/jopenspace2013/minecraft.png">
+                        <div  style="background-color: #000000; padding: 1em; box-shadow: 0 0 30px black, 0 0 30px black, 0 0 30px black;">
+                            <h2>Náš přístup k rozšiřitelnosti</h2>
+                            <p>stojí na několika základních kamenech</p>
+                            <ul style="width: 60%">
+                                <li>možnost konfigurovat aplikaci za běhu
+                                    <small>bez změny WARu, dokážeme kompletně překopat obsah a do značné míry i funkcionalitu webu</small>
+                                </li>
+                                <li>skriptování v Groovy</li>
+                                <li>vlastní ORM framework
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>bezpečné rozšiřování datového modelu za běhu</li>
+                                        <li>ukládání a dotazování dat v nových sloupcích a tabulkách</li>
+                                    </ul>
+                                </li>
+                                <li>vlastní komponentový framework
+                                    <ul style="font-size: 0.6em; line-height: 1.2em">
+                                        <li>modifikace struktury stránek (i AOP like)</li>
+                                        <li>přidávání a odebírání stránek za běhu</li>
+                                        <li>lokalizace a změny HTML šablon za běhu</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <img src="img/jopenspace2013/lego.png" style="width: 27%; border: 0px; background-color: transparent;"/>
+                        </div>
+                    </section>
+                </section>
+                <section data-background="img/jopenspace2013/finish-line.jpg">
+                    <h1>Stojí to za tu námahu</h1>
+                    <img src="img/jopenspace2013/bright-future-ahead.png" style="float: right; height: 300px; margin-top: 75px; background: none; border: none; box-shadow: none;"/>
+                    <ul class="dark" style="margin-top: 1em; font-size: 120%; line-height: 130%; width: 65%;">
+                        <li>rozbití monolitu a snížení provázanosti</li>
+                        <li>zpřístupnění programování základního produktu firmy více vývojářům</li>
+                        <li>lepší (vertikální) dělba práce</li>
+                        <li>princip přirozeného výběru</li>
+                        <li>variabilita díky kompozici</li>
+                        <li>možnosti zásahů do aplikace za běhu</li>
+                    </ul>
+                    <p class="fragment dark" style="margin-top: 2em; font-size: 120%; line-height: 130%;">Aktuálně máme v repository 35+ znovupoužitelných modulů a nepočitatelně jednoúčelových zákaznických modulů.</p>
                 </section>
                 <section data-background="img/backgrounds/black.jpg">
                     <h1>S moduly se žije těžko<br/>
