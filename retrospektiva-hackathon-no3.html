@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Retrospective FG Hackathon - strike 3</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a href="http://www.fg.cz"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section data-background="img/backgrounds/black.jpg">
+					<h1>Retrospective FG Hackathon<br/>strike 3</h1>
+					<h3>Honza Novotný</h3>
+				</section>
+                <section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h1>Google Closure FTW</h1>
+                        <p>Pokud chceme udržet krok s dobou je potřeba naše WebDev posunout směrem k vývoji bohatých aplikací
+                           v JavaScriptu. Náš současný vývoj postavený nad <a href="http://www.jquery.com">jQuery</a> je
+                           do budoucna nekonkurenceschopný.</p>
+                        <h3 style="margin-top: 1em">Problémy</h3>
+                        <ul>
+                            <li>úroveň programování v JS je ve FG nízká - vyjma JRU</li>
+                            <li>existuje mnoho JavaScript frameworků a řada z nich špatných - i nás na scestí svedlo jQuery</li>
+                            <li>JRU si řadu problémů prošlápnul a ustálil se na použití <a href="https://developers.google.com/closure/">Google Closure</a></li>
+                            <li>JRU je aktuálně jediný kdo GCT ovládá - <a href="http://en.wikipedia.org/wiki/Bus_factor">bus factor 1!</a></li>
+                        </ul>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h1>Co se s tím snažíme dělat?</h1>
+                        <h3 style="margin-top: 1em">Začli jsme hackathonem</h3>
+                        <ul>
+                            <li>Jakub nám na hackathonu dal základní školení GCT (v rozsahu cca 1 dne)</li>
+                            <li>JKO, ASO se až do konce Hackathonu věnovali portaci MonkeyTrackeru na GCT</li>
+                            <li>všichni ostatní si na GCT alespoň sáhli a udělali si představu</li>
+                        </ul>
+                        <h3 style="margin-top: 1em">A dál?</h3>
+                        <ul>
+                            <li>JKO/FHL/JNO budou dále rozvíjet MT již v Google Closure, tím bychom měli získat základní kompetence</li>
+                            <li>JRU/FHL/ASO mohou rozšiřovat kompetence v PHA, JKO v NA</li>
+                            <li>bylo by vhodné někoho dalšího zasvětit do vývoje frontendu Edee CMS (ASO/FHL?!)</li>
+                            <li>akceptovat výzvy v JS orientovaných projektech (Fraus?)</li>
+                        </ul>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Migrace publikačního procesu v CPS na RamJet</h1>
+                    <p>MFR se rozhodl zahodit původní skriptovací jazyk a mechanismus v CPS ve prospěch RamJet a Freemarker jazyka.
+                       Tato změna se bude v následujících měsících propagovat do vývoje projektů.</p>
+                    <ol>
+                        <li>podpora publikačního procesu v RamJet</li>
+                        <li>otestování základních funkcionalit publikace</li>
+                        <li>analýza a rozmyšlení lepší integrace aplikací do Edee CMS</li>
+                    </ol>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Vylepšení CPS</h1>
+                    <p>Z letošního roku máme nasbíranou řadu údajů spojenou s tzv. leakováním paměti a výkonnosti při
+                       hot restartech CPS, což je běžná součást práce každého developera. Máme nápady, které by s tímto
+                       mohly pomoci, ale zatím nebyl čas je řešit.</p>
+                    <ol>
+                        <li style="color: green">centralizace podpory pro scheduling</li>
+                        <li style="color: red">centralizace podpory pro caching</li>
+                        <li style="color: green">a pár drobných vylepšení</li>
+                    </ol>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Rozšíření nástrojů pro RamJet</h1>
+                    <p>Všechny návrhy přišly od ostatních hackerů - tj. motorem pro rozvoj RamJet nástrojů přestávám být primárně já!</p>
+                    <ol>
+                        <li style="color: green">zobrazení stacktrace v RamJet ladičce</li>
+                        <li style="color: yellow">aktualizace lokalizovaných hlášení z dialogu v prohlížeči</li>
+                        <li style="color: yellow">generování POJO z databázové vrstvy</li>
+                    </ol>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>A ta retrospektiva?</h1>
+
+                    <ul>
+                        <li>počet se ustálil na +/- 10 lidech (FHL a MVE by jeli, kdyby mohli)</li>
+                        <li>skrz všechny pobočky - sehrávání devs mezi týmy</li>
+                        <li>inovace jde dopředu a lidi to baví</li>
+                        <li>koho z lidí, co jezdí na hackathon byste zařadil mezi tahouny?</li>
+                    </ul>
+
+                    <h3 class="fragment" style="margin-top: 2em">My si myslíme, že to je dobrá investice, a Vy?</h3>
+
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
