@@ -65,26 +65,45 @@
                         </ul>
                     </div>
                 </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h2>Začít se dá s málem</h2>
-                    <div style="width: 48%; display: inline-block; vertical-align: top;">
-                        <img src="img/jopenspace2013/ak47.png" width="90%"/>
-                        <ul style="height: 70%">
-                            <li>stavěli jsme na tom, co známe</li>
-                            <li>neměli jsme žádné velké ambice</li>
-                            <li>byli jsme si vědomi limitů</li>
-                        </ul>
-                        <h3 style="margin-top: 1em; color: green">customizace Spring Frameworku</h3>
-                    </div>
-                    <div style="width: 48%; display: inline-block;">
-                        <img src="img/jopenspace2013/F2000.png" width="90%"/>
-                        <ul style="height: 70%;">
-                            <li>existují industriální standardy s letitou historií</li>
-                            <li>řeší miliony věcí</li>
-                            <li>jen jsou trochu komplikované</li>
-                        </ul>
-                        <h3 style="margin-top: 1em; color: red">OSGI</h3>
-                    </div>
+                <section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Začít se dá s málem</h2>
+                        <div style="width: 48%; display: inline-block; vertical-align: top;">
+                            <img src="img/jopenspace2013/ak47.png" width="90%"/>
+                            <ul style="height: 70%">
+                                <li>stavěli jsme na tom, co známe</li>
+                                <li>neměli jsme žádné velké ambice</li>
+                                <li>byli jsme si vědomi limitů</li>
+                            </ul>
+                            <h3 style="margin-top: 1em; color: green">customizace Spring Frameworku</h3>
+                        </div>
+                        <div style="width: 48%; display: inline-block;">
+                            <img src="img/jopenspace2013/F2000.png" width="90%"/>
+                            <ul style="height: 70%;">
+                                <li>existují industriální standardy s letitou historií</li>
+                                <li>řeší miliony věcí</li>
+                                <li>jen jsou trochu komplikované</li>
+                            </ul>
+                            <h3 style="margin-top: 1em; color: red">OSGI</h3>
+                        </div>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Životní cyklus modulu</h2>
+                        <img src="img/jopenspace2013/module-lifecycle.png" style="background: none; border: none; box-shadow: none; float: left;"/>
+                        <ol style="margin-top: 2.5em; line-height: 4em;">
+                            <li>Načtení konfigurace, inicializace Spring kontextu</li>
+                            <li>Kontrola dependencí, doplnění referencí v proxy objektech</li>
+                            <li>Zničení Spring kontextu, uvolnění zdrojů</li>
+                        </ol>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Publikace API</h2>
+                        <img src="img/jopenspace2013/api_publication.png" style="background: rgba(255, 255, 255, 0.35);"/>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Propagace událostí</h2>
+                        <img src="img/jopenspace2013/event_publication.png" height="500px" style="background: rgba(255, 255, 255, 0.35);"/>
+                    </section>
                 </section>
                 <section data-background="#000000">
                     <h2>Celé je to jen o ...</h2>
@@ -148,7 +167,7 @@
                             <ul style="width: 60%">
                                 <li>možnost konfigurovat aplikaci za běhu
                                     <ul style="font-size: 0.6em; line-height: 1.2em">
-                                        <li>bez změny WARu, dokážeme kompletně překopat obsah a do značné míry i funkcionalitu webu</li>
+                                        <li>bez změny WARu, dokážeme kompletně překopat obsah a do značné míry i funkcionalitu aplikace</li>
                                         <li>dynamické skládání stromu Spring kontextů</li>
                                         <li>změny probíhají za plného provozu aplikace - původní kontexty řeší požadavky, zatímco nové startují</li>
                                     </ul>
@@ -158,7 +177,7 @@
                                         <li>otevírá cestu k continuous delivery (byť jsme zatím daleko)</li>
                                         <li>bez testů je však skriptování a modifikace RIZIKOVÉ</li>
                                     </ul>
-                                <li>vlastní ORM framework (WTF!)
+                                <li>vlastní persistence framework (WTF!)
                                     <ul style="font-size: 0.6em; line-height: 1.2em">
                                         <li>Spring JDBC template + Cglib proxies</li>
                                         <li>bezpečné rozšiřování datového modelu za běhu</li>
@@ -167,7 +186,7 @@
                                 </li>
                                 <li>vlastní komponentový framework (WTF!)
                                     <ul style="font-size: 0.6em; line-height: 1.2em">
-                                        <li>vlastní servlety + Freemarker</li>
+                                        <li>implementace na úrovni servletů + Freemarker</li>
                                         <li>modifikace struktury stránek (i AOP like)</li>
                                         <li>přidávání a odebírání stránek za běhu</li>
                                         <li>lokalizace a změny HTML šablon za běhu</li>
@@ -209,7 +228,7 @@
                         <li>variabilita díky kompozici</li>
                         <li>možnosti zásahů do aplikace za běhu</li>
                     </ul>
-                    <p class="fragment dark" style="margin-top: 2em; font-size: 120%; line-height: 130%;">Aktuálně máme v repository 35+ znovupoužitelných modulů a nepočitatelně jednoúčelových zákaznických modulů.</p>
+                    <p class="fragment dark" style="margin-top: 1em; font-size: 120%; line-height: 130%;">Aktuálně máme v repository 35+ znovupoužitelných modulů a nepočitatelně jednoúčelových zákaznických modulů.</p>
                 </section>
                 <section data-background="img/backgrounds/black.jpg">
                     <h1>S moduly se žije těžko<br/>
