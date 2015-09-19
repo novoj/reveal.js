@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Single Sign On for you website</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+        <!-- http://merbist.com/2012/04/04/building-and-implementing-a-single-sign-on-solution/ -->
+        <!-- http://www.cs.wustl.edu/~jain/cse571-07/ftp/websso/ -->
+        <!-- http://www.tomsitpro.com/articles/single-sign-on-solutions,2-853.html -->
+        <!-- http://www.developertutorials.com/single-sign-on/ -->
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a href="http://www.fg.cz"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section data-background="img/backgrounds/black.jpg">
+					<h1>
+                        <img src="img/sso/say_it_one_more_time.jpg" alt="Say SSO one more time :)">
+                    </h1>
+					<p>
+						<small>Honza <a href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+					</p>
+				</section>
+                <section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h1>The task was simple</h1>
+                        <p>Client has several high traffic sites and e-shops on different domains.
+                            He wanted to consolidate user accounts in a single place and share accounts among them.</p>
+                        <p>
+                            <ul style="display: inline-block; margin: 1em; margin-right: 3em;">
+                                <li><a href="http://www.fraus.cz" target="_blank">www.fraus.cz</a></li>
+                                <li><a href="http://seminare.fraus.cz" target="_blank">seminare.fraus.cz</a></li>
+                                <li><a href="http://ucebnice.fraus.cz" target="_blank">ucebnice.fraus.cz</a></li>
+                            </ul>
+                            <ul style="display: inline-block; margin: 1em; margin-left: 3em;">
+                                <li><a href="http://frausmedia.cz" target="_blank">frausmedia.cz</a></li>
+                                <li><a href="http://www.flexibooks.cz" target="_blank">www.flexibooks.cz</a></li>
+                                <li><a href="http://www.flexilearn.cz" target="_blank">www.flexilearn.cz</a></li>
+                            </ul>
+                        </p>
+                        <div class="fragment">
+                            <p>AND SO WE DID IT</p>
+                            <p><a href="http://www.fraus.cz" target="_blank">... HAVE A LOOK ...</a></p>
+                        </div>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>But SSO is "solved" problem, isn't it?</h2>
+                        <p>
+                            <img src="img/sso/solved.png" alt="Problem solved!" style="background: transparent; border: none">
+                        </p>
+                        <ul>
+                            <li><a href="https://en.wikipedia.org/wiki/List_of_single_sign-on_implementations" target="_blank">lot of enterprise solutions</a> like CAS, JBoss SSO, JOSSO</li>
+                            <li>alternative approaches - OpenId, MojeId, OAuth</li>
+                        </ul>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>What enterprise solutions offered:</h2>
+                        <p>
+                            <img src="img/sso/enterprise.png" alt="Enterprise!">
+                        </p>
+                        <ul>
+                            <li>multiple systems federation - email clients, wiki, revision controls</li>
+                            <li>LDAP / ActiveDirectory integration</li>
+                            <li>complexity + costs</li>
+                        </ul>
+                        <p>They're much more suitable for "intranet" usage than for e-shops.</p>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>What OpenId, OAuth offered:</h2>
+                        <p>
+                            <img src="img/sso/openid_oauth.png" alt="OAuth!" style="background: transparent; border: none">
+                        </p>
+                        <ul>
+                            <li>proven concept</li>
+                            <li>several implementations</li>
+                        </ul>
+                        <p>Very good to accept outside identities to create internal accounts in the e-shop.
+                           Not much suitable to transfer logged user among the shops (any idea?).</p>
+                    </section>
+                    <section data-background="img/backgrounds/start.jpg">
+                        <div style="background-color: #0e0e0e; opacity: 0.6; width: 40em; height: 20em"></div>
+                        <div style="position: relative; top: -16em;">
+                            <h2>What were our starting points?</h2>
+                            <ul>
+                                <li>websites are owned by the same organization</li>
+                                <li>no external applications needs to share authentication</li>
+                                <li>single shared database with accounts accessible from all websites</li>
+                                <li>request for natural registration and login process in each of site</li>
+                                <li>request for diversity of the profile and reqistration in some sites</li>
+                                <li>fast homepage access (no redirects if possible!)</li>
+                            </ul>
+                            <p>Maybe too simple for "enterprise" solutions?!</p>
+                        </div>
+                    </section>
+                    <section data-background="img/sso/cookie_monster.jpg">
+                        <div style="background-color: #0e0e0e; opacity: 0.6; width: 40em; height: 15em"></div>
+                        <div style="position: relative; top: -12em;">
+                            <h2>Why is it so hard?</h2>
+                            <ul>
+                                <li>user sessions are located by cookies</li>
+                                <li>cookies are not shared between different domains of the same level</li>
+                                <li>the only solution is to use shared account domain</li>
+                            </ul>
+                            <p>Mmm, the problem doesn't sound that difficult. Does it?!</p>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h1>How is it usually done?</h1>
+                        <p>SAML message exchange model for achieving Web SSO looks like this:</p>
+                        <p>
+                            <img src="http://www.cs.wustl.edu/~jain/cse571-07/ftp/websso/fig2.gif"/>
+                        </p>
+                        <div style="align-content: center">
+                            <span>Credit: <a href="http://www.cs.wustl.edu/~jain/cse571-07/ftp/websso/" target="_blank">http://www.cs.wustl.edu/~jain/cse571-07/ftp/websso/</a></span>
+                        </div>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>How we did it?</h2>
+                        <p>
+                            <a href="img/sso/schema.png" target="_blank"><img src="img/sso/schema.png"/></a>
+                        </p>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Mechanism #1</h2>
+                        <style type="text/css">
+                            span.memory {
+                                margin-top: 1em;
+                                margin-left: 3em;
+                                display: block;
+                            }
+                        </style>
+                        <div style="text-align: left;">
+                            <img src="img/sso/authenticate.png" style="float: right; background: transparent; border: none"/>
+                            <p class="fragment highlight-red">1. user visits https://www.fraus.cz</p>
+                            <p class="fragment highlight-red">2. page embeds https://account.fraus.cz/user/www.fraus.cz/123abc</p>
+                            <p class="fragment highlight-red">3. account server stores into session and DB:
+                                <span class="memory">
+                                    USER NOT LOGGED IN<br/>
+                                    www.fraus.cz = token 123abc
+                                </span>
+                            </p>
+                            <p class="fragment highlight-red">4. account server returns user is not logged in (public JSON)</p>
+                            <p class="fragment highlight-red">5. user logs in on https://www.fraus.cz against shared user DB</p>
+                            <p class="fragment highlight-red">6. www.fraus.cz securely sends information to account server about user login
+                                <span class="memory">
+                                    USER novoj LOGGED IN<br/>
+                                    www.fraus.cz = token 123abc
+                                </span>
+                            </p>
+                        </div>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h2>Mechanism #2</h2>
+                        <style type="text/css">
+                            span.memory {
+                                margin-top: 1em;
+                                margin-left: 3em;
+                                display: block;
+                            }
+                        </style>
+                        <div style="text-align: left;">
+                            <img src="img/sso/authenticate.png" style="float: right; background: transparent; border: none"/>
+                            <p class="fragment highlight-red">1. user visits https://www.flexibooks.cz</p>
+                            <p class="fragment highlight-red">2. page embeds https://account.fraus.cz/user/www.flexibooks.cz/567def</p>
+                            <p class="fragment highlight-red">3. account attaches new token to existing session and DB:
+                                <span class="memory">
+                                    USER novoj LOGGED IN<br/>
+                                    www.fraus.cz = token 123abc<br/>
+                                    www.flexibooks.cz = token 567def
+                                </span>
+                            </p>
+                            <p class="fragment highlight-red">4. account server returns novoj is logged in (public JSON)</p>
+                            <p class="fragment highlight-red">5. www.flexibooks.cz verifies securely that novoj is logged in for token 567def</p>
+                            <p class="fragment highlight-red">6. account server confirms novoj is logged in - it paired both tokens through single session</p>
+                            <p class="fragment highlight-red">7. www.flexibooks.cz refreshes page contents and display correct user prices</p>
+                        </div>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h2>Challenges</h2>
+                    <img src="img/sso/challenge.png" style="float: left; background: transparent; border: none"/>
+                    <ul style="margin-top: 3em">
+                        <li>clustering - 2x2 nodes</li>
+                        <li>synchronizing session with background API requests</li>
+                        <li>tolerance to different invocation order (login before lead token request)</li>
+                        <li>ensuring single session active for user over all devices</li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h2>Thats it!</h2>
+                    <img src="http://gcn.com/Articles/2013/02/07/~/media/GIG/GCN/Redesign/Articles/2013/February/singlesignon.png"/>
+                    <p>
+                        <small>Honza Novotný, FG Forrest</small>
+                        <br/>
+                        <small><a href="http://www.twitter.com/novoj">@novoj</a></small>
+                        <br/>
+                        <small><a href="http://blog.novoj.net">http://blog.novoj.net</a></small>
+                    </p>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
