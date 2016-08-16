@@ -1,0 +1,368 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Spring Security, 2016</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a href="http://www.fg.cz"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section data-background="img/backgrounds/black.jpg">
+					<h1>Spring Security</h1>
+					<h2>your gate to authentication and authorization</h2>
+                    <h3>autumn 2016</h3>
+					<p>
+						<small>Jan <a href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+					</p>
+				</section>
+                <section data-background="img/backgrounds/jno.jpg" data-background-size="contain" style="padding-left: 25%">
+                    <h1>About me</h1>
+                    <ul>
+                        <li><a href="https://www.fg.cz">Java developer at FG Forrest</a></li>
+                        <li><a href="https://kafemlejnek.tv">YouTuber at Kafemlejnek.TV</a></li>
+                        <li><a href="http://blog.novoj.net">blogger at blog.novoj.net</a></li>
+                        <li><a href="http://jopenspace.cz">jOpenspace non-conference co-organizer</a></li>
+                        <li>occassional speaker, father,<br/>MTB rider, runner ...</li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>What Spring Security covers</h1>
+                    <ol>
+                        <li>
+                            <strong>authentication</strong>
+                            <ul>
+                                <li>Http Basic/Digest/x-509, LDAP, Kerberos, JAAS, OAuth, social networks</li>
+                                <li>password generation / matching, remember me</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>authorization</strong>
+                            <ul>
+                                <li>url pattern matching</li>
+                                <li>method call authorization, I/O data filtering</li>
+                                <li>expression based / ACL based</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>security negotiation / enforcement</strong>
+                            <ul>
+                                <li>HTTP headers</li>
+                                <li>HTTPS switching</li>
+                                <li>Session management</li>
+                                <li>CSRF protection</li>
+                                <li>Cross-origin resource sharing</li>
+                            </ul>
+                        </li>
+                        <li><strong>test support</strong></li>
+                    </ol>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Why should you consider it?</h1>
+                    <ol style="text-wrap: avoid">
+                        <li>easy to implement</li>
+                        <li>Spring integration (as you'd expect)</li>
+                        <li>mature and widespread (Acegi started in 2003)</li>
+                        <li>still in active development</li>
+                        <li>well documented and tested</li>
+                    </ol>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="slide-in fade-out">
+                        <h1>Architecture overview</h1>
+                        <img src="img/spring-security/filters.png" alt="Spring security web integration" style="width: 50%; float: left">
+                        <span style="width: 45%">
+                            firewalls HTTP request / response<br/>
+                            (<a href="https://en.wikipedia.org/wiki/Directory_traversal_attack">directory traversal</a>, <a href="https://prakharprasad.com/crlf-injection-http-response-splitting-explained/">http response splitting</a>)
+                            <br/><br/>
+                            executes internal list of filters
+                            <br/><br/>
+                            <strong>Why?</strong>
+                            <br/><br/>
+                            <ul>
+                                <li>single definition in web.xml <br/> (even if it's complex inside)</li>
+                                <li>reliable "interruption" <br/> of every single request processing</li>
+                            </ul>
+                        </span>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Architecture overview</h1>
+                        <img src="img/spring-security/filters-dispatch.png" alt="Spring security web integration" style="width: 50%; float: left">
+                        <p style="width: 45%; display: inline-block">
+                            set of filters can differ for various path patterns<br/>
+                            <em style="font-size: 80%">(org.springframework.security.web.SecurityFilterChain)</em><br/><br/>
+                            path matching is done via <em>RequestMatcher</em><br/>
+                            mostly via <em>AntPathRequestMatcher</em> but also <em>RegexRequestMatcher</em> and more
+                        </p>
+                        <pre style="width: 45%; display: inline-block">
+<code data-trim data-noescape>/foo/*/bar/**/data/*.jpg
+/foo/**
+/bar/*
+/*.html</code>
+                        </pre>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Architecture overview</h1>
+                        <h2>Standard filter composition</h2>
+                        <div>
+                            <img class="plain" src="img/spring-security/filters-standard.png" alt="Spring security web integration" style="width: 45%; float: left">
+                            <ol style="width: 45%; display: inline-block; padding-top: 4em; font-size: 80%">
+                                <li>loads SecurityContext from SecurityContext repository (usually HTTP session) and store it there also</li>
+                                <li>monitors specific URL and logs a user out</li>
+                                <li>does authentication (username, LDAP, OAuth ...)</li>
+                                <li>handles AccessDeniedException and AuthenticationException navigating user to proper locations</li>
+                                <li>executes authorization upon secured URL resources</li>
+                            </ol>
+                        </div>
+                        <div style="font-size: 80%; text-align: center; clear: both">
+                            <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/ns-config.html#filter-stack">Standard filters and their ordering</a>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in slide-out">
+                        <h1>Architecture overview</h1>
+                        <h3>Channel enforcement</h3>
+                        <p>ChannelProcessingFilter - relocates user from HTTP to HTTPS (and vice versa) when <em>ChannelDecisionManager</em> says so</p>
+                        <h3>HTTP headers management</h3>
+                        <p>HeaderWriterFilter - takes care of writing HTTP security headers to the response</p>
+                        <ul>
+                            <li><a href="http://blogs.msdn.com/b/ieinternals/archive/2011/01/31/controlling-the-internet-explorer-xss-filter-with-the-x-xss-protection-http-header.aspx">XXssProtectionHeaderWriter</a></li>
+                            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">XFrameOptionsHeaderWriter</a></li>
+                            <li><a href="http://tools.ietf.org/html/rfc6797">HstsHeaderWriter</a></li>
+                            <li>StaticHeadersWriter (for instance CacheControlHeadersWriter)</li>
+                        </ul>
+                        <h3>Session management</h3>
+                        <p>ConcurrentSessionFilter - tracks presence of all sessions,<br/> SessionManagementFilter - enforces session management</p>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Configuration</h1>
+                    <p>Both types of configuration are similar one to another.</p>
+                    <div style="text-align: center; float: left; width: 47%; display: inline-block">
+                        <h3>Security namespace</h3>
+                        <a style="margin: 2em;" href="http://localhost:8091/?message=spring/security.xml"><img class="plain" src="img/spring-security/xml-file.png" height="128px"></a><br/>
+                        <a style="margin: 2em;" href="http://localhost:8091/?message=spring/security.xml">Click to show</a>
+                    </div>
+                    <div style="text-align: center; width: 47%; display: inline-block">
+                        <h3>Java configuration</h3>
+                        <a style="margin: 2em;" href="http://localhost:8091/?message=sample/config/WebSecurityConfiguration.java:49"><img class="plain" src="img/spring-security/java-file.png" height="128px"></a><br/>
+                        <a style="margin: 2em;" href="http://localhost:8091/?message=sample/config/WebSecurityConfiguration.java:49">Click to show</a>
+                    </div>
+                    <div>
+                        <em style="font-size: 60%;">(Thanks to <a href="https://plugins.jetbrains.com/plugin/6027">Remote plugin</a>)</em>
+                    </div>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="slide-in">
+                        <h1>Authentication process</h1>
+                        <img src="img/spring-security/resources-access.png" alt="Secured resource access" style="max-height: 600px">
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Login</h1>
+                        <div>
+                            <img class="plain" src="img/spring-security/login.png" alt="Login" style="width: 15%; float: left">
+                            <ul>
+                                <li>always use HTTPS protocol</li>
+                                <li>always use POST</li>
+                                <li>use CSRF token</li>
+                                <li>use the same error message when credentials don't match</li>
+                            </ul>
+                        </div>
+                        <div style="clear: both; text-align: center">
+                            <a style="margin: 2em;" href="http://localhost:8091/?message=views/login.html">Example</a>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Remember me, hot or not?</h1>
+                        <div style="text-align: center">
+                            <img class="plain" src="img/spring-security/remember-me.png" alt="Keep me signed in" style="width: 25%;">
+                        </div>
+                        <div style="float: left; margin-left: 2em;">
+                            <h4>Things to consider</h4>
+                            <ul>
+                                <li>users do like it</li>
+                                <li>when stealed logs anyone in</li>
+                                <li>it opens gap for CSRF attack</li>
+                                <li>it may reveal original password</li>
+                            </ul>
+                        </div>
+                        <div style="margin-left: 2em;">
+                            <h4>2-basic implementations</h4>
+                            <ul>
+                                <li>Hash-Based Token (default)</li>
+                                <li>Persistent Token Approach</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Remember me, hot or not?</h1>
+                        <h4>Require interactive login for</h4>
+                        <ul>
+                            <li>password change</li>
+                            <li>email change</li>
+                            <li>access to sensitive information (address)</li>
+                            <li>important actions (purchase)</li>
+                        </ul>
+                        <pre>
+<code class="nohighlight" data-trim data-noescape>/userProfile/*=IS_AUTHENTICATED_FULLY
+/login=IS_AUTHENTICATED_ANONYMOUSLY
+/logout=IS_AUTHENTICATED_ANONYMOUSLY
+/lostPassword=IS_AUTHENTICATED_ANONYMOUSLY
+/**=IS_AUTHENTICATED_REMEMBERED</code>
+                        </pre>
+                        <div>
+                            <a href="http://localhost:8091/?message=org/springframework/security/access/vote/AuthenticatedVoter.java:29">Documentation</a>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Hash-Based Token</h1>
+                        <pre style="display: inline-block">
+<code class="nohighlight" data-trim data-noescape>base64(username + ":" + expirationTime + ":" +
+md5Hex(username + ":" + expirationTime + ":" password + ":" + key))
+
+username:          As identifiable to the UserDetailsService
+password:          That matches the one in the retrieved UserDetails
+expirationTime:    The date and time when the remember-me token expires, expressed in milliseconds
+key:               A private key to prevent modification of the remember-me token</code>
+                        </pre>
+                        <h4>Disadvantages</h4>
+                        <ul>
+                            <li>username + expiration time known to the attacker</li>
+                            <li>password is part of the hash</li>
+                            <li>MD5 cipher is very fast</li>
+                            <li>key is shared among all users</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Persistent Token Approach</h1>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <h3>How it works</h3>
+                            <ol>
+                                <li>on successful login with Remember Me checked, a login cookie is issued</li>
+                                <li>cookie consists of <code>series:token</code></li>
+                                <li>the series and token are unguessable random numbers from a suitably large space</li>
+                                <li>data is stored together with user name in a database table</li>
+                                <li>when a non-logged-in user visits the site with a login cookie, it is looked up in the database</li>
+                                <li>if it is present, systems logs in a user with name stored with the pair in db</li>
+                                <li>used token is removed from the database</li>
+                                <li>new token is generated but series part is kept same, data are updated in DB and new cookie is sent to browser</li>
+                                <li>if the username and series are present but the token does not match, a theft is assumed - user receives a warning and all of the user's remembered sessions are deleted</li>
+                                <li>if the username and series are not present, the login cookie is ignored.</li>
+                            </ol>
+                        </div>
+                        <div style="float: left; margin-left: 2em; width: 45%; font-size: 80%;">
+                            <h3>Disadvantages</h3>
+                            <ul style="width: 100%">
+                                <li>CSRF window is still open wide</li>
+                                <li>when stolen it opens up app to the attacker</li>
+                                <li>requires persistent storage</li>
+                            </ul>
+                            <h3 style="margin-top: 1em">Advantages</h3>
+                            <ul style="width: 100%">
+                                <li>user name is not revealed</li>
+                                <li>password is not revealed</li>
+                                <li>when stolen, user gets informed on next login</li>
+                                <li>when stolen, attacker looses access on user next login</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Logout</h1>
+                        <img class="plain" src="img/spring-security/logout.png" alt="Logout" style="width: 15%; float: left">
+                        <div>
+                            <div style="float: left; margin-left: 2em;">
+                                <h4>Recommendations</h4>
+                                <ul>
+                                    <li>always use POST</li>
+                                    <li>use CSRF token</li>
+                                </ul>
+                            </div>
+                            <div style="margin-left: 2em;">
+                                <h4>What happens on logout</h4>
+                                <ul>
+                                    <li>session is invalidated</li>
+                                    <li>remember me tokens are cleared</li>
+                                    <li>custom cookies might be cleared</li>
+                                    <li>CSRF token is invalidated</li>
+                                    <li>SecurityContext is emptied</li>
+                                    <li>user is navigated to logout page</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="clear: both; text-align: center; margin-top: 1em;">
+                            <a style="margin: 2em;" href="http://localhost:8091/?message=views/layout.html:85">Example</a>
+                        </div>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Cross site request forgery (CSRF)</h1>
+
+                </section>
+                <!-- TODO HTTPs chanelling -->
+                <!-- TODO remember me fct -->
+                <!-- TODO session management, session fixation attack -->
+                <!-- TODO password management -->
+                <!-- TODO user switching -->
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
