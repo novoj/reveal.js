@@ -563,6 +563,17 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
                     <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
                         <p>Handy for developers as well as for customer administrators. Allows user with admin roles to switch
                            to any other user with lower roles without knowing password.</p>
+<pre style="display: inline-block;"><code class="java" data-trim>@Override
+protected void configure(HttpSecurity http) throws Exception {
+    final SwitchUserFilter filter = new SwitchUserFilter();
+    filter.setSwitchUserUrl("/switchUser");
+    filter.setUsernameParameter("username");
+    filter.setExitUserUrl("/restoreUserBack");
+    http.addFilterAfter(filter, FilterSecurityInterceptor.class)
+        .authorizeRequests()
+            .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
+            .antMatchers("/restoreUser").authenticated();
+}</code></pre>
                     </div>
                 </section>
                 <section data-background="img/spring-security/questions.jpg">
@@ -577,7 +588,6 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
 </session-config>
 
                 -->
-                <!-- TODO user switching -->
                 <!-- TODO method security -->
                 <!-- TODO testing -->
 			</div>
