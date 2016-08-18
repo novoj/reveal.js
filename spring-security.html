@@ -433,8 +433,128 @@ key:               A private key to prevent modification of the remember-me toke
                         </div>
                     </section>
                 </section>
-                <!-- TODO HTTPs chanelling -->
-                <!-- TODO remember me fct -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Channel security</h1>
+                    <img class="plain" src="img/spring-security/ssl.png" alt="Password" style="width: 25%; float: left">
+                    <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                        <p>Allows you setup simple rules for SSL / plain HTTP protocol enforcement.</p>
+<pre style="display: inline-block;"><code class="xml" data-trim><http>
+    <intercept-url pattern="/secure/**" requires-channel="https"></intercept-url>
+    <intercept-url pattern="/css/**" requires-channel="http"></intercept-url>
+    <intercept-url pattern="/**" requires-channel="any"></intercept-url>
+    <port-mappings>
+        <port-mapping http="9080" https="9443"></port-mapping>
+    </port-mappings>
+</http></code></pre>
+                        <div style="text-align: center">
+                            <p>You don't have any excuse not to encrypt.</p>
+                            <a href="https://letsencrypt.org/">
+                                <img class="plain" src="img/spring-security/lets-encrypt.png" alt="Let's Encrypt" style="width: 50%">
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <section data-background="img/spring-security/security_header.jpg" data-background-color="black" data-background-size="30%" data-background-position="left">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Security headers</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>These are defaults:</p>
+<pre style="display: inline-block;"><code class="xml" data-trim>
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Content-Type-Options: nosniff
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block</code></pre>
+                            <p>By only declaring:</p>
+<pre style="display: inline-block;"><code class="xml" data-trim><http>
+	<headers defaults-disable="false"></headers>
+</http></code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-Content-Type-Options</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Content-Type-Options: nosniff</code></pre>
+                            <p>Tells browsers (Chrome,IE) not to guess content type of the document from it's content.</p>
+                            <p>Attack scenario: malicious user uploads PDF file that contains JavaScript. Your server
+                               let other users to download such file and open it in their browser. Even if server supplies
+                               PDF content type, browser might decide not to trust it and detect content type by the contents of the
+                               file. Finally it handles PDF file as JavaScript one and executes the script.</p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>HTTP Strict Transport Security (HSTS)</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Strict-Transport-Security: max-age=31536000 ; includeSubDomains</code></pre>
+                            <p>Tells browser that all resources on this domain must be reached by HTTPS protocol.</p>
+                            <p>Except first request all subsequent ones will be loaded over HTTPS by the browser. Even if there is explicit link with HTTP protocol.</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim><img src="http://myserver.cz/img/someimage.jpg"></code></pre>
+                            <p>First request problem can be solved with <a href="https://hstspreload.appspot.com/">HSTS Preload</a></p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>HTTP Public Key Pinning (HPKP)</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Public-Key-Pins-Report-Only: max-age=5184000;
+                             pin-sha256="d6qzRu9zOECb90Uez27xWltNsj0e1Md7GkYYkVoZWmM=";
+                             pin-sha256="E9CZ9INDbd+2eRQozYqqbQ2yXLVKB9+xcprMF+44U1g=";
+                             report-uri="http://example.net/pkp-report";
+                             includeSubDomains</code></pre>
+                            <p>Tells browser that public key in the server certificate must match any of presented SHA256 hashes. Protects you against compromised CA.</p>
+                            <p>Trust on First Use.</p>
+                            <p>When using <code style="font-size: 80%">Public-Key-Pins</code> and the server delivers an unknown public key, the client should present a warning to the user.</p>
+                            <p>Reports can be processed with <a href="https://report-uri.io/">Report URI service</a></p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-Frame-Options</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny</code></pre>
+                            <p>Tells browser not to load any FRAMES on your domain (or only frames targeting your/some domain).</p>
+                            <p>Standardized as part of Content Security Policy.</p>
+                            <p>Alternative variants:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny
+X-Frame-Options: sameorigin
+X-Frame-Options: allow-from www.seznam.cz</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-XSS-Protection</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1; mode=block</code></pre>
+                            <p>Ask browser to assist you with reflected XSS attack.</p>
+                            <p>If browser <a href="https://blogs.msdn.microsoft.com/ie/2008/07/02/ie8-security-part-iv-the-xss-filter/">detects suspicious script</a> in request that is reflected in the server response, script is blocked or reported.</p>
+                            <p>Alternative variant:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1;  report=https://report-uri.io/</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Content Security Policy (CSP)</h1>
+                        <div style="text-align: left; margin-left: 8em; height: 800px;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy: script-src 'self' https://trustedscripts.example.com;
+                         report-uri /csp-report-endpoint/</code></pre>
+                            <p>Site tels browser from which sources it expects to load resources.</p>
+                            <p>Documentation at <a href="https://content-security-policy.com/">https://content-security-policy.com</a></p>
+                            <p>Alternative variant:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy-Report-Only: script-src 'self';
+                                     report-uri /csp-report-endpoint/</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Content Security Policy (CSP)</h1>
+                        <div style="text-align: left; margin-left: 8em; height: 800px;">
+                            <img src="img/spring-security/csp.png" alt="CSP overview">
+                        </div>
+                    </section>
+                </section>
                 <!-- TODO session management, session fixation attack -->
                 <!--
 
@@ -443,8 +563,9 @@ key:               A private key to prevent modification of the remember-me toke
 </session-config>
 
                 -->
-                <!-- TODO password management -->
                 <!-- TODO user switching -->
+                <!-- TODO method security -->
+                <!-- TODO testing -->
 			</div>
 
             <!-- TO STUDY: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
