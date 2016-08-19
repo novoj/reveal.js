@@ -557,6 +557,58 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
                         </div>
                     </section>
                 </section>
+                <section data-background="img/backgrounds/binary-code.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Session management</h1>
+                        <p>After successfull authentication all registered
+                            <a href="http://localhost:8091/?message=org/springframework/security/web/authentication/session/SessionAuthenticationStrategy.java">SessionAuthenticationStrategy</a>
+                            are called.<br/>Preprogrammed implementations provide:
+                        </p>
+                        <ul>
+                            <li>session fixation protection</li>
+                            <li>concurrency control</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Session fixation protection</h1>
+                        <p><strong>Attack vector:</strong> Attacker will create it's own session in the application.
+                            Via social engineering sends link to a user (or uses similar technique) that will make user
+                            browser to use already existing attacker session. When user logs in, attacker can act on
+                            behalf of the user.
+                        </p>
+                        <h3>Defense</h3>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <p>Don't accept session id from URL by configuring web.xml:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim><session-config>
+    <tracking-mode>COOKIE</tracking-mode>
+</session-config></code></pre>
+                            <ul style="font-size: 70%">
+                                <li>COOKIE</li>
+                                <li>URL</li>
+                                <li>
+                                    <a href="http://download.oracle.com/otn-pub/jcp/servlet-3.0-fr-eval-oth-JSpec/servlet-3_0-final-spec.pdf?AuthParam=1471606619_c6d486d96c4d3110d045d7027578a40e">SSL</a> (chapter 7.1.2)</li>
+                            </ul>
+                        </div>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <p>Create new session on user login:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;session-management session-fixation-protection="migrateSession"/&gt;</code></pre>
+                            <ul style="font-size: 70%">
+                                <li>newSession (clean)</li>
+                                <li>migrateSession (copy)</li>
+                                <li>changeSessionId (Servlet 3.1)</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Concurrency control</h1>
+                        <p>Spring Security can track all sessions in <a href="http://localhost:8091/?message=org/springframework/security/core/session/SessionRegistry.java">SessionRegistry</a>.</p>
+                        <pre style="display: inline-block;"><code class="xml" data-trim><session-management>
+    &lt;concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/&gt;  expired-url="/sessionExpired.html"
+</session-management></code></pre>
+                        <p>When <em>error-if-maximum-exceeded</em> is false and <em>max-sessions</em> is exceeded least recently used session is invalidated.
+                           User using this session will get <em>expired-url</em> page.</p>
+                    </section>
+                </section>
                 <section data-background="img/backgrounds/brown.jpg">
                     <h1>User switching</h1>
                     <img src="img/spring-security/user-switch.png" alt="CSP overview" class="plain" width="200" style="float: left;">
@@ -574,22 +626,226 @@ protected void configure(HttpSecurity http) throws Exception {
             .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
             .antMatchers("/restoreUser").authenticated();
 }</code></pre>
+                        <p>Consider also adding an IP check or other authentication checks to better secure user switching.<br/>This feature is form of backdoor.</p>
                     </div>
+                </section>
+                <section data-background="img/spring-security/authorization.jpg" data-background-size="30%" data-background-color="black" data-background-position="left">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Authorization</h1>
+                        <div style="float: left; width: 65%; font-size: 80%; text-align: right">
+                            <img class="plain" src="img/spring-security/auth-model.png">
+                        </div>
+                        <div style="float: left; margin-left: 2em; width: 30%; font-size: 60%;">
+                            <h3>AccessDecisionManager</h3>
+                            <ul style="width: 100%">
+                                <li>AffirmativeBased:<br/><em>SINGLE GRANT -> GRANT</em></li>
+                                <li>ConsensusBased:<br/><em>sum(GRANT) > sum(DENY) -> GRANT</em></li>
+                                <li>UnanimousBased:<br/><em>SINGLE DENY -> DENY</em></li>
+                            </ul>
+                            <h3 style="margin-top: 1em">AccessDecisionVoter</h3>
+                            <ul style="width: 100%">
+                                <li>AuthenticatedVoter:<br/><em>IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_ANONYMOUSLY</em></li>
+                                <li>RoleVoter (RoleHierarchyVoter):<br/><em>ROLE_ (GrantedAuthority)</em></li>
+                                <li>WebExpressionVoter:<br/><em>SpEL expression</em></li>
+                            </ul>
+                        </div>
+                        <div style="clear: both; width: 85%; float: right;">
+                            <strong>Example:</strong>
+<pre style="display: inline-block;"><code class="xml" data-trim>/admin/**=ROLE_ADMINISTRATOR, ROLE_SUPER_ADMINISTRATOR
+/**=IS_AUTHENTICATED_ANONYMOUSLY
+
+/userManagement/**=#{hasRole('ROLE_COMPANY_OWNER') and hasIpAddress('192.168.1.0/24')</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Hieararchical roles</h1>
+                        <div style="clear: both">
+                            <p>Useful in scenarios when user having certain role<br/>should also have another role.</p>
+                            <strong>Example:</strong>
+                        </div>
+                        <div style="clear: both; width: 30%; margin-left: 35%">
+                            <pre style="display: inline-block;"><code class="xml" data-trim>ROLE_ADMIN > ROLE_STAFF
+ROLE_STAFF > ROLE_USER
+ROLE_USER > ROLE_GUEST</code></pre>
+                        </div>
+                        <p>Admin will be also STAFF, USER, GUEST regarding access decision logic.<br/>Hierarchy rules can be changed without touching user data.</p>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Web expression security</h1>
+                        <p>You can use either <em>simple rules</em> or <em>expression rules</em>, not both.</p>
+                        <div style="clear: both; width: 70%; margin-left: 15%">
+                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;http use-expressions="true"&gt;
+    &lt;intercept-url pattern="/user/{userId}/**"
+                   access="@webSecurity.checkUserId(authentication,#userId)"/&gt;
+&lt;/http&gt;</code></pre>
+                            <p>@ refers to Spring bean objects<br/>
+                               # refers to url parameters</p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Built-in-expressions</h1>
+                        <img src="img/spring-security/built-in-expressions.png" width="800">
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Method security</h1>
+                        <p>Operates using Spring AOP abstraction.<br/>Thus you can configure it manually by custom Aspects or exact mapping.</p>
+                        <h3>Expression based security</h3>
+                        <div style="width: 35%; margin-left: 10%; float: left;">
+                            <p>Method annotations:</p>
+                            <ul style="list-style-type: none">
+                                <li>@PreAuthorize</li>
+                                <li>@PreFilter</li>
+                                <li>@PostAuthorize</li>
+                                <li>@PostFilter</li>
+                            </ul>
+                        </div>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <p>
+                            <pre style="display: inline-block;"><code class="java" data-trim>@PreAuthorize("#contact.name == authentication.name")
+public void doSomething(Contact contact);
+
+@PreAuthorize("hasRole('USER')")
+@PostFilter("hasPermission(filterObject, 'read')")
+public List&lt;Contact&gt; getAll();</code></pre>
+                            </p>
+                            <p>Filtering is not suitable for paged output.<br/>
+                               But Spring Security can <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/data-query.html">integrate with Spring Data</a>!</p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Meta annotations</h1>
+                        <p style="margin-left: 20%; text-align: center">Allows you to mitigate String based "programming".</p>
+                        <div style="float: left; width: 80%; margin-left: 20%; margin-bottom: 2em;">
+                            <h3>Define meta-annotation</h3>
+                            <pre style="display: inline-block;"><code class="java" data-trim>@Retention(RetentionPolicy.RUNTIME)
+@PreAuthorize("#contact.name == authentication.name")
+public @interface ContactPermission {}</code></pre>
+
+                            <h3>Use meta-annotation</h3>
+                            <pre style="display: inline-block;"><code class="java" data-trim>@ContactPermission
+public void doSomething(Contact contact);</code></pre>
+                        </div>
+                        <p style="margin-left: 20%; text-align: center"><em>Currently doesn't allow multiple annotations on a single method. <a href="https://github.com/spring-projects/spring-security/issues/4003">Issue #4003</a></em></p>
+                    </section>
+                </section>
+                <section data-background="img/spring-security/testing.png">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Security testing</h1>
+                        <h3>Best practices &#8482;</h3>
+                        <ul style="width: 80%">
+                            <li><strong>do test</strong> the security in integration tests along with business logic</li>
+                            <li>prepare set of <strong>personas</strong> for each roles</li>
+                            <li>test <strong>negative scenarios</strong> that should finish with AccessDeniedException</li>
+                            <li>complex security expression extract to <strong>access check method</strong> or
+                                <strong>PermissionEvaluator</strong>, unit test these methods carefully</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Method authorization testing</h1>
+                        <h3>Test example</h3>
+                        <div style="float: left; width: 100%; margin-bottom: 2em;">
+                            <pre style="display: inline-block;"><code class="java" style="font-size: 80%; max-height: 600px;" data-trim>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@SecurityExecutionListeners
+public class ExampleTestClass {
+
+    @WithAnonymousUser
+    @Test(expected = AccessDeniedException.class)
+    public void getMessageUnauthenticated() {
+    	messageService.getMessage();
+    }
+
+    @Test
+    @WithUserDetails("client@domain.cz")
+    public void getMessageAsClientUser() {
+        assertNotNull(messageService.getMessage());
+    }
+
+    @Test
+    @WithUserDetails("admin@domain.cz")
+    public void getMessageAsAdminUser() {
+        assertNotNull(messageService.getMessage());
+    }
+
+}</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Test meta-annotations</h1>
+                        <div style="float: left; width: 100%; margin-bottom: 2em;">
+                            <p>To avoid strings in annotations and add better maintainability use meta-annotations:</p>
+
+                            <pre style="display: inline-block;"><code class="java" style="font-size: 80%; max-height: 600px;" data-trim>@Retention(RetentionPolicy.RUNTIME)
+@WithUserDetails(value="admin@domain.cz")
+public @interface RunAsAdministrator { }</code></pre>
+
+                            <p>And use it in test:</p>
+
+                            <pre style="display: inline-block;"><code class="java" style="font-size: 80%; max-height: 600px;" data-trim>@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@SecurityExecutionListeners
+public class ExampleTestClass {
+
+    @Test
+    @RunAsClient
+    public void getMessageAsClientUser() {
+        assertNotNull(messageService.getMessage());
+    }
+
+    @Test
+    @RunAsAdmin
+    public void getMessageAsAdminUser() {
+        assertNotNull(messageService.getMessage());
+    }
+
+}</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Spring MVC test support</h1>
+                        <div style="float: left; width: 100%; margin-bottom: 2em;">
+                            <pre style="display: inline-block;"><code class="java" style="font-size: 70%; line-height: 1.4em; max-height: 600px;" data-trim>import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@WebAppConfiguration
+public class ExampleTestClass {
+
+    @Autowired
+    private WebApplicationContext context;
+    private MockMvc mvc;
+
+    @Before
+    public void setup() {
+        mvc = MockMvcBuilders.webAppContextSetup(context)
+                             .apply(springSecurity())
+                             .build();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void shouldUserLogin() {
+        mvc.perform(formLogin("/auth").user("admin").password("pass")).with(csrf()))
+           .andExpect(authenticated());
+    }
+
+    @Test
+    @RunAsClient
+    public void shouldUserLogout() {
+        mvc.perform(logout("/signout")).with(csrf()))
+           .andExpect(unauthenticated());
+    }
+
+}</code></pre>
+                        </div>
+                    </section>
                 </section>
                 <section data-background="img/spring-security/questions.jpg">
                     <h2 style="margin-top: 8em">Děkuji za pozornost</h2>
                     <p>Contact me at <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                 </section>
-                <!-- TODO session management, session fixation attack -->
-                <!--
-
-                <session-config>
-    <tracking-mode>COOKIE</tracking-mode>
-</session-config>
-
-                -->
-                <!-- TODO method security -->
-                <!-- TODO testing -->
 			</div>
 
             <!-- TO STUDY: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
