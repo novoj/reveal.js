@@ -21,12 +21,57 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+        <style>
+            .documentation {
+                font-family: sans-serif;
+                color: #fff;
+                display: inline-block;
+                font-weight: 100;
+                text-align: center;
+                font-size: 1.2em;
+                position:absolute;
+                margin: 25px;
+                top:0;
+                right:120px;
+                z-index: 100;
+            }
+
+            .documentation > div{
+                padding: 10px;
+                border-radius: 3px;
+                background: #343434;
+                display: inline-block;
+            }
+
+            .documentation div > a {
+                color: white;
+                text-decoration: none;
+                padding: 15px;
+                border-radius: 3px;
+                background: #252525;
+                display: inline-block;
+            }
+
+            .documentation > div:hover {
+                background: #8b8b8b;
+            }
+
+            .documentation div:hover > a {
+                background: #606060;
+            }
+        </style>
 	</head>
 
 	<body>
 
+    <div class="documentation">
+        <div>
+            <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/" target="_blank">Docs</a>
+        </div>
+    </div>
         <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
-            <a href="http://www.fg.cz"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+            <a href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
         </div>
 
 		<div class="reveal">
