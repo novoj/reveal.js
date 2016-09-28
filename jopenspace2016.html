@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Spring Security, 2016</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            .documentation {
+                font-family: sans-serif;
+                color: #fff;
+                display: inline-block;
+                font-weight: 100;
+                text-align: center;
+                position:absolute;
+                margin: 15px;
+                top:0;
+                right:100px;
+                z-index: 100;
+            }
+
+            .documentation > div{
+                padding: 10px;
+                border-radius: 3px;
+                background: #343434;
+                display: inline-block;
+            }
+
+            .documentation div > a {
+                color: #cecece;
+                text-decoration: none;
+                padding: 10px;
+                border-radius: 3px;
+                background: #252525;
+                display: inline-block;
+            }
+
+            .documentation > div:hover {
+                background: #8b8b8b;
+            }
+
+            .documentation div:hover > a {
+                background: #606060;
+            }
+        </style>
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/jopenspace2016/breaking_toys.jpg">
+                    <h1 style="color: black;">Když vám rozbíjejí hračky</h1>
+                    <p style="margin-top: 10em">
+                        <small style="color: #333333">Jan <a style="color: #444444" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+                    </p>
+                    <h4 style="color:black">Sledujte prezentaci spolu se mnou<br/><a style="color: #444444" href="http://novoj.github.io/reveal.js/jopenspace2016.html">http://novoj.github.io/reveal.js/jopenspace2016.html</a></h4>
+                </section>
+                <!-- Client input -->
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>Už na škole nás učili</h1>
+                    <h3>nevěřit ničemu, co přichází z klienta</h3>
+                    <ul>
+                        <li>parametry / fieldy</li>
+                        <li>http hlavičky</li>
+                        <li>názvy souborů<br>(to, že to nemůže existovat, ještě neznamená,<br>že vám to nemůžou uploadnout)</li>
+                        <li>soubory (injected code)</li>
+                    </ul>
+                    <p><strong>Obecně:</strong></p>
+                    <ul>
+                        <li>co není třeba předávat přes klienta radši nepředávat</li>
+                        <li>používat ideálně hashe místo idček (enumerace)</li>
+                        <li>vstupy validovat</li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>Děláme to dostatečně?</h1>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>Http Response Splitting</h1>
+                    <p><a href="https://cs.wikipedia.org/wiki/HTTP_response_splitting">co to je?</a></p>
+                    <p><a href="#TODO">demo</a></p>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>Cross Site Scripting (XSS)</h1>
+                    <ul>
+                        <li>reflected XSS na kradení hesel (<a href="https://www.youtube.com/watch?v=Td0LeWtNSVI&t=12m58s">Kafemlejnek.TV</a>)</li>
+                        <li>ovládání klienta (<a href="https://www.youtube.com/watch?v=Td0LeWtNSVI&t=22m28s">Kafemlejnek.TV</a>)</li>
+                        <li>detekce navštívených stránek a historie vyhledávání (<a href="http://lcamtuf.coredump.cx/css_calc/">popis</a>,
+                            <a href="http://lcamtuf.coredump.cx/whack/">demo</a>)</li>
+                        <li>scanning a útoky na zařízení ve vnitřní síti
+                            (<a href="https://allodox.wordpress.com/2012/04/21/javascript-based-network-scanners">popis</a>, <a href="http://www.andlabs.org/tools/jsrecon.html">demo</a>)</li>
+                    </ul>
+                    <p><strong>Co s tím?</strong></p>
+                    <ul>
+                        <li>Content Security Policy FTW</li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>Nebezpečí v URL</h1>
+                    <ul>
+                        <li>vložený obrázek za HTTP autentizací (<a
+                                href="http://www.soom.cz/clanky/1161--Kradez-prihlasovacich-udaju-obrazkem-WWW-Authenticate-exploit">popis</a>)</li>
+                        <li>HTML v odkazu (<a href="data:text/html, <html contenteditable>" target="_new">Notepad</a>), útok na přihlašování
+                            <a href="https://thehackerblog.com/dataurize/chrome/index.html">demo</a>, <a href="https://thehackerblog.com/dataurization-of-urls-for-a-more-effective-phishing-campaign/">popis</a></li>
+                    </ul>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>XML zranitelnosti</h1>
+                    <pre><code data-trim>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE lolz [
+&lt;!ENTITY lol "lol"&gt;
+&lt;!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;"&gt;
+&lt;!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;"&gt;
+&lt;!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;"&gt;
+&lt;!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;"&gt;
+&lt;!ENTITY lol6 "&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;"&gt;
+&lt;!ENTITY lol7 "&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;"&gt;
+&lt;!ENTITY lol8 "&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;"&gt;
+&lt;!ENTITY lol9 "&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;"&gt;
+]&gt;
+&lt;lolz&gt;&lol9;&lt;/lolz&gt;</code></pre>
+                    <ul>
+                        <li>Million LOLs (<a href="https://cytinus.wordpress.com/2011/07/26/37/">popis</a>)</li>
+                        <li>XSS injekce přes data v XML</li>
+                        <li>DOS serveru - čtení z file:///dev/random</li>
+                        <li>include lokálního / externího souboru</li>
+                        <li>získání adresářové struktury v Java aplikaci (<a
+                                href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html">útok na Runkeeper s použitím Gopher protokolu</a>,
+                                <a href="http://lab.onsec.ru/2014/06/xxe-oob-exploitation-at-java-17.html">novější typ útoku s pomocí FTP</a>)</li>
+                        <li>XML hacky v místech, kde byste je nečekali:
+                            <a href="http://www.soom.cz/clanky/1198--MS-Office-DoS-a-mozna-i-neco-vic">Outlook</a>,
+                            <a href="https://lwn.net/Articles/690411/">PDF</a>,
+                            <a href="https://www.dropbox.com/s/wkba6f0wrax0wr8/xxe.mp4?dl=0">SVG</a>,
+                            <a href="https://www.youtube.com/watch?v=qzbafFSFhtU">DOCX</a>
+                        </li>
+                    </ul>
+
+                    <p><strong>Skvělý rozbor XXE</strong> se nachází na <a href="http://www.soom.cz/clanky/1137--XXE-a-dalsi-XML-zranitelnosti">SOOM.cz</a></p>
+
+                  <!--
+
+                   - mitigation: https://blog.compass-security.com/2012/08/secure-xml-parser-configuration/
+                   - billion LOLS je stále problematický: https://java.net/jira/browse/JERSEY-1714 / http://blog.bdoughan.com/2011/03/preventing-entity-expansion-attacks-in.html
+                   - přes PDF parser: https://lwn.net/Articles/690411/ :)
+                   - http://t.co/jBR0NKST -> https://www.youtube.com/watch?v=7GtPgavI-sI
+                   - http://10-99.blogspot.cz/2013/02/definition-xml-external-entityxxe-is.html
+                   - http://2013.appsecusa.org/2013/wp-content/uploads/2013/12/WhatYouDidntKnowAboutXXEAttacks.pdf
+                   - Hack přes SVG / DOCX : https://vulners.com/hackerone/H1:104620
+                   - http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8
+
+                    - Proxované spouštění kódu
+                        - např. domain check ... cokoliv co se spouští na příkazové řádce nebo HTTP
+
+                    - RegEx útoky-->
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>A co teda s tím?</h1>
+                    <div style="display: block; clear: both">
+                        <img src="img/jopenspace2016/xxe-0.png" style="width: 45%; margin: 2%">
+                        <img src="img/jopenspace2016/xxe-1.png" style="width: 45%; margin: 2%">
+                    </div>
+                    <div style="text-align: center"><a href="http://t.co/jBR0NKST">Source</a>,
+                        <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet">OWASP</a>,
+                        <a href="https://www.blackhat.com/docs/us-15/materials/us-15-Wang-FileCry-The-New-Age-Of-XXE-java-wp.pdf">BlackHat</a></div>
+                </section>
+                <section data-background="img/backgrounds/black.jpg">
+                    <h1>ReDos</h1>
+                    <ul>
+                        <li>plno lidí RegExům nerozumí</li>
+                        <li>plno vývojářů RegExy kopírují aniž by jim rozuměli</li>
+                    </ul>
+
+                    <p><em>Ukázka <a href="http://regexlib.com/REDetails.aspx?regexp_id=1757">RegExu na validaci e-mailu</a>:</em></p>
+                    <pre><code data-trim data-noescape>^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$</code></pre>
+                    <div class="fragment">
+                        <pre><code data-trim data-noescape>^([a-zA-Z0-9])<mark>(([\-.]|[_]+)?([a-zA-Z0-9]+))*</mark>(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$</code></pre>
+                        <pre><code>novotnaci@gmail.com //ok
+aaaaaaaaaaaaaaaaaaaaaaaa! //DOS</code></pre> OK
+                    </div>
+                    <ul>
+                        <li><a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">detailní popis</a></li>
+                        <li><a href="https://code.google.com/archive/p/saferegex/">Safe RegEx tester</a>, <a href="https://github.com/substack/safe-regex">totéž v Node.js</a></li>
+                        <li><a href="http://www.ocpsoft.org/regex/how-to-interrupt-a-long-running-infinite-java-regular-expression/">Circuit breaker v Javě</a></li>
+                        <li><a href="https://bugs.openjdk.java.net/browse/JDK-8140212">Pro JDK is not an issue :(</a></li>
+                    </ul>
+                </section>
+                <!-- OUTRO -->
+                <section data-background="img/spring-security/questions.jpg">
+                    <h2 style="margin-top: 8em">Děkuji za pozornost</h2>
+                    <p><strong>Odkazy:</strong></p>
+                    <ul>
+                        <li><a href="http://www.soom.cz/lexikon-webovych-zranitelnosti">SOOM.cz</a></li>
+                        <li><a href="https://www.owasp.org/index.php/Main_Page">OWASP</a></li>
+                        <li><a href="http://security.stackexchange.com/">Security StackExchange</a></li>
+                    </ul>
+                    <p>Kontakt <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                </section>
+			</div>
+
+            <!-- REFERENCE: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+	</body>
+</html>
