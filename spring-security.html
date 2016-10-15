@@ -77,7 +77,7 @@
 
 			<div class="slides">
                 <!-- INTRO -->
-                <section>
+                <section data-background="img/backgrounds/black.jpg">
                     <section data-background="img/backgrounds/black.jpg">
                         <h1>Spring Security</h1>
                         <h2>your gate to authentication and authorization</h2>
@@ -85,15 +85,19 @@
                         <p>
                             <small>Jan <a href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
                         </p>
-                        <h4>Follow presentation with me at<br/><a href="http://novoj.github.io/reveal.js/spring-security.html">http://novoj.github.io/reveal.js/spring-security.html</a></h4>
                     </section>
                     <section data-background="img/backgrounds/jno.jpg" data-background-size="contain" style="padding-left: 25%">
+                        <h4 style="margin-bottom: 4em;">
+                            <span style="font-size: 180%">Follow presentation with me at</span><br/>
+                            <a href="http://novoj.github.io/reveal.js/spring-security.html" style="font-size: 125%">http://novoj.github.io/reveal.js/spring-security.html</a>
+                        </h4>
                         <h1>About me</h1>
-                        <ul>
+                        <ul style="margin-left: 3em;">
                             <li><a href="https://www.fg.cz">Java developer at FG Forrest</a></li>
                             <li><a href="https://kafemlejnek.tv">VLogger at Kafemlejnek.TV</a></li>
                             <li><a href="http://blog.novoj.net">blogger at blog.novoj.net</a></li>
                             <li><a href="http://jopenspace.cz">jOpenspace non-conference co-organizer</a></li>
+                            <li><a href="https://www.monkeytracker.cz">co-author of MonkeyTracker service</a></li>
                             <li>using Spring (Acegi) Security since 2007</li>
                             <li>occassional speaker, father,<br/>MTB rider, runner ...</li>
                         </ul>
@@ -266,7 +270,6 @@
                                checks validity of the password via <a href="http://localhost:8091/?message=org/springframework/security/crypto/password/PasswordEncoder.java">PasswordEncoder</a>.</p>
                             <p style="text-align: left; font-size: 80%">When password is ok, new <a href="http://localhost:8091/?message=org/springframework/security/core/Authentication.java">Authentication</a> object is created and stored in
                                 <a href="http://localhost:8091/?message=org/springframework/security/core/context/SecurityContext.java">SecurityContext</a>.</p>
-                            <p style="text-align: left; font-size: 80%">Session protection is applied (more on this later).</p>
                         </div>
                         <div style="text-align: center; width: 47%; display: inline-block">
                             <h3>Subsequent requests</h3>
@@ -317,8 +320,8 @@
                             <h3>AccessDecisionManager</h3>
                             <ul style="width: 100%">
                                 <li>AffirmativeBased:<br/><em>SINGLE GRANT -> GRANT</em></li>
-                                <li>ConsensusBased:<br/><em>sum(GRANT) > sum(DENY) -> GRANT</em></li>
                                 <li>UnanimousBased:<br/><em>SINGLE DENY -> DENY</em></li>
+                                <li>ConsensusBased:<br/><em>sum(GRANT) > sum(DENY) -> GRANT</em></li>
                             </ul>
                             <h3 style="margin-top: 1em">AccessDecisionVoter</h3>
                             <ul style="width: 100%">
@@ -327,42 +330,30 @@
                                 <li>WebExpressionVoter:<br/><em>SpEL expression</em></li>
                             </ul>
                         </div>
-                        <div style="clear: both; width: 85%; float: right;">
-                            <strong>Example:</strong>
-                            <pre style="display: inline-block;"><code class="xml" data-trim>/admin/**=ROLE_ADMINISTRATOR, ROLE_SUPER_ADMINISTRATOR
-/**=IS_AUTHENTICATED_ANONYMOUSLY
-
-/userManagement/**=#{hasRole('ROLE_COMPANY_OWNER') and hasIpAddress('192.168.1.0/24')</code></pre>
-                        </div>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Hieararchical roles</h1>
-                        <div style="clear: both">
-                            <p>Useful in scenarios when user having certain role<br/>should also have another role.</p>
-                            <strong>Example:</strong>
-                        </div>
-                        <div style="clear: both; width: 30%; margin-left: 35%">
-                            <pre style="display: inline-block;"><code class="xml" data-trim>ROLE_ADMIN > ROLE_STAFF
-ROLE_STAFF > ROLE_USER
-ROLE_USER > ROLE_GUEST</code></pre>
-                        </div>
-                        <p>Admin will be also STAFF, USER, GUEST regarding access decision logic.<br/>Hierarchy rules can be changed without touching user data.</p>
-                    </section>
-                    <section data-transition="fade-in fade-out">
-                        <h1>Web expression security</h1>
-                        <p>You can use either <em>simple rules</em> or <em>expression rules</em>, not both.</p>
-                        <div style="clear: both; width: 70%; margin-left: 15%">
-                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;http use-expressions="true"&gt;
-    &lt;intercept-url pattern="/user/{userId}/**"
-                   access="@webSecurity.checkUserId(authentication,#userId)"/&gt;
-&lt;/http&gt;</code></pre>
-                            <p>@ refers to Spring bean objects<br/>
-                                # refers to url parameters</p>
+                        <div style="clear: both; width: 85%; float: right; margin-top: 1em">
+                            <strong>SecurityConfig example:</strong>
+                            <pre style="display: inline-block;"><code class="xml" data-trim data-noescape="true">/admin/**=<mark>ROLE_ADMINISTRATOR</mark>, <mark>ROLE_SUPER_ADMINISTRATOR</mark>
+/userManagement/**=<mark>#{hasRole('ROLE_COMPANY_OWNER') and hasIpAddress('192.168.1.0/24')</mark>
+/**=<mark>IS_AUTHENTICATED_ANONYMOUSLY</mark></code></pre>
                         </div>
                     </section>
                     <section data-transition="fade-in fade-out">
                         <h1>Built-in-expressions</h1>
-                        <img src="img/spring-security/built-in-expressions.png" width="800">
+                        <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/el-access.html#el-common-built-in">
+                            <img src="img/spring-security/built-in-expressions.png" width="800">
+                        </a>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>Web expression security</h1>
+                        <p>You can use either <em>simple rules</em> or <em>expression rules</em>, not both.</p>
+                        <div style="clear: both; width: 75%; margin-left: 15%">
+                            <pre style="display: inline-block;"><code class="xml" data-trim>&lt;http use-expressions="true"&gt;
+    &lt;intercept-url pattern="/user/{userId}/**"
+                   access="@myAuthService.checkUserId(authentication,#userId)"/&gt;
+&lt;/http&gt;</code></pre>
+                            <p>@ refers to Spring bean objects<br/>
+                                # refers to url parameters</p>
+                        </div>
                     </section>
                     <section data-transition="fade-in fade-out">
                         <h1>Method security</h1>
@@ -391,6 +382,19 @@ public List&lt;Contact&gt; getAll();</code></pre>
                         </div>
                     </section>
                     <section data-transition="fade-in fade-out">
+                        <h1>Hieararchical roles</h1>
+                        <div style="clear: both">
+                            <p>Useful in scenarios when user having certain role<br/>should also have another role.</p>
+                            <strong>Example:</strong>
+                        </div>
+                        <div style="clear: both; width: 30%; margin-left: 35%">
+                            <pre style="display: inline-block;"><code class="xml" data-trim>ROLE_ADMIN > ROLE_STAFF
+ROLE_STAFF > ROLE_USER
+ROLE_USER > ROLE_GUEST</code></pre>
+                        </div>
+                        <p>Admin will be also STAFF, USER, GUEST regarding access decision logic.<br/>Hierarchy rules can be changed without touching user data.</p>
+                    </section>
+                    <section data-transition="fade-in fade-out">
                         <h1>Meta annotations</h1>
                         <p style="margin-left: 20%; text-align: center">Allows you to mitigate String based "programming".</p>
                         <div style="float: left; width: 80%; margin-left: 20%; margin-bottom: 2em;">
@@ -403,7 +407,10 @@ public @interface ContactPermission {}</code></pre>
                             <pre style="display: inline-block;"><code class="java" data-trim>@ContactPermission
 public void doSomething(Contact contact);</code></pre>
                         </div>
-                        <p style="margin-left: 20%; text-align: center"><em>Currently doesn't allow multiple annotations on a single method. <a href="https://github.com/spring-projects/spring-security/issues/4003">Issue #4003</a></em></p>
+                        <p style="margin-left: 20%; text-align: center">
+                            Currently doesn't allow multiple annotations on a single method.
+                            <br/><a href="https://github.com/spring-projects/spring-security/issues/4003">Issue #4003</a></em>
+                        </p>
                     </section>
                 </section>
                 <!-- TESTING -->
@@ -420,7 +427,7 @@ public void doSomething(Contact contact);</code></pre>
                         </ul>
                     </section>
                     <section data-transition="fade-in fade-out">
-                        <h1>Method authorization testing</h1>
+                        <h1>Method authorization</h1>
                         <h3>Test example</h3>
                         <div style="float: left; width: 100%; margin-bottom: 2em;">
                             <pre style="display: inline-block;"><code class="java" style="font-size: 80%; max-height: 600px;" data-trim>@RunWith(SpringJUnit4ClassRunner.class)
@@ -428,8 +435,8 @@ public void doSomething(Contact contact);</code></pre>
 @SecurityExecutionListeners
 public class ExampleTestClass {
 
-    @WithAnonymousUser
     @Test(expected = AccessDeniedException.class)
+    @WithAnonymousUser
     public void getMessageUnauthenticated() {
     	messageService.getMessage();
     }
@@ -520,6 +527,34 @@ public class ExampleTestClass {
 }</code></pre>
                         </div>
                     </section>
+                </section>
+                <!-- USER SWITCHING -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>User switching</h1>
+                    <img src="img/spring-security/user-switch.png" alt="CSP overview" class="plain" width="200" style="float: left;">
+                    <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+                        <p>Handy for developers as well as for customer administrators. Allows user with admin roles to switch
+                            to any other user with lower roles without knowing password.</p>
+                        <pre style="display: inline-block;"><code class="java" data-trim>@Override
+protected void configure(HttpSecurity http) throws Exception {
+    final SwitchUserFilter filter = new SwitchUserFilter();
+    filter.setSwitchUserUrl("/switchUser");
+    filter.setUsernameParameter("username");
+    filter.setExitUserUrl("/restoreUserBack");
+    http.addFilterAfter(filter, FilterSecurityInterceptor.class)
+        .authorizeRequests()
+            .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
+            .antMatchers("/restoreUser").authenticated();
+}</code></pre>
+                        <p>Consider also adding an IP check or other authentication checks to better secure user switching.</p>
+                        <p><strong>Warning!</strong> This feature is kind of a backdoor to your application.</p>
+                    </div>
+                </section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/black.jpg">
+                    <img src="img/backgrounds/attention.jpg" width="800"/>
+                    <h2>Thank your for your attention</h2>
+                    <p>Contact me at <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                 </section>
                 <!-- PASSWORD MANAGEMENT -->
                 <section data-background="img/backgrounds/brown.jpg">
@@ -863,7 +898,7 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
                                     <a href="http://download.oracle.com/otn-pub/jcp/servlet-3.0-fr-eval-oth-JSpec/servlet-3_0-final-spec.pdf?AuthParam=1471606619_c6d486d96c4d3110d045d7027578a40e">SSL</a> (chapter 7.1.2)</li>
                             </ul>
                         </div>
-                        <div style="float: left; width: 45%; font-size: 80%; margin-left: 2em;">
+                        <div style="float: left; width: 47%; font-size: 80%; margin-left: 2em;">
                             <p>Create new session on user login:</p>
                             <pre style="display: inline-block;"><code class="xml" data-trim>&lt;session-management session-fixation-protection="migrateSession"/&gt;</code></pre>
                             <ul style="font-size: 70%">
@@ -877,36 +912,16 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
                         <h1>Concurrency control</h1>
                         <p>Spring Security can track all sessions in <a href="http://localhost:8091/?message=org/springframework/security/core/session/SessionRegistry.java">SessionRegistry</a>.</p>
                         <pre style="display: inline-block;"><code class="xml" data-trim><session-management>
-    &lt;concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/&gt;  expired-url="/sessionExpired.html"
+    &lt;concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/sessionExpired.html"/&gt;
 </session-management></code></pre>
                         <p>When <em>error-if-maximum-exceeded</em> is false and <em>max-sessions</em> is exceeded least recently used session is invalidated.
                            User using this session will get <em>expired-url</em> page.</p>
                     </section>
                 </section>
-                <!-- USER SWITCHING -->
-                <section data-background="img/backgrounds/brown.jpg">
-                    <h1>User switching</h1>
-                    <img src="img/spring-security/user-switch.png" alt="CSP overview" class="plain" width="200" style="float: left;">
-                    <div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-                        <p>Handy for developers as well as for customer administrators. Allows user with admin roles to switch
-                           to any other user with lower roles without knowing password.</p>
-<pre style="display: inline-block;"><code class="java" data-trim>@Override
-protected void configure(HttpSecurity http) throws Exception {
-    final SwitchUserFilter filter = new SwitchUserFilter();
-    filter.setSwitchUserUrl("/switchUser");
-    filter.setUsernameParameter("username");
-    filter.setExitUserUrl("/restoreUserBack");
-    http.addFilterAfter(filter, FilterSecurityInterceptor.class)
-        .authorizeRequests()
-            .antMatchers("/switchUser").hasAnyAuthority("ROLE_ADMIN")
-            .antMatchers("/restoreUser").authenticated();
-}</code></pre>
-                        <p>Consider also adding an IP check or other authentication checks to better secure user switching.<br/>This feature is form of backdoor.</p>
-                    </div>
-                </section>
-                <!-- OUTRO -->
-                <section data-background="img/spring-security/questions.jpg">
-                    <h2 style="margin-top: 8em">Thank your for your attention</h2>
+                <!-- OUTRO AGAIN -->
+                <section data-background="img/backgrounds/black.jpg">
+                    <img src="img/backgrounds/attention.jpg" width="800"/>
+                    <h2>Thank your for your attention</h2>
                     <p>Contact me at <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                 </section>
 			</div>
@@ -948,7 +963,7 @@ protected void configure(HttpSecurity http) throws Exception {
 				]
 			});
 
-            var deadline = new Date(Date.parse(new Date()) + 2 * 60 * 60 * 1000);
+            var deadline = new Date(Date.parse(new Date()) + 1.25 * 60 * 60 * 1000);
             initializeClock(deadline);
 
 		</script>
