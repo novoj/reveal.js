@@ -729,7 +729,7 @@ key:               A private key to prevent modification of the remember-me toke
                             <li>Referer header check (not entirely recommended)</li>
                             <li>requesting unique CSRF token in HTTP request (as parameter or header, not cookie!)</li>
                         </ul>
-                        <p><em style="font-size: 75%">Originally Spring Security used <a href="https://spring.io/blog/2013/08/21/spring-security-3-2-0-rc1-highlights-csrf-protection/">CSRF token per session</a>
+                        <p><em style="font-size: 75%">Originally Spring Security used <a href="https://spring.io/blog/2013/08/21/spring-security-3-2-0-rc1-highlights-csrf-protection/">CSRF token per request</a>
                            but it was quite impractical (browser back button, partial update) and thus CSRF token is now unique to session.</em></p>
                         <h3>Things to consider</h3>
                         <ul>
