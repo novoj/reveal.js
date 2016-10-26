@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Spring Security, 2016</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            .documentation {
+                font-family: sans-serif;
+                color: #fff;
+                display: inline-block;
+                font-weight: 100;
+                text-align: center;
+                position:absolute;
+                margin: 15px;
+                top:0;
+                right:100px;
+                z-index: 100;
+            }
+
+            .documentation > div{
+                padding: 10px;
+                border-radius: 3px;
+                background: #343434;
+                display: inline-block;
+            }
+
+            .documentation div > a {
+                color: #cecece;
+                text-decoration: none;
+                padding: 10px;
+                border-radius: 3px;
+                background: #252525;
+                display: inline-block;
+            }
+
+            .documentation > div:hover {
+                background: #8b8b8b;
+            }
+
+            .documentation div:hover > a {
+                background: #606060;
+            }
+        </style>
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/backgrounds/black.jpg">
+                    <section data-background="img/backgrounds/black.jpg">
+                        <h1>Runtime class generation</h1>
+                        <h2>how to implement your own Spring Data</h2>
+                        <h3>autumn 2016</h3>
+                        <p>
+                            <small>Jan <a href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+                        </p>
+                    </section>
+                    <section data-background="img/backgrounds/jno.jpg" data-background-size="contain" style="padding-left: 25%">
+                        <h4 style="margin-bottom: 4em;">
+                            <span style="font-size: 180%">Follow presentation with me at</span><br/>
+                            <a href="http://novoj.github.io/reveal.js/spring-security.html" style="font-size: 105%">http://novoj.github.io/reveal.js/runtime-class-generation.html</a>
+                        </h4>
+                        <h1>About me</h1>
+                        <ul style="margin-left: 3em;">
+                            <li><a href="https://www.fg.cz">Java developer at FG Forrest</a></li>
+                            <li><a href="https://kafemlejnek.tv">YouTuber at Kafemlejnek.TV</a></li>
+                            <li><a href="http://blog.novoj.net">blogger at blog.novoj.net</a></li>
+                            <li><a href="http://jopenspace.cz">jOpenspace non-conference co-organizer</a></li>
+                            <li><a href="https://www.monkeytracker.cz">co-author of MonkeyTracker service</a></li>
+                            <li>using Spring (Acegi) Security since 2007</li>
+                            <li>occassional speaker, father,<br/>MTB rider, runner ...</li>
+                        </ul>
+                    </section>
+                    <section data-background="img/backgrounds/brown.jpg">
+                        <h1>What will we talk about?</h1>
+                        <ol style="white-space: nowrap">
+                            <li>use-cases</li>
+                            <li>tools</li>
+                            <li>performance penalization</li>
+                            <li>catches and donwsides</li>
+                        </ol>
+                    </section>
+                </section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/black.jpg">
+                    <img src="img/backgrounds/attention.jpg" width="800"/>
+                    <h2>Thank your for your attention</h2>
+                    <p>Contact me at <a href="https://www.twitter.com/novoj">@Novoj</a> or <a href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                </section>
+			</div>
+
+            <!-- REFERENCE: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+	</body>
+</html>
