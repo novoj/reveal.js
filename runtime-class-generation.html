@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Spring Security, 2016</title>
+		<title>Runtime Class Generation, 2016</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/clock.css">
@@ -75,7 +75,7 @@
                 <section data-background="img/backgrounds/black.jpg">
                     <section data-background="img/backgrounds/black.jpg">
                         <h1>Runtime class generation</h1>
-                        <h2>how to implement your own Spring Data</h2>
+                        <h2>let the machine work for you</h2>
                         <h3>autumn 2016</h3>
                         <p>
                             <small>Jan <a href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
@@ -97,14 +97,91 @@
                             <li>occassional speaker, father,<br/>MTB rider, runner ...</li>
                         </ul>
                     </section>
-                    <section data-background="img/backgrounds/brown.jpg">
-                        <h1>What will we talk about?</h1>
-                        <ol style="white-space: nowrap">
-                            <li>use-cases</li>
-                            <li>tools</li>
-                            <li>performance penalization</li>
-                            <li>catches and donwsides</li>
-                        </ol>
+                </section>
+                <!-- GOAL -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section>
+                        <h1>Wouldn't it be nice if this code</h1>
+                        <pre><code class="java" data-trim>public interface PersonDao {
+
+    void create(String firstName, String lastName, LocalDate birthDate);
+
+    void store(Person person);
+
+    Person getById();
+
+    boolean removeById();
+
+}</code></pre>
+                        <h2>was automatically implemented by machine?</h2>
+                    </section>
+                    <section>
+                        <h1>It's already out there</h1>
+                        <div style="width: 30%; display: inline-block; vertical-align: top; height: 40em;">
+                            <p>Just to name a few:</p>
+                            <ul>
+                                <li><a href="http://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.query-methods.details">Spring data</a></li>
+                                <li><a href="http://www.mybatis.org/mybatis-3/java-api.html">MyBatis</a></li>
+                                <li><a href="https://en.wikipedia.org/wiki/Active_record_pattern">Active Record (JRuby)</a></li>
+                            </ul>
+                        </div>
+                        <div style="width: 68%; display: inline-block; vertical-align: top; height: 40em;">
+                            <img src="img/runtime/spring-data.jpg" height="500px" style="position: absolute; left: 35%"/>
+                            <img class="fragment current-visible" src="img/runtime/mybatis.jpg" height="500px" style="position: absolute; left: 35%"/>
+                            <img class="fragment current-visible" src="img/runtime/ruby-on-rails.jpg" height="500px" style="position: absolute; left: 35%"/>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>But how they do it?</h1>
+                        <div style="margin: 2em">
+                            <p>Using automatic class generation in:</p>
+                            <div style="width: 48%; display: inline-block">
+                                <h3>compile time</h3>
+                                <ul>
+                                    <li>AspectJ</li>
+                                    <li>ByteBuddy</li>
+                                    <li>BTrace</li>
+                                    <li>Lombok</li>
+                                </ul>
+                            </div>
+                            <div style="width: 48%; display: inline-block">
+                                <h3>runtime</h3>
+                                <ul>
+                                    <li>JdkProxy</li>
+                                    <li>CgLib</li>
+                                    <li>Javassist</li>
+                                    <li>ByteBuddy</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p>Both approaches have their pros and cons.</p>
+                    </section>
+                </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section>
+                        <h1>Let's prototype!</h1>
+                        <div class="fragment">
+                            <div style="width: 48%; display: inline-block">
+                                <h2>Pros</h2>
+                                <ul>
+                                    <li>type safe code around hashmap</li>
+                                    <li>supports refactoring</li>
+                                    <li>supports searching</li>
+                                </ul>
+                            </div>
+                            <div style="width: 48%; display: inline-block">
+                                <h2>Cons</h2>
+                                <ul>
+                                    <li>string parsing - method.getName()</li>
+                                    <li>ugly code</li>
+                                    <li>most likely pretty slow</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>Refactor!</h1>
+
                     </section>
                 </section>
                 <!-- OUTRO -->
@@ -115,7 +192,7 @@
                 </section>
 			</div>
 
-            <!-- REFERENCE: http://stackoverflow.com/questions/549/the-definitive-guide-to-form-based-website-authentication -->
+            <!-- REFERENCE: http://www.slideshare.net/RafaelWinterhalter/runtime-code-generation-for-the-jvm -->
 
 		</div>
 
@@ -154,7 +231,6 @@
 
             var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
             initializeClock(deadline);
-
 		</script>
 
 	</body>
