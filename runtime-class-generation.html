@@ -252,7 +252,7 @@
                         </div>
                         <div class="fragment">
                             <p>Default methods to the rescue.</p>
-                            <p>Look at:</p>
+                            <h3>Look at:</h3>
                             <ul>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/model/traits/AgingPerson.java">Aging person trait</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/model/CustomizedPerson.java">Customized person contract</a></li>
@@ -266,7 +266,7 @@
                         <p><strong>Branch:</strong> tutorial05</p>
                         <div style="margin-top: 2em">
                             <p>Abstract classes are more appropriate</p>
-                            <p>Look at:</p>
+                            <h3>Look at:</h3>
                             <ul>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/model/traits/AgingPerson.java">Aging person trait</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/model/CustomizedPerson.java">Customized person contract</a></li>
@@ -280,6 +280,68 @@
                         <h1>DAO implementation</h1>
                         <h2>all building blocks in place</h2>
                         <p><strong>Branch:</strong> tutorial06</p>
+                        <div style="margin-top: 2em">
+                            <p>Nothing much new here</p>
+                            <h3>Look at:</h3>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/Dao.java">Dao interface</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java">Person Dao "implementation"</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java">Test suite</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/GenericBucketRepository.java">Memory repository</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/GenericBucketDaoProxyGenerator.java">Dao method implementation</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>DAO implementation</h1>
+                        <h2>nicer create &amp; add method</h2>
+                        <p><strong>Branch:</strong> tutorial07</p>
+                        <div style="margin-top: 2em">
+                            <p>Let's get advantage of parameters!</p>
+                            <h3>Look at:</h3>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:24">Person Dao "implementation"</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:38">Test suite</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/DaoMethodExecutor.java">Dao method executor</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/AddDaoMethodExecutor.java">Add method executor</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/GenericBucketDaoProxyGenerator.java:49">Updated proxy generator</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>DAO implementation</h1>
+                        <h2>finder implementation</h2>
+                        <div style="margin-top: 1em">
+                            <img class="plain" src="img/runtime/query-process.png" height="500px">
+                        </div>
+                    </section>
+                    <section>
+                        <h1>DAO implementation</h1>
+                        <h2>finder implementation</h2>
+                        <p><strong>Branch:</strong> tutorial08</p>
+                        <div style="margin-top: 1em">
+                            <h3>Look at:</h3>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:22">Person Dao "implementation"</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:55">Test suite</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/GetDaoMethodExecutor.java">Get method executor</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/dto/DaoMethodQuery.java">Query AST</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/query/keyword/Keyword.java">Keywords (reserved words)</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>DAO implementation</h1>
+                        <h2>removal implementation (piece of cake)</h2>
+                        <p><strong>Branch:</strong> tutorial09</p>
+                        <div style="margin-top: 1em">
+                            <h3>Look at:</h3>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:23">Person Dao "implementation"</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:133">Test suite</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/RemoveDaoMethodExecutor.java">Remove method executor</a></li>
+                            </ul>
+                        </div>
                     </section>
                 </section>
                 <!-- OUTRO -->
