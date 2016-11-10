@@ -344,6 +344,53 @@
                         </div>
                     </section>
                 </section>
+                <section data-background="img/backgrounds/brown.jpg">
+                    <section>
+                        <h1>Bonus</h1>
+                        <h2>proxy serialization</h2>
+                        <p><strong>Branch:</strong> tutorial10</p>
+                        <div style="margin-top: 1em">
+                            <p>We can't simply serialize proxy - class might not be known at the moment of deserialization.</p>
+                            <p>We need to serialize "recipe" how to reconstruct the class.</p>
+                            <h3>Look at:</h3>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/SerializableProxy.java">Serializable Proxy</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:117">Test suite</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h1>Bonus</h1>
+                        <h2>always repackage</h2>
+                        <div style="width: 100%; text-align: center">
+                            <pre style="display: inline-block; width: auto;"><code class="xml" style="max-height: 600px; width: 60em; font-size: 80%; line-height: 1.4em;" data-trim><plugin>
+    <groupId>org.sonatype.plugins</groupId>
+    <artifactId>jarjar-maven-plugin</artifactId>
+    <version>1.9</version>
+    <executions>
+        <execution>
+	        <phase>package</phase>
+	        <goals>
+		        <goal>jarjar</goal>
+	        </goals>
+	        <configuration>
+		        <overwrite>true</overwrite>
+		        <includes>
+			        <include>org.javassist:javassist</include>
+		        </includes>
+		        <rules>
+			        <rule>
+				        <pattern>javassist.**</pattern>
+				        <result>cz.novoj.generation.internal.javassist.@1</result>
+			        </rule>
+		        </rules>
+	        </configuration>
+        </execution>
+    </executions>
+</plugin></code></pre>
+                        </div>
+                    </section>
+                </section>
                 <!-- OUTRO -->
                 <section data-background="img/backgrounds/black.jpg">
                     <img src="img/backgrounds/attention.jpg" width="800"/>
