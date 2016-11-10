@@ -390,6 +390,18 @@
 </plugin></code></pre>
                         </div>
                     </section>
+                    <section>
+                        <h1>Bonus</h1>
+                        <h2>additional topics</h2>
+                        <ul>
+                            <li>annotations on methods are not inherited in Java and some class generations utils
+                                doesn't copy them on overriden methods on subclass, look what
+                                <a href="http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/AnnotationUtils.html">Spring guys worked around this</a></li>
+                            <li>generics resolution - is tricky, again see <a href="http://grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-core/4.2.0.RELEASE/org/springframework/core/GenericTypeResolver.java#GenericTypeResolver">Spring implementation</a></li>
+                            <li>performance of proxies is <a href="https://zeroturnaround.com/rebellabs/testing-the-performance-of-4-java-runtime-code-generators-cglib-javassist-jdk-proxy-byte-buddy/">not so bad</a>,
+                                but dynamic nature makes them much slower than static class implementation</li>
+                        </ul>
+                    </section>
                 </section>
                 <!-- OUTRO -->
                 <section data-background="img/backgrounds/black.jpg">
