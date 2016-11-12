@@ -422,6 +422,32 @@ ROLE_USER > ROLE_GUEST</code></pre>
                         <p>Admin will be also STAFF, USER, GUEST regarding access decision logic.<br/>Hierarchy rules can be changed without touching user data.</p>
                     </section>
                     <section data-transition="fade-in fade-out">
+                        <h1>Permissions</h1>
+                        <p>If you need more robust authorization system - ie. when roles are not enough.</p>
+                        <p>Implement your own <a href="http://localhost:8091/?message=org/springframework/security/access/PermissionEvaluator.java">PermissionEvaluator</a></p>
+                        <div style="clear: both; width: 95%; margin-left: 5%; font-size: 90%;">
+                            <pre style="display: inline-block;"><code class="java" data-trim>public interface PermissionEvaluator extends AopInfrastructureBean {
+
+    boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission);
+
+    boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission);
+
+}</code></pre>
+                        </div>
+                        <p>And configure it:</p>
+                        <div style="clear: both; width: 95%; margin-left: 5%; font-size: 80%;">
+                            <pre style="display: inline-block;"><code class="xml" data-trim><security:global-method-security pre-post-annotations="enabled">
+   <security:expression-handler ref="expressionHandler"/>
+</security:global-method-security>
+
+<bean id="expressionHandler"
+      class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+      <property name="permissionEvaluator" ref="myPermissionEvaluator"></property>
+</bean></code></pre>
+                        </div>
+                        <p>Or use <a href="http://docs.spring.io/spring-security/site/docs/current/reference/html/domain-acls.html">already implemented ACL system</a> from Spring Security.</p>
+                    </section>
+                    <section data-transition="fade-in fade-out">
                         <h1>Meta annotations</h1>
                         <p style="margin-left: 20%; text-align: center">Allows you to mitigate String based "programming".</p>
                         <div style="float: left; width: 80%; margin-left: 20%; margin-bottom: 2em;">
