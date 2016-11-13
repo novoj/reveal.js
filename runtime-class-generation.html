@@ -67,11 +67,11 @@
         <div style="display: block; position: absolute; bottom: 40px; left: 50%; width: 1000px; margin-left: -500px; z-index: 20;">
             <table style="width: 100%">
                 <tr>
-                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Pořadatel</span></td>
-                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Konference</span></td>
+                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Organizer</span></td>
+                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Conference</span></td>
                     <td style="text-align: center; width: 20%"></td>
                     <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Gold partner</span></td>
-                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">Generální partner</span></td>
+                    <td style="text-align: center; width: 20%"><span style="font-size: 80%; color: #e7ad52;">General partner</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
@@ -123,7 +123,7 @@
                             <li><a href="http://blog.novoj.net">blogger at blog.novoj.net</a></li>
                             <li><a href="http://jopenspace.cz">jOpenspace non-conference co-organizer</a></li>
                             <li><a href="https://www.monkeytracker.cz">co-author of MonkeyTracker service</a></li>
-                            <li>occassional speaker, father,<br/>MTB rider, runner ...</li>
+                            <li>occasional speaker, father,<br/>MTB rider, runner ...</li>
                         </ul>
                     </section>
                 </section>
@@ -191,7 +191,19 @@
                     <section>
                         <h1>Let's prototype!</h1>
                         <p><strong>Branch:</strong> tutorial01</p>
-                        <div class="fragment">
+                        <div style="width: 40%; height: 8em; vertical-align: top; display: inline-block">
+                            Look at:<br/><br/>
+                            <ul>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/Person.java">Person</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/PropertyAccessor.java">Property Accessor</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/model/GenericBucket.java">Actual memory model</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/model/GenericBucketProxyGenerator.java">Proxy implementation</a></li>
+                            </ul>
+                        </div>
+                        <div style="width: 50%; height: 8em; display: inline-block; vertical-align: middle">
+                            <img class="plain" src="img/runtime/jdk-proxy.png" style="margin-top: 4em"/>
+                        </div>
+                        <div class="fragment" style="margin-top: 1em;">
                             <div style="width: 48%; display: inline-block">
                                 <h2>Pros</h2>
                                 <ul>
@@ -213,9 +225,10 @@
                     <section>
                         <h1>Refactor!</h1>
                         <h2>Proxy class caching</h2>
+                        <img class="plain" src="img/runtime/red-green-refactor.png" style="float: left; width: 30%; position: absolute; left: 0%; top: 0%">
                         <p><strong>Branch:</strong> tutorial02</p>
-                        <div class="fragment">
-                            <ul style="width: 60%;">
+                        <div>
+                            <ul style="width: 60%; margin-top: 4em;">
                                 <li>java.lang.reflect.Proxy already caches classes</li>
                                 <li>but we can do this more effectively</li>
                                 <li>this is valid even for other class generators - I recommend disabling generator caching and implement your own</li>
@@ -226,53 +239,46 @@
                         <h1>Refactor!</h1>
                         <h2>Method logic caching</h2>
                         <p><strong>Branch:</strong> tutorial03</p>
-                        <div>
-                            <div style="width: 40%; vertical-align: top; display: inline-block">
-                                <ul>
+                        <img class="plain" src="img/runtime/red-green-refactor.png" style="float: left; width: 30%; position: absolute; left: 0%; top: 0%">
+                        <div style="margin-top: 4em">
+                            <div style="width: 45%; vertical-align: top; display: inline-block">
+                                Let's make it even better:<br/><br/>
+                                <ol>
                                     <li>convert IF to lambda functions</li>
                                     <li>cache pair Proxy.method + service lambda</li>
                                     <li>cache information about method name decomposition, so that parsing is done only once</li>
-                                </ul>
+                                </ol>
                             </div>
                             <div style="width: 40%; margin-left: 10%; vertical-align: top; display: inline-block">
                                 Look at:<br/><br/>
                                 <ul>
+                                    <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/model/GenericBucketProxyGenerator.java:64">Concrete usage</a></li>
                                     <li><a href="http://localhost:8091?message=cz/novoj/generation/proxyGenerator/JdkProxyDispatcherInvocationHandler.java">Dispatcher handler</a></li>
                                     <li><a href="http://localhost:8091?message=cz/novoj/generation/proxyGenerator/infrastructure/MethodClassification.java">Method classification</a></li>
-                                    <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/model/GenericBucketProxyGenerator.java:64">Concrete usage</a></li>
                                 </ul>
                             </div>
                         </div>
                     </section>
                     <section>
-                        <h1>Custom method implementation</h1>
-                        <p><strong>Branch:</strong> tutorial04</p>
-                        <div style="margin-top: 2em">
-                            <p>What if we need custom logic on a proxy?</p>
-                            <p>What if we want to mix and match custom logic with automatic one?</p>
-                        </div>
-                        <div class="fragment">
-                            <p>Default methods to the rescue.</p>
-                            <h3>Look at:</h3>
-                            <ul>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/traits/AgingPerson.java">Aging person trait</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/CustomizedPerson.java">Customized person contract</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/JdkInterfaceProxyGeneratorTest.java">Test suite</a></li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section>
-                        <h1>Custom method implementation</h1>
-                        <h2>we can do it better</h2>
-                        <p><strong>Branch:</strong> tutorial05</p>
-                        <div style="margin-top: 2em">
-                            <p>Abstract classes are more appropriate</p>
-                            <h3>Look at:</h3>
-                            <ul>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/traits/AgingPerson.java">Aging person trait</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/model/CustomizedPerson.java">Customized person contract</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/JdkInterfaceProxyGeneratorTest.java">Test suite</a></li>
-                            </ul>
+                        <h1>Custom method body</h1>
+                        <div style="width: 100%; vertical-align: top">
+                            <img class="plain" src="img/runtime/manual-override.jpg" style="width: 30%; margin-right: 2em;">
+                            <div style="width: 60%; display: inline-block">
+                                <p><strong>Branch:</strong> tutorial04</p>
+                                <div style="display: inline-block">
+                                    <p>What if we need custom logic on a proxy?</p>
+                                    <p>What if we want to mix and match custom logic with automatic one?</p>
+                                </div>
+                                <div class="fragment" style="display: inline-block">
+                                    <p>Default / abstract methods to the rescue.</p>
+                                    <h3>Look at:</h3>
+                                    <ul>
+                                        <li><a href="http://localhost:8091?message=cz/novoj/generation/model/traits/AgingPerson.java">Aging person trait</a></li>
+                                        <li><a href="http://localhost:8091?message=cz/novoj/generation/model/CustomizedPerson.java">Customized person contract</a></li>
+                                        <li><a href="http://localhost:8091?message=cz/novoj/generation/JdkInterfaceProxyGeneratorTest.java">Test suite</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </section>
@@ -280,7 +286,8 @@
                     <section>
                         <h1>DAO implementation</h1>
                         <h2>all building blocks in place</h2>
-                        <p><strong>Branch:</strong> tutorial06</p>
+                        <img class="plain" src="img/runtime/CRUD.gif" style="float: left; width: 30%; position: absolute; left: 0%; top: 50%">
+                        <p><strong>Branch:</strong> tutorial05</p>
                         <div style="margin-top: 2em">
                             <p>Nothing much new here</p>
                             <h3>Look at:</h3>
@@ -296,22 +303,22 @@
                     <section>
                         <h1>DAO implementation</h1>
                         <h2>nicer create &amp; add method</h2>
-                        <p><strong>Branch:</strong> tutorial07</p>
+                        <img class="plain" src="img/runtime/CRUD.gif" style="float: left; width: 30%; position: absolute; left: 0%; top: 50%">
+                        <p><strong>Branch:</strong> tutorial06</p>
                         <div style="margin-top: 2em">
                             <p>Let's get advantage of parameters!</p>
                             <h3>Look at:</h3>
                             <ul>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:24">Person Dao "implementation"</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:38">Test suite</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/DaoMethodExecutor.java">Dao method executor</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/AddDaoMethodExecutor.java">Add method executor</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/GenericBucketDaoProxyGenerator.java:49">Updated proxy generator</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/GenericBucketDaoProxyGenerator.java:30">Updated proxy generator</a></li>
                             </ul>
                         </div>
                     </section>
                     <section>
                         <h1>DAO implementation</h1>
-                        <h2>finder implementation</h2>
+                        <h2>finder / removal implementation</h2>
                         <div style="margin-top: 1em">
                             <img class="plain" src="img/runtime/query-process.png" height="500px">
                         </div>
@@ -319,28 +326,17 @@
                     <section>
                         <h1>DAO implementation</h1>
                         <h2>finder implementation</h2>
-                        <p><strong>Branch:</strong> tutorial08</p>
+                        <p><strong>Branch:</strong> tutorial07</p>
+                        <img class="plain" src="img/runtime/CRUD.gif" style="float: left; width: 30%; position: absolute; left: 0%; top: 50%">
                         <div style="margin-top: 1em">
                             <h3>Look at:</h3>
                             <ul>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:22">Person Dao "implementation"</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:55">Test suite</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/GetDaoMethodExecutor.java">Get method executor</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/RemoveDaoMethodExecutor.java">Remove method executor</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/dto/DaoMethodQuery.java">Query AST</a></li>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/query/keyword/Keyword.java">Keywords (reserved words)</a></li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section>
-                        <h1>DAO implementation</h1>
-                        <h2>removal implementation (piece of cake)</h2>
-                        <p><strong>Branch:</strong> tutorial09</p>
-                        <div style="margin-top: 1em">
-                            <h3>Look at:</h3>
-                            <ul>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/PersonDao.java:23">Person Dao "implementation"</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:133">Test suite</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/dao/executor/RemoveDaoMethodExecutor.java">Remove method executor</a></li>
                             </ul>
                         </div>
                     </section>
@@ -349,14 +345,14 @@
                     <section>
                         <h1>Bonus</h1>
                         <h2>proxy serialization</h2>
-                        <p><strong>Branch:</strong> tutorial10</p>
+                        <p><strong>Branch:</strong> master</p>
                         <div style="margin-top: 1em">
                             <p>We can't simply serialize proxy - class might not be known at the moment of deserialization.</p>
                             <p>We need to serialize "recipe" how to reconstruct the class.</p>
                             <h3>Look at:</h3>
                             <ul>
                                 <li><a href="http://localhost:8091?message=cz/novoj/generation/contract/SerializableProxy.java">Serializable Proxy</a></li>
-                                <li><a href="http://localhost:8091?message=cz/novoj/generation/dao/JavassistPersonDaoTest.java:117">Test suite</a></li>
+                                <li><a href="http://localhost:8091?message=cz/novoj/generation/proxyGenerator/implementation/javassist/model/JavassistSerializationTest.java">Test suite</a></li>
                             </ul>
                         </div>
                     </section>
