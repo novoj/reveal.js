@@ -791,7 +791,25 @@ key:               A private key to prevent modification of the remember-me toke
                                 <a href="http://docs.spring.io/spring-security/site/docs/4.2.x-SNAPSHOT/reference/html/csrf.html#csrf-cookie">CookieCsrfTokenRepository</a></li>
                             <li>Multipart form posts are harder to protect - entire body must be processed before CSRF protection might apply</li>
                             <li>CSRF token SHOULD NOT be used in GET requests due to possible token leak via Referer header. CSRF token should be used only in HTTP POST actions that produces protected side effect.</li>
+                            <li>Beware of <a href="https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930">Breach & Heist attack</a></li>
                         </ul>
+                    </section>
+                    <section data-transition="fade-in fade-out">
+                        <h1>CSRF protection</h1>
+                        <h2>Ultimate solution</h2>
+                        <p>New W3C proposal <a href="https://github.com/mikewest/internetdrafts/tree/master/first-party-cookies">First-Party-Only-Cookies</a> suggests <strong>SameSite</strong> cookie
+                           that could bring an and to CSRF attack entirely.</p>
+                        <div style="float: left; width: 65%; font-size: 80%; margin-left: 2em;">
+                            <iframe src="http://caniuse.com/#feat=same-site-cookie-attribute" frameborder="0" width="100%" height="450px"></iframe>
+                        </div>
+                        <div style="float: left; margin-left: 2em; width: 25%; font-size: 80%;">
+                            <p>Targeted for all types of authentication cookies.</p>
+                            <h3>Two posible modes</h3>
+                            <ul>
+                                <li><strong>LAX</strong><br/>allows to use authentication cookies in top level navigations</li>
+                                <li><strong>STRICT</strong><br/>authentication cookies won't be send at all when request is initiatied from another site</li>
+                            </ul>
+                        </div>
                     </section>
                 </section>
                 <!-- CHANNEL SECURITY -->
@@ -1016,7 +1034,7 @@ X-Frame-Options: allow-from www.seznam.cz</code></pre>
 				]
 			});
 
-            var deadline = new Date(Date.parse(new Date()) + 1.25 * 60 * 60 * 1000);
+            var deadline = new Date(Date.parse(new Date()) + 0.75 * 60 * 60 * 1000);
             initializeClock(deadline);
 
 		</script>
