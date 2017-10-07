@@ -21,11 +21,19 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+        <style>
+            @media screen and (max-height: 600px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
 	</head>
 
 	<body>
 
-        <div style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+        <div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
             <a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
         </div>
 
