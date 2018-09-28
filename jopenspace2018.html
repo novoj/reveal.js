@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Validation done right, 2018</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            @media screen and (max-height: 1000px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
+	</head>
+
+	<body>
+
+        <div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Form</h1>
+	                <img class="plain" src="img/jopenspace2018/validated-min.png" style="width: 60%">
+                    <p>
+                        <small style="color: #a6a6a6">Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+                    </p>
+                    <h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://goo.gl/KznAa9">https://goo.gl/KznAa9</a></h4>
+                </section>
+				<!-- CONTENT -->
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Solved problem in 2018?</h1>
+					<p>You don't see this too much lately:</p>
+					<div style="clear: both; vertical-align: center">
+						<img class="plain" src="img/jopenspace2018/bad-validations-1.png">
+						<img class="plain" src="img/jopenspace2018/errors-on-top-1.png">
+					</div>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h2>Why we need form validations?</h2>
+					<p>help the user to fill the data correctly</p>
+					<div style="height: 26em">
+						<img class="plain" src="img/jopenspace2018/last-name.png">
+					</div>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h2>Why we need form validations?</h2>
+					<p>protect application from consuming bad input</p>
+					<img class="plain" src="img/jopenspace2018/exploits_of_a_mom.png" width="200%">
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Why do we still fail in 2018?</h1>
+					<img class="plain" src="img/jopenspace2018/sep.jpg">
+					<ol>
+						<li>error handling doesn't lie on happy path</li>
+						<li>it's considered "someone else's problem"</li>
+						<li>even customers often don't have checking those<br/>in acceptation protocols</li>
+					</ol>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg" data-state="validation">
+					<h1>What are best practices of validation?</h1>
+					<div style="align-content: center">
+						<table style="width: 60em; margin: 0 auto;">
+							<tr>
+								<td style="vertical-align: middle; width: 40%">
+									<dl>
+										<dt>Right time</dt>
+										<dd>right after the user completed the input</dd>
+										<dt>Right place</dt>
+										<dd>next to the field where the problem is</dd>
+										<dt>Right color</dt>
+										<dd>red is for errors, blue for information, yellow for warnings, green for the confirmation of success</dd>
+										<dt>Clear language</dt>
+										<dd>what happened, what can user do about it</dd>
+										<dt>Accept partially correct data</dt>
+										<dd>correct them yourself when you can</dd>
+										<dt>Never rely on client side validations</dt>
+										<dd>or you'd be surprised soon</dd>
+									</dl>
+								</td>
+								<td style="vertical-align: middle; width: 60%">
+									<img class="plain" src="img/jopenspace2018/validation.gif">
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>What choices did we made in FG Forrest?</h1>
+					<dl>
+						<dt>Single place of truth</dt>
+						<dd>same logic executes validation on client and on server<br/>
+						    some validations also can't be executed on client (free account)</dd>
+						<dt>Inline/live validation</dt>
+						<dd>user gets feedback immediately</dd>
+						<dt>Form state is kept on server</dt>
+						<dd>client sends only incremental diffs in user entered data</dd>
+						<dt>No programming required</dt>
+						<dd>developer should not be bothered by tuning validations</dd>
+					</dl>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg" data-state="showtime">
+					<h1>Showtime</h1>
+					<video id="showtime" height="600">
+						<source src="img/jopenspace2018/showtime.mp4" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<p><a href="http://localhost:8080/qf/en/ramjet/exampleForm" target="_blank">Ordinary form</a></p>
+					<p><a href="https://www.trikator.cz/registrace-uzivatele" target="_blank">Registration form</a></p>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Corner cases</h1>
+					<div style="align-content: center">
+						<table style="margin: 0 auto;">
+							<tr>
+								<td style="vertical-align: middle; width: 40%">
+									<ol>
+										<li>related fields</li>
+										<li>user devices with limited space</li>
+										<li>enumeration attacks</li>
+										<li>race conditions</li>
+										<li>session drops</li>
+										<li>conditional blocks of forms</li>
+									</ol>
+								</td>
+								<td>
+									<img class="plain" src="img/jopenspace2018/knock-knock-race-condition-joke.png">
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<section data-background="img/jopenspace2018/success.jpg">
+					<div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+						<h1>When done right it may bring</h1>
+						<ul>
+							<li>a 22% increase in success rates</li>
+							<li>a 31% increase in satisfaction rating,</li>
+							<li>a 42% decrease in completion times</li>
+						</ul>
+						<p>Source: <a href="https://alistapart.com/article/inline-validation-in-web-forms">Inline validation in web forms</a></p>
+					</div>
+				</section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/attention.jpg">
+                    <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                        <h1>Thank you for your attention</h1>
+                        <p><strong>Sources:</strong></p>
+                        <ul>
+                            <li><a href="https://conversionxl.com/blog/form-validation/">How to Get Form Validation Right</li>
+                            <li><a href="http://form.guide/best-practices/form-validations-definitive-guide.html">A Definitive Guide to Sensible Form Validations</li>
+                            <li><a href="https://baymard.com/blog/inline-form-validation">Usability Testing of Inline Form Validation: 40% Don’t Have It, 20% Get It Wrong</li>
+	                        <li><a href="https://alistapart.com/article/inline-validation-in-web-forms">Inline validation in web forms</a></li>
+                        </ul>
+                        <p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                    </div>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+	</body>
+</html>
