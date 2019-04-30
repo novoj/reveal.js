@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Co byste měli vědět, když se mluví o webové bezpečnosti, 2019</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            @media screen and (max-height: 1000px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
+	</head>
+
+	<body>
+
+        <div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Co byste měli vědět, když se mluví o webové bezpečnosti</h1>
+	                <img class="plain" src="img/jopenspace2018/validated-min.png" style="width: 60%">
+                    <p>
+                        <small style="color: #a6a6a6">Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+                    </p>
+                    <h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://goo.gl/KznAa9">https://goo.gl/KznAa9</a></h4>
+                </section>
+				<!-- CONTENT -->
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>O mně</h1>
+					<div style="align-content: center">
+						<table style="margin: 0 auto;">
+							<tr>
+								<td style="vertical-align: top; width: 50%">
+									<h2>Bio</h2>
+									<ul>
+										<li>vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+										<li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
+										<li>spoluautor <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+										<li>20 let vývojářem webových aplikací</li>
+									</ul>
+								</td>
+								<td>
+									<h2>Exponované aplikace</h2>
+									<ul>
+										<li><a href="https://www.hrad.cz">Hrad.cz (web)</a></li>
+										<li><a href="https://www.cez.cz">ČEZ.cz (web, aplikace, intranet)</a></li>
+										<li><a href="https://www.flexi.cz/">Flexi.cz (pojištění)</a></li>
+										<li><a href="https://www.kb.cz">KB.cz (web, aplikace)</a></li>
+										<li><a href="https://www.doxx.sk">DOXX.sk (stravenky)</a></li>
+										<li><a href="https://www.ikem.cz">IKEM (intranet nemocnice)</a></li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Hacknuli vás někdy?</h1>
+					<p class="fragment">mě ano</p>
+					<p class="fragment">náklady prolomení > f(chráněná hodnota, náklady zabezpečení)</p>
+					<aside class="notes">
+						Mě ano
+					</aside>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Bezpečnost je (ne)rovnice</h1>
+					<p>náklady prolomení > f(chráněná hodnota, náklady zabezpečení)</p>
+					<aside class="notes">
+
+					</aside>
+				</section>
+				<section>
+					<h2>Vždy je nějaká hodnota</h2>
+					<ul>
+						<li>zdroje - botnet</li>
+						<li>data - hesla, karty, e-maily</li>
+						<li>nefunkčnost služby</li>
+					</ul>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Většina útoků probíhajících na internetu je hloupá</h1>
+					<p>kobercové nálety na nejrozšířenější software využívající známých exploitů</p>
+					<p>brute force útoky a automatizované testy např. na SQL injection</p>
+					<p>DOS útoky</p>
+					<a href="https://github.com/NullArray/AutoSploit">AutoSploit</a>
+					<a href="https://www.shodan.io/">Shodan</a>
+				</section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/attention.jpg">
+                    <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                        <h1>Thank you for your attention</h1>
+                        <p><strong>Sources:</strong></p>
+                        <ul>
+                            <li><a href="https://conversionxl.com/blog/form-validation/">How to Get Form Validation Right</li>
+                            <li><a href="http://form.guide/best-practices/form-validations-definitive-guide.html">A Definitive Guide to Sensible Form Validations</li>
+                            <li><a href="https://baymard.com/blog/inline-form-validation">Usability Testing of Inline Form Validation: 40% Don’t Have It, 20% Get It Wrong</li>
+	                        <li><a href="https://alistapart.com/article/inline-validation-in-web-forms">Inline validation in web forms</a></li>
+                        </ul>
+                        <p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                    </div>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+	</body>
+</html>
