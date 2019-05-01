@@ -186,6 +186,28 @@
 								<a href="https://www.tutorialspoint.com/html5/html5_web_sql.htm">web SQL database</a>
 							</li>
 						</ul>
+						<p>Pokud taková zranitelnost existuje je velká pravděpodobnost, že útočník získá VŠECHNA data.</p>
+						<p>Útočník může přes SQL injection i <a href="https://dev.mysql.com/doc/refman/5.7/en/load-data.html">číst</a> a
+							<a href="https://dev.mysql.com/doc/refman/5.7/en/select-into.html">zapisovat</a> soubory na serveru s oprávněním jaké má aplikace.</p>
+						<p>V některých DB, <a href="https://turbofuture.com/computers/Using-xp_cmdshell-to-Query-the-Windows-File-System">pokud je to povoleno</a> může útočník i spouštět příkazy OS.</p>
+					</section>
+					<section>
+						<h1>Ochrana proti injection</h1>
+						<ul>
+							<li>vstupy od uživatele předávat DB stroji jako argumenty (tj. tak aby, je stroj nemohl považovat za součást dotazu)</li>
+							<li>tam, kde to není možné (ORDER BY) nikdy nevkládat vstup uživatele přímo do dotazu, ale překládat nebo whitelistovat</li>
+							<li>escapování znaků není spolehlivá cesta!</li>
+						</ul>
+					</section>
+					<section>
+						<h1>XXE - XML External Entity (XXE) Processing</h1>
+						<p>Zneužití obrovských a rozličných <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">možností XML parserů</a>.</p>
+						<p>XML je možná trochu zastaralý formát, ale je všude.</p>
+						<p>Nové formáty (YAML, JSON) mají také své zranitelnosti
+							<ul>
+								<li><a href="https://security.stackexchange.com/questions/26742/safe-yaml-parser">Deserializace objektů v Ruby / Python</a></li>
+							</ul>
+						</p>
 					</section>
 				</section>
 				<section data-background="img/backgrounds/brown.jpg">
@@ -359,6 +381,30 @@
 							</ul>
 						</p>
 						<p>Je již <a href="https://caniuse.com/#feat=same-site-cookie-attribute">rozumně podporované</a> v současných prohlížečích.</p>
+					</section>
+					<section>
+						<h1>Clickjacking</h1>
+						<p>Útočník na své stránce vyrobí iframe a otevře v ní aplikaci, na kterou chce útočit. Iframe
+						   nastaví jako průhledný (opacity), takže ji uživatel nevidí i když do ní kliká. Iframe může mít
+						   velikost i jen 1x1px a útočná stránka bude pohybovat výřezem tak, aby se klikalo na "správná" místa.
+							Iframe pak putuje spolu s kurzorem myši uživatele.</p>
+						<p>Nemusí jí jen o klikání, ale i vyplňování formulářů a drag'n'drop operace.</p>
+						<p>Pomocí adresy <i>view-source:https://www.domain.cz</i> a drag'n'drop je možné přesvědčit uživatele,
+						   aby nevědomky poslal útočníkovi obsah stránky načtené přes HTTPS i s CSRF tokenem.</p>
+						<p>Používá se v kombinaci se sociálním inženýrstvím.</p>
+					</section>
+					<section>
+						<h1>Ochrana proti Clickjackingu</h1>
+						<p>Použití <strong>Content Security Policy</strong> a direktivy <strong>frame-ancestors</strong>. Funkčně analogická k X-Frame-Options</p>
+						<pre>
+
+						</pre>
+						<p>(Starší řešení) Použití hlavičky <strong>X-Frame-Options</strong> pro povolení otevření aplikace v rámu.</p>
+						<ul>
+							<li><strong>DENY</strong> - zakázáno</li>
+							<li><strong>SAMEORIGIN</strong> - povoleno jen na stejné doméně</li>
+							<li><strong>ALLOW-FROM</strong> - 1 doména, odkud je možné použít rámy, není podporováno všemi prohlížeči</li>
+						</ul>
 					</section>
 				</section>
                 <!-- OUTRO -->
