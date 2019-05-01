@@ -49,14 +49,14 @@
                     </p>
                     <h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://goo.gl/KznAa9">https://goo.gl/KznAa9</a></h4>
                 </section>
-				<!-- CONTENT -->
+				<!-- ABOUT ME -->
 				<section data-background="img/backgrounds/brown.jpg">
-					<h1>O mně</h1>
+					<h1>Proč bych vám měl zrovna já něco povídat o bezpečnosti?</h1>
 					<div style="align-content: center">
 						<table style="margin: 0 auto;">
 							<tr>
 								<td style="vertical-align: top; width: 50%">
-									<h2>Bio</h2>
+									<h2>O mně</h2>
 									<ul>
 										<li>vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
 										<li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
@@ -79,36 +79,287 @@
 						</table>
 					</div>
 				</section>
+				<!-- BASICS -->
 				<section data-background="img/backgrounds/brown.jpg">
-					<h1>Hacknuli vás někdy?</h1>
-					<p class="fragment">mě ano</p>
-					<p class="fragment">náklady prolomení > f(chráněná hodnota, náklady zabezpečení)</p>
-					<aside class="notes">
-						Mě ano
-					</aside>
+					<section>
+						<h1>Hacknuli vás někdy?</h1>
+						<p class="fragment">mě ano</p>
+						<div class="fragment">
+							<h2>Bezpečnost je (ne)rovnice</h2>
+							<blockquote style="white-space: nowrap">f(náklady prolomení) > f(chráněná hodnota, komplexita, náklady zabezpečení)</blockquote>
+							<p>tvar křivek je dán především schopnostmi a zkušenostmi týmu</p>
+						</div>
+					</section>
+					<section>
+						<h2>Vždy je nějaká hodnota</h2>
+						<ul>
+							<li>zdroje - botnet, mining</li>
+							<li>data - hesla, karty, e-maily, know-how</li>
+							<li>nefunkčnost služby - ransomware, poškození konkurence</li>
+						</ul>
+						<p>Hacking je dnes již průmysl. Hackitivsm je otázka minulosti.</p>
+					</section>
+					<section>
+						<h1>Většina útoků probíhajících na internetu je hloupá</h1>
+						<p>kobercové nálety na nejrozšířenější software využívající známých exploitů</p>
+						<p>brute force útoky a automatizované testy např. na SQL injection</p>
+						<p>DOS útoky</p>
+						<h2>Kobercové útoky lze poměrně jednoduše automatizovat a cílit</h2>
+						<ul>
+							<li><a href="https://www.shodan.io/">Shodan</a></li>
+							<li><a href="https://github.com/NullArray/AutoSploit">AutoSploit</a></li>
+						</ul>
+					</section>
+					<section>
+						<h1>Bezpečnostní hygiena</h1>
+						<ol>
+							<li>aktualizujte software (<a href="https://www.google.com/search?q=automated+security+dependency+upgrade&oq=automated+security+dependency+upgrade">automatizujte</a>)</li>
+							<li>monitorujte podezřelé aktivity</li>
+							<li>zálohujte (<a href="https://about.gitlab.com/2017/02/10/postmortem-of-database-outage-of-january-31/">a ověřujte funkčnost záloh</a>)</li>
+							<li>vzdělávajte se</li>
+							<li>šifrujte veškerou komunikaci</li>
+							<li>whitelistujte pouze nezbytně nutné</li>
+							<li>neprozrazujte víc než je nutné (<a href="https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/setting-honeytraps-with-modsecurity-adding-fake-html-comments/">oni to budou hledat</a>)</li>
+							<li>nedávejte více práv než je nutné</li>
+							<li>používejte klíče, pokud musíte hesla - přidejte 2FA a používejte klíčenky</li>
+							<li>segmentujte prostředí (omezte dopady úspěšného útoku)</li>
+						</ol>
+					</section>
+				</section>
+				<!-- BASICS -->
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>OWASP TOP 10 v 2017</h1>
+					<ol>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">Injection</a>
+							<span style="font-size: 60%; display: block">zneužití SQL, NoSQL, OS a LDAP dotazů</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication">Broken Authentication</a>
+							<span style="font-size: 60%; display: block">nesprávná implementace autentizačního procesu</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">Sensitive Data Exposure</a>
+							<span style="font-size: 60%; display: block">nedostatečně chráněné citlivé údaje</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A4-XML_External_Entities_(XXE)">XML External Entities (XXE)</a>
+							<span style="font-size: 60%; display: block">nesprávná konfigurace XML parserů umožňující jejich zneužití</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control">Broken Access Control</a>
+							<span style="font-size: 60%; display: block">nedostatečně kontrolovaná přístupová práva</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">Security Misconfiguration</a>
+							<span style="font-size: 60%; display: block">nesprávná konfigurace použitých komponent - omylem či z neznalosti</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_(XSS)">Cross-Site Scripting (XSS)</a>
+							<span style="font-size: 60%; display: block">injekce a vykonání JS kódu v relaci jiného uživatele</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A8-Insecure_Deserialization">Insecure Deserialization</a>
+							<span style="font-size: 60%; display: block">zneužití interních dat po deserializaci do programové reprezentace</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A9-Using_Components_with_Known_Vulnerabilities">Using Components with Known Vulnerabilities</a>
+							<span style="font-size: 60%; display: block">zneužití známé zranitelnosti použité SW/HW komponenty</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A10-Insufficient_Logging%26Monitoring">Insufficient Logging&Monitoring</a>
+							<span style="font-size: 60%; display: block">pomalá detekce útoku, útočník dostane dostatečný časový prostor k akci</span>
+						</li>
+					</ol>
 				</section>
 				<section data-background="img/backgrounds/brown.jpg">
-					<h1>Bezpečnost je (ne)rovnice</h1>
-					<p>náklady prolomení > f(chráněná hodnota, náklady zabezpečení)</p>
-					<aside class="notes">
-
-					</aside>
-				</section>
-				<section>
-					<h2>Vždy je nějaká hodnota</h2>
-					<ul>
-						<li>zdroje - botnet</li>
-						<li>data - hesla, karty, e-maily</li>
-						<li>nefunkčnost služby</li>
-					</ul>
+					<section>
+						<h1>Injection</h1>
+						<p>lze obecně kdekoliv, kde se databázovému stroji předává dotaz ve formě textu:</p>
+						<ul>
+							<li><a href="https://www.zdrojak.cz/clanky/sql-injection-pre-kazdeho/">SQL</a></li>
+							<li>noSQL: <a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">MongoDB</a>, <a href="https://stackoverflow.com/questions/54769528/preventing-nosql-injections-with-elasticsearch">Elastic Search</a></li>
+							<li><a href="https://www.owasp.org/index.php/Testing_for_Command_Injection_(OTG-INPVAL-013)">operační systém</a> (příklad pro <a href="https://www.netsparker.com/blog/web-security/command-injection-vulnerability/">ping</a>)</li>
+							<li><a href="https://www.owasp.org/index.php/Testing_for_LDAP_Injection_(OTG-INPVAL-006)">LDAP</a></li>
+							<li>
+								<a href="https://www.owasp.org/index.php/Test_Local_Storage_(OTG-CLIENT-012)">local data storage</a>,
+								<a href="https://www.tutorialspoint.com/html5/html5_web_sql.htm">web SQL database</a>
+							</li>
+						</ul>
+					</section>
 				</section>
 				<section data-background="img/backgrounds/brown.jpg">
-					<h1>Většina útoků probíhajících na internetu je hloupá</h1>
-					<p>kobercové nálety na nejrozšířenější software využívající známých exploitů</p>
-					<p>brute force útoky a automatizované testy např. na SQL injection</p>
-					<p>DOS útoky</p>
-					<a href="https://github.com/NullArray/AutoSploit">AutoSploit</a>
-					<a href="https://www.shodan.io/">Shodan</a>
+					<section>
+						<h1>Zneužití vstupních parametrů</h1>
+						<p>Spočívá v úpravě vstupních parametrů aplikace</p>
+						<div style="align-content: center">
+							<table style="margin: 0 auto;">
+								<tr>
+									<td style="vertical-align: top; width: 50%">
+										<h2>Zajímavé cíle</h2>
+										<ul>
+											<li>skrytá pole</li>
+											<li>výběrové položky</li>
+											<li>názvy souborů</li>
+											<li>hlavičky</li>
+											<li>cookies (součástí hlavičky)</li>
+										</ul>
+									</td>
+									<td>
+										<h2>Nástroje, které hackeři používají</h2>
+										<ul>
+											<li><a href="https://www.youtube.com/embed/MNDkzkR8TBI?start=345">BurpSuite</a></li>
+											<li><a href="https://www.owasp.org/index.php/OWASP_WebScarab_NG_Project">WebScarab</a></li>
+											<li><a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">ZAP</a></li>
+											<li><a href="https://www.wireshark.org/">WireShark</a></li>
+											<li><a href="https://addons.mozilla.org/cs/firefox/addon/tamper-data-for-ff-quantum/">Tamper Data</a></li>
+											<li><a href="https://www.telerik.com/fiddler">Fiddler2</a></li>
+										</ul>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<section>
+						<h1>Útoky na autentizaci</h1>
+						<ul>
+							<li>hádání hesla: brute force, dictionary attack, leaked pwd databases</li>
+							<li>zneužití slabin procesu pro obnovu zapomenutého hesla
+								<ul>
+									<li>kontrolní otázky (sic!)</li>
+									<li>ověřování na základě veřejně dostupných informací</li>
+									<li>možnost změny e-mailové adresy ve formuláři pro zaslání kódu</li>
+									<li>slabé / odhadnutelné tokeny vygenerované aplikací</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Doporučení pro přihlašovací formuláře</h1>
+						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+							<ul>
+								<li>zaveďte kontrolu proti útoku silou - při opakovaných neplatných pokusech o přihlášení
+									<ul>
+										<li>vložte captchu</li>
+										<li>zaveďte časovou penalizaci (pozor penalizace musí být aplikována i když by
+											útočník heslo uhádl, jinak je možné díky paralelnímu přístupu jednoduše
+											odhadnout zásah)</li>
+									</ul>
+								</li>
+								<li>vyzkoušejte, že se váš přihlašovací formulář dobře používá s klíčenkami (LastPass např.)</li>
+								<li>při chybě používejte stejnou - generickou hlášku "Vaše přihlašovací údaje nejsou správné!"</li>
+								<li>auditujte všechny pokusy o přihlášení
+									<ul>
+										<li>datum a čas</li>
+										<li>IP adresa</li>
+										<li>user agent</li>
+										<li>výsledek</li>
+									</ul>
+								</li>
+								<li>přihlašování akceptujte pouze přes šifrovaný protokol (HTTPS)</li>
+								<li>chraňte přihlašování proti CSRF útoku (viz. dále)</li>
+								<li>pokud používáte funkcionalitu "zapamatuj si mě na tomto počítači", vyžadujte přihlášení před změnou citlivých údajů</li>
+								<li>zvažte zavedení vícefaktorové autentizace</li>
+							</ul>
+							<p>Další doporučení naleznete v <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md">v OWASP cheatsheetu</a></p>
+						</div>
+					</section>
+					<section>
+						<h1>Doporučení pro práci se sezením</h1>
+						<ul>
+							<li>pro přenos bezpečnostního tokenu (session cookie např.)
+								<ul>
+									<li>používejte atribut <strong>secure</strong></li>
+									<li>používejte atribut <strong>httpOnly</strong></li>
+									<li>používejte atribut <strong>sameSite</strong></li>
+									<li>nastavujte správně doménu a cestu</li>
+									<li>nespravujte session token sami, případně použijte dostatečně silný generátor náhodných čísel a délku tokenu</li>
+									<li>po přihlášení zahoďte starou session a vygenerujte novou</li>
+									<li>po odhlášení zahoďte session</li>
+									<li>mějte maximální dobu života sezení a pak vynuťte znovu přihlášení uživatele</li>
+								</ul>
+							</li>
+						</ul>
+						<p>Další doporučení naleznete v <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md">v OWASP cheatsheetu</a></p>
+					</section>
+					<section>
+						<h1>Doporučení pro práci s hesly</h1>
+						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+							<ul>
+								<li>neomezujte maximální délku hesla nebo znaky v heslu</li>
+								<li>neořezávejte mezery, nijak neupravujte uživatelské heslo na vstupu</li>
+								<li>používejte pomalé hashovací funkce s unikátní solí per záznam (BCrypt, PBKDF2, scrypt, Argon 2)</li>
+								<li>neposílejte hesla e-mailem</li>
+								<li>vyžadujte po uživatelích rozumně složitá hesla</li>
+								<li>pokud uživatel mění heslo / e-mail, vyžadujte vložení původního hesla</li>
+								<li>nenačítejte uživatele z databáze včetně jeho (byť) hesla</li>
+								<li>zajistěte, že se hesla nemohou otisknout do logů</li>
+							</ul>
+						</div>
+					</section>
+					<section>
+						<h1>Doporučení pro obnovu zapomenutého hesla</h1>
+						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
+							<ul>
+								<li>pokud uživatel zapomene heslo, pošlete mu odkaz na reset hesla obsahující jednorázový bezpečný token s omezenou časovou platností</li>
+								<li>formulář pro odeslání zapomenutého hesla by měl dávat stejnou odpověď pro existující i neexistující uživatelský účet</li>
+								<li>token musí mít dostatečnou délku, jinak se stane cílem útoku silou</li>
+								<li>token musí být unikátní a musí být vygenerován algoritmem s dostatečně náhodným výstupem</li>
+								<li>token by měl být v databázi uložen také v zahashované formě, stejně jako heslo</li>
+								<li>token by měl být po použití odstraněn</li>
+								<li>token by měl být funkční pouze po omezenou dobu - např. 24 hodin</li>
+								<li>po použití tokenu nabídněte uživateli změnu jeho hesla</li>
+							</ul>
+						</div>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<section>
+						<h1>Útoky na autorizaci</h1>
+						<p>Aplikace kontroluje, zda mohu něco udělat, ale už nekontroluje s čím to dělám.</p>
+						<p><i>Příklad:</i> rajce.net má soukromá alba obrázků, která nezobrazí cizím, z obrázů je možné
+							si nechat udělat fyzické obrázky a nechat si poslat poštou, při přidávání do košíku bylo možné
+							si přes odhadnutí ID nechat vyrobit zamčené fotografie cizích lidí</p>
+						<p>Některé aplikace (a dříve i Windows) řeší práva tak, že nezobrazí linky / tlačítka pro provedení
+						   akce. Pokud ale uživatel zná správnou kombinaci URL, tak může akci provést. Typicky platí
+						   pro systémy, které na oprávnění nebyly připravované od začátku.</p>
+					</section>
+					<section>
+						<h1>Cross-Site Request Forgery</h1>
+						<p>útočník zneužije uživatele, aby sám nevědomě odeslal potřebné požadavky serveru</p>
+						<div style="text-align: center">
+							<img src="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png"/>
+							<span>Credit: https://consideratecode.com/2017/08/31/csrf/</span>
+						</div>
+						<p>Zranitelné HTTP metody: GET a POST</p>
+						<p>Pro GET je možné využít IMG a SRC tagy.</p>
+						<p>Nebezpečné v kombinaci s funkcionalitou "trvalého přihlášení"</p>
+					</section>
+					<section>
+						<h1>Obrana proti CSRF</h1>
+						<h2>Autorizační token platný po dobu trvání sezení</h2>
+						<ol>
+							<li>zajistit dostatečnou entropii délku tokenu</li>
+							<li>pohlídat si prozrazení CSRF tokenu
+								<ul>
+									<li>neměl by se vyskytovat v lincích (leak přes Referer)</li>
+									<li>pozor <a href="https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930">Breach &amp; Heist útoky</a>,
+										CSRF token je dobré pro každé vykreslení maskovat (stačí i obyčejná XOR šifra)</li>
+								</ul>
+							</li>
+						</ol>
+						<h2>SameSite cookie</h2>
+						<p>Příznak u cookie <a href="https://www.owasp.org/index.php/SameSite">zamezí zaslání této cookie</a> ze stránky na jiné doméně.
+						   Má dva režimy:
+							<ul>
+								<li><strong>LAX (default)</strong> chrání pouze POST metody, GET metody jen, pokud se nejedná o top-level navigaci (kliknutí na link se změnou adresy v URL)</li>
+								<li><strong>STRICT</strong> cookie se nikdy nepošle skrz navigaci mezi doménami (při prokliknutí odkazu na jiném webu bude vždy požadováno přihlášení)</li>
+							</ul>
+						</p>
+						<p>Je již <a href="https://caniuse.com/#feat=same-site-cookie-attribute">rozumně podporované</a> v současných prohlížečích.</p>
+					</section>
 				</section>
                 <!-- OUTRO -->
                 <section data-background="img/backgrounds/attention.jpg">
