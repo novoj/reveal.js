@@ -31,6 +31,10 @@
         </style>
 	</head>
 
+	<!-- TODO GRAFIKA, NAJÍMÁME NA POSLEDNÍ SLAJD -->
+	<!-- ZMÍNIT DÍL O IRS U BEZPEČNOSTNÍCH OTÁZEK -->
+	<!-- ZMÍNIT DÍL O MANFREDOVI V PODVRHÁVÁNÍ VSTUPNÍCH ÚDAJŮ -->
+
 	<body>
 
         <div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
@@ -41,16 +45,15 @@
 
 			<div class="slides">
                 <!-- INTRO -->
-                <section data-background="img/backgrounds/brown.jpg">
+                <section data-background="img/web-security-basics/cyber.jpg">
                     <h1>Co byste měli vědět, když se mluví o webové bezpečnosti</h1>
-	                <img class="plain" src="img/jopenspace2018/validated-min.png" style="width: 60%">
-                    <p>
-                        <small style="color: #a6a6a6">Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+                    <p style="color: #b5b5b5; margin: 2em;">
+                        Jan <a style="color: #e5e5e5" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
                     </p>
-                    <h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://goo.gl/KznAa9">https://goo.gl/KznAa9</a></h4>
+                    <h4 style="color:#b5b5b5">Go through presentation with me<br/><a style="color: white" href="http://bit.ly/web_security_basics">http://bit.ly/web_security_basics</a></h4>
                 </section>
 				<!-- ABOUT ME -->
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<h1>Proč bych vám měl zrovna já něco povídat o bezpečnosti?</h1>
 					<div style="align-content: center">
 						<table style="margin: 0 auto;">
@@ -58,9 +61,9 @@
 								<td style="vertical-align: top; width: 50%">
 									<h2>O mně</h2>
 									<ul>
-										<li>vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+										<li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
 										<li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
-										<li>spoluautor <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+										<li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
 										<li>20 let vývojářem webových aplikací</li>
 									</ul>
 								</td>
@@ -80,24 +83,33 @@
 					</div>
 				</section>
 				<!-- BASICS -->
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Hacknuli vás někdy?</h1>
-						<p class="fragment">mě ano</p>
 						<div class="fragment">
-							<h2>Bezpečnost je (ne)rovnice</h2>
-							<blockquote style="white-space: nowrap">f(náklady prolomení) > f(chráněná hodnota, komplexita, náklady zabezpečení)</blockquote>
-							<p>tvar křivek je dán především schopnostmi a zkušenostmi týmu</p>
+							<p>mě ano</p>
+							<div>
+								<h2>Bezpečnost je nerovnice</h2>
+								<blockquote style="white-space: nowrap">f(náklady prolomení) > f(chráněná hodnota, komplexita, náklady zabezpečení)</blockquote>
+								<p>tvar křivek je dán především schopnostmi a zkušenostmi týmu</p>
+							</div>
 						</div>
 					</section>
 					<section>
-						<h2>Vždy je nějaká hodnota</h2>
+						<h1>Vždy je nějaká hodnota</h1>
 						<ul>
 							<li>zdroje - botnet, mining</li>
-							<li>data - hesla, karty, e-maily, know-how</li>
-							<li>nefunkčnost služby - ransomware, poškození konkurence</li>
+							<li>data - hesla, karty, e-maily, osobní informace, know-how</li>
+							<li>nefunkčnost služby - ransomware, finanční ztráty, poškození konkurence</li>
 						</ul>
 						<p>Hacking je dnes již průmysl. Hackitivsm je otázka minulosti.</p>
+						<div style="text-align: center">
+							U zavedeného e-shopu může být hodinový výpadek ztráta v řádech 100,000 Kč.<br/>
+							<a href="https://www.theguardian.com/business/2015/nov/06/nearly-157000-had-data-breached-in-talktalk-cyber-attack">Mobilní operátor TalkTalk po útoku v roce 2015</a>
+							musel zaplatit pokutu £400k a už se nevzpamatoval.
+							<img src="img/web_security_basics/talktalk.jpg" height="300px"/><br/>
+							<small><a href="https://darknetdiaries.com/episode/4/">Poslechněte si jejich příběh</a></small>
+						</div>
 					</section>
 					<section>
 						<h1>Většina útoků probíhajících na internetu je hloupá</h1>
@@ -106,8 +118,8 @@
 						<p>DOS útoky</p>
 						<h2>Kobercové útoky lze poměrně jednoduše automatizovat a cílit</h2>
 						<ul>
-							<li><a href="https://www.shodan.io/">Shodan</a></li>
-							<li><a href="https://github.com/NullArray/AutoSploit">AutoSploit</a></li>
+							<li><a href="https://www.shodan.io/">Shodan</a> - databáze strojů a otevřených rozhraní</li>
+							<li><a href="https://github.com/NullArray/AutoSploit">AutoSploit</a> -  automatizovaný nástroj, který na základě výsledku v Shodanu aplikuje vybrané exploity</li>
 						</ul>
 					</section>
 					<section>
@@ -125,9 +137,19 @@
 							<li>segmentujte prostředí (omezte dopady úspěšného útoku)</li>
 						</ol>
 					</section>
+					<section>
+						<h1>Víte jaká je nejstarší bezpečnostní chyba?</h1>
+						<div class="fragment" style="text-align: center;">
+							<p>Slabé případně výchozí přihlašovací jméno a heslo. Poprvé byla reportována v roce <strong>1969</strong>.</p>
+							<p>V roce <a href="https://darknetdiaries.com/episode/13/">2012</a> vznikl botnet, který se pokusil najít všechny
+							   stroje na internetu, s výchozími nebo slabými hesly. Našel jich <a
+										href="https://en.wikipedia.org/wiki/Carna_botnet">420,000</a></p>
+							<img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Carnabotnet_geovideo_lowres.gif"/>
+						</div>
+					</section>
 				</section>
 				<!-- BASICS -->
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<h1>OWASP TOP 10 v 2017</h1>
 					<ol>
 						<li>
@@ -172,7 +194,7 @@
 						</li>
 					</ol>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Zneužití vstupních parametrů</h1>
 						<p>Spočívá v úpravě vstupních parametrů aplikace</p>
@@ -191,7 +213,7 @@
 										</ul>
 									</td>
 									<td>
-										<h2>Nástroje, které hackeři používají</h2>
+										<h2>Nástroje</h2>
 										<ul>
 											<li><a href="https://www.youtube.com/embed/MNDkzkR8TBI?start=345">BurpSuite</a></li>
 											<li><a href="https://www.owasp.org/index.php/OWASP_WebScarab_NG_Project">WebScarab</a></li>
@@ -204,12 +226,14 @@
 								</tr>
 							</table>
 						</div>
+						<p>A zneužití nedostatečné kontroly na straně aplikace.</p>
+						<p><small><a href="https://darknetdiaries.com/episode/7/">Zajímavý podcast na téma hackování MMORPG her.</a></small></p>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Injection</h1>
-						<p>lze obecně kdekoliv, kde se databázovému stroji předává dotaz ve formě textu:</p>
+						<p>lze obecně kdekoliv, kde se nějakému engine předává dotaz ve formě textu:</p>
 						<ul>
 							<li><a href="https://www.zdrojak.cz/clanky/sql-injection-pre-kazdeho/">SQL</a></li>
 							<li>noSQL: <a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">MongoDB</a>, <a href="https://stackoverflow.com/questions/54769528/preventing-nosql-injections-with-elasticsearch">Elastic Search</a></li>
@@ -224,17 +248,18 @@
 						<p>Útočník může přes SQL injection i <a href="https://dev.mysql.com/doc/refman/5.7/en/load-data.html">číst</a> a
 							<a href="https://dev.mysql.com/doc/refman/5.7/en/select-into.html">zapisovat</a> soubory na serveru s oprávněním jaké má aplikace.</p>
 						<p>V některých DB, <a href="https://turbofuture.com/computers/Using-xp_cmdshell-to-Query-the-Windows-File-System">pokud je to povoleno</a> může útočník i spouštět příkazy OS.</p>
+						<p>Čím více toho engine umí, tím je pro vás nebezpečnější. Jenže vývojáři mají rádi mocné stroje.</p>
 					</section>
 					<section>
 						<h1>Ochrana proti injection</h1>
 						<ul>
-							<li>vstupy od uživatele předávat DB stroji jako argumenty (tj. tak aby, je stroj nemohl považovat za součást dotazu)</li>
-							<li>tam, kde to není možné (ORDER BY) nikdy nevkládat vstup uživatele přímo do dotazu, ale překládat nebo whitelistovat</li>
+							<li>vstupy od uživatele předávat stroji jako argumenty (tj. tak aby, je stroj nemohl považovat za součást dotazu)</li>
+							<li>tam, kde to není možné (v SQL např. ORDER BY) nikdy nevkládat vstup uživatele přímo do dotazu, ale překládat nebo whitelistovat</li>
 							<li>escapování znaků není spolehlivá cesta!</li>
 						</ul>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Útoky na autentizaci</h1>
 						<ul>
@@ -248,36 +273,28 @@
 								</ul>
 							</li>
 						</ul>
+						<p>Díky bezpečnostním otázkám přišel <a href="https://darknetdiaries.com/episode/26/">americký daňový úřad</a> v roce <strong>2015</strong> o desítky milionů $.</p>
 					</section>
 					<section>
 						<h1>Doporučení pro přihlašovací formuláře</h1>
-						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-							<ul>
-								<li>zaveďte kontrolu proti útoku silou - při opakovaných neplatných pokusech o přihlášení
-									<ul>
-										<li>vložte captchu</li>
-										<li>zaveďte časovou penalizaci (pozor penalizace musí být aplikována i když by
-											útočník heslo uhádl, jinak je možné díky paralelnímu přístupu jednoduše
-											odhadnout zásah)</li>
-									</ul>
-								</li>
-								<li>vyzkoušejte, že se váš přihlašovací formulář dobře používá s klíčenkami (LastPass např.)</li>
-								<li>při chybě používejte stejnou - generickou hlášku "Vaše přihlašovací údaje nejsou správné!"</li>
-								<li>auditujte všechny pokusy o přihlášení
-									<ul>
-										<li>datum a čas</li>
-										<li>IP adresa</li>
-										<li>user agent</li>
-										<li>výsledek</li>
-									</ul>
-								</li>
-								<li>přihlašování akceptujte pouze přes šifrovaný protokol (HTTPS)</li>
-								<li>chraňte přihlašování proti CSRF útoku (viz. dále)</li>
-								<li>pokud používáte funkcionalitu "zapamatuj si mě na tomto počítači", vyžadujte přihlášení před změnou citlivých údajů</li>
-								<li>zvažte zavedení vícefaktorové autentizace</li>
-							</ul>
-							<p>Další doporučení naleznete v <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md">v OWASP cheatsheetu</a></p>
-						</div>
+						<ul>
+							<li>přihlašování akceptujte pouze přes šifrovaný protokol (HTTPS)</li>
+							<li>chraňte přihlašování proti CSRF útoku (viz. dále)</li>
+							<li>vyzkoušejte, že se váš přihlašovací formulář dobře používá s klíčenkami (LastPass např.)</li>
+							<li>zaveďte kontrolu proti útoku silou - při opakovaných neplatných pokusech o přihlášení
+								<ul>
+									<li>vložte captchu</li>
+									<li>zaveďte časovou penalizaci (pozor penalizace musí být aplikována i když by
+										útočník heslo uhádl, jinak je možné díky paralelnímu přístupu jednoduše
+										odhadnout zásah)</li>
+								</ul>
+							</li>
+							<li>při chybě používejte stejnou - generickou hlášku "Vaše přihlašovací údaje nejsou správné!"</li>
+							<li>auditujte všechny pokusy o přihlášení: datum a čas, IP adresa, User agent, výsledek</li>
+							<li>pokud používáte funkcionalitu "zapamatuj si mě na tomto počítači", vyžadujte přihlášení před změnou citlivých údajů</li>
+							<li>zvažte zavedení vícefaktorové autentizace</li>
+						</ul>
+						<p><small>Další doporučení naleznete <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md">v OWASP cheatsheetu</a></small></p>
 					</section>
 					<section>
 						<h1>Doporučení pro práci se sezením</h1>
@@ -288,32 +305,32 @@
 									<li>používejte atribut <strong>httpOnly</strong></li>
 									<li>používejte atribut <strong>sameSite</strong></li>
 									<li>nastavujte správně doménu a cestu</li>
-									<li>nespravujte session token sami, případně použijte dostatečně silný generátor náhodných čísel a délku tokenu</li>
-									<li>po přihlášení zahoďte starou session a vygenerujte novou</li>
-									<li>po odhlášení zahoďte session</li>
-									<li>mějte maximální dobu života sezení a pak vynuťte znovu přihlášení uživatele</li>
 								</ul>
+								<li>nespravujte session token sami, případně použijte dostatečně silný generátor náhodných čísel a délku tokenu</li>
+								<li>po přihlášení zahoďte starou session a vygenerujte novou</li>
+								<li>po odhlášení zahoďte session</li>
+								<li>mějte maximální dobu života sezení a pak vynuťte znovu přihlášení uživatele</li>
 							</li>
 						</ul>
-						<p>Další doporučení naleznete v <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md">v OWASP cheatsheetu</a></p>
+						<p><small>Další doporučení naleznete <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md">v OWASP cheatsheetu</a></small></p>
 					</section>
 					<section>
 						<h1>Doporučení pro práci s hesly</h1>
-						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-							<ul>
-								<li>neomezujte maximální délku hesla nebo znaky v heslu</li>
-								<li>neořezávejte mezery, nijak neupravujte uživatelské heslo na vstupu</li>
-								<li>používejte pomalé hashovací funkce s unikátní solí per záznam (BCrypt, PBKDF2, scrypt, Argon 2)</li>
-								<li>neposílejte hesla e-mailem</li>
-								<li>vyžadujte po uživatelích rozumně složitá hesla</li>
-								<li>pokud uživatel mění heslo / e-mail, vyžadujte vložení původního hesla</li>
-								<li>nenačítejte uživatele z databáze včetně jeho (byť) hesla</li>
-								<li>zajistěte, že se hesla nemohou otisknout do logů</li>
-							</ul>
-						</div>
+						<ul>
+							<li>neomezujte maximální délku hesla nebo znaky v heslu</li>
+							<li>neořezávejte mezery, nijak neupravujte uživatelské heslo na vstupu</li>
+							<li>používejte pomalé hashovací funkce s unikátní solí per záznam (BCrypt, PBKDF2, scrypt, Argon 2)</li>
+							<li>neposílejte hesla e-mailem</li>
+							<li>vyžadujte po uživatelích rozumně složitá hesla</li>
+							<li>pokud uživatel mění heslo / e-mail, vyžadujte vložení původního hesla</li>
+							<li>nenačítejte uživatele z databáze včetně jeho hesla</li>
+							<li>zajistěte, že se hesla nemohou otisknout do logů</li>
+						</ul>
 					</section>
 					<section>
 						<h1>Proč ukládat saltovaná hesla v pomale hashované podobě?</h1>
+						<img src="https://www.codeproject.com/KB/aspnet/844722/hash_picture1_en.jpg"/><br/>
+						<small>Credit: <a href="https://www.codeproject.com/Articles/844722/Hashing-Passwords-using-ASP-NETs-Crypto-Class">Hashing Passwords using ASP.NET's Crypto Class</a></small>
 						<ul>
 							<li>uživatelé často přepoužívají hesla k více službám</li>
 							<li>cracking hashů se v současné době dá provádět velice efektivně</li>
@@ -324,25 +341,23 @@
 					</section>
 					<section>
 						<h1>Doporučení pro obnovu zapomenutého hesla</h1>
-						<div style="float: left; margin-left: 2em; width: 65%; font-size: 80%;">
-							<ul>
-								<li>pokud uživatel zapomene heslo, pošlete mu odkaz na reset hesla obsahující jednorázový bezpečný token s omezenou časovou platností</li>
-								<li>formulář pro odeslání zapomenutého hesla by měl dávat stejnou odpověď pro existující i neexistující uživatelský účet</li>
-								<li>token musí mít dostatečnou délku, jinak se stane cílem útoku silou</li>
-								<li>token musí být unikátní a musí být vygenerován algoritmem s dostatečně náhodným výstupem</li>
-								<li>token by měl být v databázi uložen také v zahashované formě, stejně jako heslo</li>
-								<li>token by měl být po použití odstraněn</li>
-								<li>token by měl být funkční pouze po omezenou dobu - např. 24 hodin</li>
-								<li>po použití tokenu nabídněte uživateli změnu jeho hesla</li>
-							</ul>
-						</div>
+						<ul>
+							<li>pokud uživatel zapomene heslo, pošlete mu odkaz na reset hesla obsahující jednorázový bezpečný token s omezenou časovou platností</li>
+							<li>formulář pro odeslání zapomenutého hesla by měl dávat stejnou odpověď pro existující i neexistující uživatelský účet</li>
+							<li>token musí mít dostatečnou délku, jinak se stane cílem útoku silou</li>
+							<li>token musí být unikátní a musí být vygenerován algoritmem s dostatečně náhodným výstupem</li>
+							<li>token by měl být v databázi uložen také v zahashované formě, stejně jako heslo</li>
+							<li>token by měl být po použití odstraněn</li>
+							<li>token by měl být funkční pouze po omezenou dobu - např. 24 hodin</li>
+							<li>po použití tokenu nabídněte uživateli změnu jeho hesla</li>
+						</ul>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Útoky na autorizaci</h1>
 						<p>Aplikace kontroluje, zda mohu něco udělat, ale už nekontroluje s čím to dělám.</p>
-						<p><i>Příklad:</i> rajce.net má soukromá alba obrázků, která nezobrazí cizím, z obrázů je možné
+						<p><i>Příklad:</i> rajce.net má soukromá alba obrázků, která nezobrazí cizím, z obrázků je možné
 							si nechat udělat fyzické obrázky a nechat si poslat poštou, při přidávání do košíku bylo možné
 							si přes odhadnutí ID nechat vyrobit zamčené fotografie cizích lidí</p>
 						<p>Některé aplikace (a dříve i Windows) řeší práva tak, že nezobrazí linky / tlačítka pro provedení
@@ -350,21 +365,21 @@
 							pro systémy, které na oprávnění nebyly připravované od začátku.</p>
 					</section>
 					<section>
-						<h1>Cross-Site Request Forgery</h1>
+						<h2>Cross-Site Request Forgery</h2>
 						<p>útočník zneužije uživatele, aby sám nevědomě odeslal potřebné požadavky serveru</p>
 						<div style="text-align: center">
-							<img src="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png"/>
-							<span>Credit: https://consideratecode.com/2017/08/31/csrf/</span>
+							<a href="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png"><img src="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png" height="500px"/></a><br/>
+							<small>Credit: <a href="https://consideratecode.com/2017/08/31/csrf/">CSRF – Security Acronyms explained</a></small>
 						</div>
-						<p>Zranitelné HTTP metody: GET a POST</p>
-						<p>Pro GET je možné využít IMG a SRC tagy.</p>
-						<p>Nebezpečné v kombinaci s funkcionalitou "trvalého přihlášení"</p>
+						<p>Zranitelné HTTP metody: GET a POST<br/>
+							Pro GET je možné využít IMG a LINK/SCRIPT tagy.<br/>
+							Nebezpečné v kombinaci s funkcionalitou "trvalého přihlášení"</p>
 					</section>
 					<section>
 						<h1>Obrana proti CSRF</h1>
 						<h2>Autorizační token platný po dobu trvání sezení</h2>
 						<ol>
-							<li>zajistit dostatečnou entropii délku tokenu</li>
+							<li>zajistit dostatečnou entropii a délku tokenu</li>
 							<li>pohlídat si prozrazení CSRF tokenu
 								<ul>
 									<li>neměl by se vyskytovat v lincích (leak přes Referer)</li>
@@ -396,11 +411,13 @@
 					</section>
 					<section>
 						<h1>Ochrana proti Clickjackingu</h1>
+						<h2>Content Security Policy</h2>
 						<p>Použití <strong>Content Security Policy</strong> a direktivy <strong>frame-ancestors</strong>. Funkčně analogická k X-Frame-Options</p>
-						<pre>
+						<pre><code class="hlxml" data-trim data-noescape>
 							Content-Security-Policy: frame-ancestors 'none';
-						</pre>
-						<p>(Starší řešení) Použití hlavičky <strong>X-Frame-Options</strong> pro povolení otevření aplikace v rámu.</p>
+						</code></pre>
+						<h2>X-Frame-Options (starší řešení)</h2>
+						<p>Použití hlavičky <strong>X-Frame-Options</strong> pro povolení otevření aplikace v rámu.</p>
 						<ul>
 							<li><strong>DENY</strong> - zakázáno</li>
 							<li><strong>SAMEORIGIN</strong> - povoleno jen na stejné doméně</li>
@@ -408,11 +425,11 @@
 						</ul>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
-						<h2>Nedostatečně chráněné citlivé informace</h2>
+						<h1>Nedostatečně chráněné citlivé informace</h1>
 						<p>Proč bych měl přístup k tomuto skriptu zaheslovat, když nikdo neví jaké je jeho URL?</p>
-						<img src="img/web_security_basics/senat.JPG" height="400px"/>
+						<img src="img/web_security_basics/senat.jpg" height="400px"/>
 						<p>ČR má i slavnou kauzu týkající se nezabezpečeného directory listingu:
 							<a href="https://www.lupa.cz/clanky/porno-na-psp-cz-par-dalsich-pouceni-z-teto-kauzy/">Porno na webu poslanecké sněmovny</a>
 						</p>
@@ -441,7 +458,7 @@
 						</div>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>XXE - XML External Entity (XXE) Processing</h1>
 						<p>Zneužití obrovských a rozličných <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">možností XML parserů</a>.</p>
@@ -598,7 +615,7 @@
 						</ol>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>XSS - cross site scripting</h1>
 						<p>Podvržení spustitelného JavaScript kódu to těla cizí stránky. Možností, jak XSS provést je velmi mnoho - doporučuji alespoň prolistovat knihu
@@ -642,7 +659,7 @@
 						<img src="img/web_security_basics/escaping.JPG" height="400px"/>
 					</section>
 				</section>
-				<section data-background="img/backgrounds/brown.jpg">
+				<section data-background="img/backgrounds/red.jpg">
 					<section>
 						<h1>Path traversal</h1>
 						<p>Útok pomocí zneužití navigace v adresářové struktuře. Nelze se spolehnout na to, že na OS
@@ -675,6 +692,11 @@
                         <p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                     </div>
                 </section>
+				<section data-background="img/web-security-basics/fg-invitation.jpg">
+					<a href="https://www.fg.cz/cs/cv" target="_blank">
+						<div style="width: 1920px; height: 1080px">&nbsp;</div>
+					</a>
+				</section>
 			</div>
 
 		</div>
