@@ -41,7 +41,7 @@
 
 			<div class="slides">
                 <!-- INTRO -->
-                <section data-background="img/web-security-basics/cyber.jpg">
+                <section data-background="img/web_security_basics/cyber.jpg">
                     <h1>Co byste měli vědět, když se mluví o webové bezpečnosti</h1>
                     <p style="color: #b5b5b5; margin: 2em;">
                         Jan <a style="color: #e5e5e5" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
@@ -458,7 +458,7 @@
 					<section>
 						<h1>XXE - XML External Entity (XXE) Processing</h1>
 						<p>Zneužití obrovských a rozličných <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">možností XML parserů</a>.</p>
-						<p>XML je možná trochu zastaralý formát, ale je všude a díky jeho benefitům (čitelnost, schéma, WS standardům) tu ještě nějakou dobu bude.</p>
+						<p>XML je možná trochu zastaralý formát, ale je všude a díky jeho benefitům<br/>(čitelnost, schéma, web-services standardy) tu ještě nějakou dobu bude.</p>
 					</section>
 					<section>
 						<h1>Document Type Definition</h1>
@@ -513,7 +513,7 @@
 	&lt;/user&gt;
 &lt;/users&gt;
 						</code></pre>
-						<p>Uživatel si následně založí uživatele:</p>
+						<p>Uživatel si následně založí účet s přihlašovacím jménem:</p>
 						<pre><code data-trim data-noescape style="font-size: smaller">Jan&amp;amp;lt;/login&amp;gt;&amp;lt;/user&amp;gt;&amp;lt;user&amp;gt;&amp;lt;login&amp;gt;Hacker&amp;lt;/login&amp;gt;&amp;lt;pwd&amp;gt;heslo&amp;lt;/pwd&amp;gt;&amp;lt;role&amp;gt;admin&amp;lt;/role&amp;gt;&amp;lt;/user&amp;gt;&amp;lt;user&amp;gt;&amp;lt;login&amp;gt;</code></pre>
 						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -605,9 +605,9 @@
 						<ol>
 							<li>pro práci (nejen) s XML používejte knihovny k tomu určené!</li>
 							<li>XML z externího zdroje může být extrémně nebezpečné a proto je třeba se k němu tak chovat</li>
+							<li>konzumentem i producentem XML může být často i úplně jiná aplikace!<br/>(proxy útoky přes externí špatně zabezpečené aplikace)</li>
 							<li>seznamte se s tím, co všechno váš parser umí a zablokujte všechny funkce, co nepotřebujete</li>
-							<li>konzumentem i producentem takto vytvořeného XML může být často i úplně jiná aplikace!</li>
-							<li>pokud to lze limitujte objem a čas na parsování dokumentu</li>
+							<li>pokud to lze, limitujte objem a čas na parsování dokumentu</li>
 						</ol>
 					</section>
 				</section>
@@ -615,24 +615,26 @@
 					<section>
 						<h1>XSS - cross site scripting</h1>
 						<p>Podvržení spustitelného JavaScript kódu to těla cizí stránky. Možností, jak XSS provést je velmi mnoho - doporučuji alespoň prolistovat knihu
-							<a href="https://www.soom.cz/data/Cross-Site_Scripting_v_praxi__Roman_Kummel.pdf">XSS v praxi</a>, která je sice už starší, ale pořád dává
+							<a href="https://www.soom.cz/data/Cross-Site_Scripting_v_praxi__Roman_Kummel.pdf">XSS v praxi</a> (přes 300 stránek), která je sice už starší, ale pořád dává
 						   slušný přehled o tom, co lze s XSS provádět.</p>
-						<h2>Příklady toho, co může útočník provést</h2>
+						<h2>Co může útočník pomocí XSS provést<br/><small>(není kompletní výčet)</small></h2>
 						<ul>
 							<li>krádež session</li>
 							<li>krádež citlivých údajů (odposlouchávání, úprava DOM)</li>
 							<li>zjištění informací v jakých dalších aplikacích je uživatel přihlášen</li>
-							<li>skrz prohlížeč uživatele skenovat / útočit na jeho vnitřní síť (intranet)</li>
 							<li>využít kapacity počítače např. k těžení bitcoinů</li>
-							<li>vytvoření backdooru (<a href="https://beefproject.com/">BeEF</a>, <a href="https://github.com/portcullislabs/xssshell-xsstunnell">XSS Tunnel</a>)</li>
+							<li>skrz prohlížeč uživatele skenovat / útočit na jeho vnitřní síť (intranet)<br/>
+							    existuje řada nástrojů k vytvoření backdooru (<a href="https://beefproject.com/">BeEF</a>, <a href="https://github.com/portcullislabs/xssshell-xsstunnell">XSS Tunnel</a>)
+							</li>
 						</ul>
 					</section>
 					<section>
-						<h1><a href="https://beefproject.com/">Browser Exploitation Framework</a></h1>
+						<h1>Browser Exploitation Framework (BeEF)</h1>
+						<p><a href="https://beefproject.com/">https://beefproject.com/</a></p>
 						<iframe width="560" height="315" src="https://www.youtube.com/embed/WtLTtbe5JcM?start=467" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</section>
 					<section>
-						<h1>Ochrana</h1>
+						<h1>Ochrana proti XSS</h1>
 						<h2><a href="https://content-security-policy.com/">Content Security Policy</a></h2>
 						<p>Jediná skutečně efektivní obrana proti XSS.</p>
 						<dl>
@@ -640,19 +642,19 @@
 							<dd>výchozí politika pro načítání obsahu typu JavaScript, obrázky, CSS, fonty, AJAX požadavky, rámy, HTML5 média</dd>
 							<dt>script-src</dt>
 							<dd>politika pro načítání JavaScriptů
-								<pre>script-src 'self' www.google-analytics.com ajax.googleapis.com;</pre>
+								<pre><code class="hlxml" data-trim data-noescape>script-src 'self' www.google-analytics.com ajax.googleapis.com;</code></pre>
 								pozor na povolení <cite>unsafe-inline</cite> a <cite>unsafe-eval</cite>, protože to jsou místa, kam budou útočníci cílit
 							</dd>
 							<dt>form-action</dt>
 							<dd>definuje URL, kam mohou být směřovány POST akce form elementů na webu</dd>
 						</dl>
-						<p>Je možné provozovat pouze v "reportovacím režimu" (<a href="https://report-uri.com/">existují služby pro zpracování dat</a>)</p>
+						<p>Je možné provozovat i pouze jen v "reportovacím režimu" (<a href="https://report-uri.com/">existují služby pro zpracování dat</a>)</p>
 					</section>
 					<section>
-						<h1>Ochrana</h1>
+						<h1>Ochrana proti XSS</h1>
 						<h2>Důsledné escapování vstupů uživatele</h2>
-						<p>Problémem je, že pro odlišné "formáty" je nutné escapovat odlišně. Proto existuje celá řada escapovacích funkcí:</p>
-						<img src="img/web_security_basics/escaping.JPG" height="400px"/>
+						<p>Problémem je, že pro odlišné "formáty" je nutné escapovat odlišně. Existuje celá řada escapovacích funkcí:</p>
+						<img src="img/web_security_basics/escaping.JPG" height="500px"/>
 					</section>
 				</section>
 				<section data-background="img/backgrounds/red.jpg">
@@ -672,7 +674,10 @@
 						<p>U interpretovaných jazyků (PHP, JavaScript) se útočník může pokusit nahrát soubor na server
 						   do složky se zdrojovými soubory a nechat ho v rámci běžné obsluhy požadavku vyhodnotit.</p>
 						<p>
-							<a href="https://medium.com/@jonathanbouman/local-file-inclusion-at-ikea-com-e695ed64d82f">Praktická ukázka z útoku na Ikea</a></p>
+						<div style="text-align: center">
+							<img src="https://cdn-images-1.medium.com/max/1200/1*iIMnV0gGyL4Bb0hZSAu0hQ.gif"/>
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/local-file-inclusion-at-ikea-com-e695ed64d82f">Local File Inclusion at Ikea.com</a></small>
 					</section>
 				</section>
                 <!-- OUTRO -->
@@ -685,10 +690,10 @@
 	                        <li><a href="https://darknetdiaries.com/">Darknet diaries - podcast o temné straně internetu</a></li>
 	                        <li><a href="https://www.michalspacek.cz/clanky/">Blog Michala Špačka</a></li>
                         </ul>
-                        <p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                        <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                     </div>
                 </section>
-				<section data-background="img/web-security-basics/fg-invitation.jpg">
+				<section data-background="img/web_security_basics/fg-invitation2.jpg">
 					<a href="https://www.fg.cz/cs/cv" target="_blank">
 						<div style="width: 1920px; height: 1080px">&nbsp;</div>
 					</a>
