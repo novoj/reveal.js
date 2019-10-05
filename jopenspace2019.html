@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Abusing Levenshtein automaton for syncing trees, 2019</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            @media screen and (max-height: 1000px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
+	</head>
+
+	<body>
+
+        <div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+            <a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/backgrounds/brown.jpg">
+                    <h1>Abusing Levenshtein automaton for syncing trees</h1>
+	                <img class="plain" src="img/jopenspace2019/Levenshtein.jpg" style="width: 20%">
+                    <p>
+                        <small style="color: #a6a6a6">Dr. Vladimir I. Levenshtein</small>
+                    </p>
+	                <p>
+		                <small style="color: #a6a6a6">Interpretation by Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+	                </p>
+	                <h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://goo.gl/KznAa9">https://goo.gl/KznAa9</a></h4>
+                </section>
+				<!-- CONTENT -->
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Problem definition</h1>
+					<p>Compute minimal set of operations to apply on left tree to get to the structure of the right one.</p>
+					<div style="text-align: center">
+						<img src="img/jopenspace2019/tree-edit-distance.png" style="padding: 3em">
+					</div>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Levenshtein distance</h1>
+					<p>Levenshtein distance is a string metric for measuring the difference between two sequences.
+						Informally, the Levenshtein distance between two words is the minimum number of single-character
+						edits required to change one word into the other. It is named after the Soviet mathematician
+						Vladimir Levenshtein, who considered this distance in 1965.</p>
+					<table>
+						<tr>
+							<td>
+								<h3>Allowed operations:</h3>
+								<ul>
+									<li>insert</li>
+									<li>delete</li>
+									<li>substitute</li>
+								</ul>
+							</td>
+							<td style="width: 10em">
+
+							</td>
+							<td>
+								<h3>Example:</h3>
+								<img src="img/jopenspace2019/distance.jpg"><br/>
+								Levenshtein distance here is <strong>3</strong>
+							</td>
+						</tr>
+					</table>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h1>Sequencing tree</h1>
+					<div style="text-align: center">
+						<img src="img/jopenspace2019/tree-example.jpg" style="padding: 1em; width: 50%">
+					</div>
+					<code data-trim data-noescape style="font-size: 140%; font-weight: bold">
+						A A( B C C( D D( E F )D )C G H )A I I( J )I
+					</code>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h2>Applying Levenshtein automaton</h2>
+					<table>
+						<tr>
+							<td rowspan="2" style="width: 30%"><img src="img/jopenspace2019/levehnstein-table.png" class="plain" style="padding: 1em;"></td>
+							<td style="vertical-align: top; padding: 2em; width: 70%">
+								<img src="img/jopenspace2019/formula.png" class="plain" style="padding: 1em;"><br/>
+								Algorithm uses stack of operations instead of plain numbers. Imagine that under the number
+								3 is following stack of operations:<br/><br/>
+								<div style="text-align: center">
+									<ul>
+										<li>INSERT A(</li>
+										<li>INSERT B</li>
+										<li>DELETE C</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg">
+					<h2>Reconstructing tree</h2>
+					<ol>
+						<li>removing opening and closing elements and pointing all inner operations to correct parents</li>
+						<li>replacing pair operations INSERT + DELETE targeting the same element to MOVE operation</li>
+					</ol>
+					<p>And finally apply modification recipe applied on source tree.</p>
+				</section>
+				<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+					<h2>Real life usage</h2>
+					<img src="img/jopenspace2019/questionary.jpg" class="plain" style="padding: 1em;">
+				</section>
+				<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+					<h2>Real life usage</h2>
+					<img src="img/jopenspace2019/questionary-live.jpg" class="plain" style="padding: 1em; width: 80%">
+				</section>
+				<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+					<h2>Real life usage - the why</h2>
+					<ul>
+						<li>FG developers create page structure -> Git</li>
+						<li>Customer creates it's own modifications to structure on base of existing page structure</li>
+						<li>FG developers update the page structure -> Git</li>
+						<li>We need to merge original Customer modifications to new page structure pulled from Git</li>
+						<li>We create modification recipe skipping changes to nodes present in Git</li>
+					</ul>
+					<p>Conflicts may still occur.</p>
+				</section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/attention.jpg">
+                    <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                        <h1>Thank you for your attention</h1>
+                        <p><strong>Sources:</strong></p>
+                        <ul>
+	                        <li><a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a></li>
+	                        <li><a href="https://medium.com/@ethannam/understanding-the-levenshtein-distance-equation-for-beginners-c4285a5604f0">Levenshtein automaton implementation</a></li>
+	                        <li><a href="https://ethw.org/Vladimir_I._Levenshtein">Dr. Vladimir I. Levenshtein</a></li>
+	                        <li><a href="https://www.researchgate.net/publication/6886484_Designing_an_A_Algorithm_for_Calculating_Edit_Distance_between_Rooted-Unordered_Trees">Horesh, Yair & Mehr, Ramit & Unger, Ron. (2006). Designing an A* Algorithm for Calculating Edit Distance between Rooted-Unordered Trees. Journal of computational biology : a journal of computational molecular cell biology. 13. 1165-76. 10.1089/cmb.2006.13.1165.</a></li>
+                        </ul>
+                        <p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                    </div>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+	</body>
+</html>
