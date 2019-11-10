@@ -126,6 +126,7 @@
 						<ul>
 							<li><a href="https://www.shodan.io/">Shodan</a> - databáze strojů a otevřených rozhraní</li>
 							<li><a href="https://github.com/NullArray/AutoSploit">AutoSploit</a> -  automatizovaný nástroj, který na základě výsledku v Shodanu aplikuje vybrané exploity</li>
+							<lis><a href="https://whatcms.org/">CMS detection</a> - nástroj pro detekci použitých CMS</lis>
 						</ul>
 					</section>
 					<section>
@@ -446,6 +447,8 @@
 						<h2>Nedostatečně chráněné citlivé informace</h2>
 						<p>Proč bych měl přístup k tomuto skriptu zaheslovat, když nikdo neví jaké je jeho URL?</p>
 						<img src="img/web_security_basics/senat.jpg" height="400px"/>
+						<p>Apple v červnu 2018 <a href="https://medium.com/@jonathanbouman/how-i-hacked-apple-com-unrestricted-file-upload-bcda047e27e3">měl nezabepečený přístup k některým svým Amazon S3 bucketům</a>.</p>
+						<p>Některé Android aplikace si ukládají citlivá údaje <a href="https://fs0c131y.com/posts/2018-10-16_how-i-found-the-database-of-the-donald-daters-app/">v čitelné podobě</a>.</p>
 						<p>ČR má i slavnou kauzu týkající se nezabezpečeného directory listingu:<br/>
 							<a href="https://www.lupa.cz/clanky/porno-na-psp-cz-par-dalsich-pouceni-z-teto-kauzy/">Porno na webu poslanecké sněmovny</a>
 						</p>
@@ -457,6 +460,7 @@
 						<p>K vyhledání můžete použít třeba google:</p>
 						<pre><code data-trim data-noescape>filetype:php_ "password"</code></pre>
 						<pre><code data-trim data-noescape>site:home.tiscali.cz "index of"</code></pre>
+						<p>Častou chybou je také provozování aplikace v deveopment režimu na produkčním prostředí.</p>
 					</section>
 					<section>
 						<h1>Únik repozitáře kódu</h1>
@@ -504,7 +508,7 @@
 					<section>
 						<h1>XXE - XML External Entity (XXE) Processing</h1>
 						<p>Zneužití obrovských a rozličných <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">možností XML parserů</a>.</p>
-						<p>XML je možná trochu zastaralý formát, ale je všude a díky jeho benefitům<br/>(čitelnost, schéma, web-services standardy) tu ještě nějakou dobu bude.</p>
+						<p>XML je možná trochu zastaralý formát, ale <a href="https://github.com/BuffaloWill/oxml_xxe">je použití všude možně</a> a díky jeho benefitům<br/>(čitelnost, schéma, web-services standardy) tu ještě nějakou dobu bude.</p>
 					</section>
 					<section>
 						<h1>XML Injection</h1>
@@ -616,6 +620,13 @@
 						</code></pre>
 					</section>
 					<section>
+						<h2>Průnik na BOL.com e-commerce</h2>
+						<div style="text-align: center">
+							<img src="https://miro.medium.com/max/1736/1*9ro87L9jNBcVoW2pgssylA.gif">
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/xxe-at-bol-com-7d331186de54">XXE at Bol.com</a></small>
+					</section>
+					<section>
 						<h1>DoS</h1>
 						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -675,9 +686,23 @@
 						</ul>
 					</section>
 					<section>
+						<h2>Zcizení přihlašovacích údajů pomocí reflected XSS</h2>
+						<div style="text-align: center">
+							<img src="https://miro.medium.com/max/1988/1*21SP-EeJItl7wDON1mBawg.gif">
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/reflected-xss-at-philips-com-e48bf8f9cd3c">Reflected XSS at Philips.com</a></small>
+					</section>
+					<section>
 						<h1>Browser Exploitation Framework (BeEF)</h1>
 						<p><a href="https://beefproject.com/">https://beefproject.com/</a></p>
 						<iframe width="560" height="315" src="https://www.youtube.com/embed/WtLTtbe5JcM?start=467" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</section>
+					<section>
+						<h1>Plný přístup k obsahu webu</h1>
+						<p>a práci uživatele s ním, včetně všech vkládaných informací.</p>
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/afGv3Y7ugfw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<p>Z této funkcionality čerpá řada marketingových nástrojů jako je <a href="https://www.hotjar.com" target="_blank">HotJar</a> nebo český
+							<a href="https://www.smartlook.cz" target="_blank">SmartLook</a></p>
 					</section>
 					<section>
 						<h1>Ochrana proti XSS</h1>
@@ -735,6 +760,7 @@
 	                        <li><a href="https://www.soom.cz/">SOOM.cz - portál o hackovacích technikách</a></li>
 	                        <li><a href="https://darknetdiaries.com/">Darknet diaries - podcast o temné straně internetu</a></li>
 	                        <li><a href="https://www.michalspacek.cz/clanky/">Blog Michala Špačka</a></li>
+	                        <li><a href="https://medium.com/@jonathanbouman">Blog Jonathana Boumena</a></li>
                         </ul>
                         <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
                     </div>
