@@ -507,28 +507,6 @@
 						<p>XML je možná trochu zastaralý formát, ale je všude a díky jeho benefitům<br/>(čitelnost, schéma, web-services standardy) tu ještě nějakou dobu bude.</p>
 					</section>
 					<section>
-						<h1>Document Type Definition</h1>
-						<pre><code class="hlxml" data-trim data-noescape>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE note
-[
-	&lt;!ELEMENT note (to,from,heading,body)&gt;
-	&lt;!ELEMENT to (#PCDATA)&gt;
-	&lt;!ELEMENT from (#PCDATA)&gt;
-	&lt;!ELEMENT heading (#PCDATA)&gt;
-	&lt;!ELEMENT body (#PCDATA)&gt;
-	&lt;!ENTITY friend "Jani"&gt;
-]&gt;
-&lt;note&gt;
-	&lt;to&gt;Tove&lt;/to&gt;
-	&lt;from&gt;&amp;friend;&lt;/from&gt;
-	&lt;heading&gt;Reminder&lt;/heading&gt;
-	&lt;body&gt;Don't forget me this weekend!&lt;/body&gt;
-&lt;/note&gt;
-						</code></pre>
-						<p>Více detailů o <a href="https://www.soom.cz/clanky/1137--XXE-a-dalsi-XML-zranitelnosti">XML zranitelnostech</a>.</p>
-					</section>
-					<section>
 						<h1>XML Injection</h1>
 						<p>Uživateli umožníme vložit část, která XML poškodí.</p>
 						<pre><code class="hlxml" data-trim data-noescape>
@@ -584,6 +562,28 @@
 	&lt;/user&gt;
 &lt;/users&gt;
 						</code></pre>
+					</section>
+					<section>
+						<h1>Document Type Definition</h1>
+						<pre><code class="hlxml" data-trim data-noescape>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE note
+[
+	&lt;!ELEMENT note (to,from,heading,body)&gt;
+	&lt;!ELEMENT to (#PCDATA)&gt;
+	&lt;!ELEMENT from (#PCDATA)&gt;
+	&lt;!ELEMENT heading (#PCDATA)&gt;
+	&lt;!ELEMENT body (#PCDATA)&gt;
+	&lt;!ENTITY friend "Jani"&gt;
+]&gt;
+&lt;note&gt;
+	&lt;to&gt;Tove&lt;/to&gt;
+	&lt;from&gt;&amp;friend;&lt;/from&gt;
+	&lt;heading&gt;Reminder&lt;/heading&gt;
+	&lt;body&gt;Don't forget me this weekend!&lt;/body&gt;
+&lt;/note&gt;
+						</code></pre>
+						<p>Více detailů o <a href="https://www.soom.cz/clanky/1137--XXE-a-dalsi-XML-zranitelnosti">XML zranitelnostech</a>.</p>
 					</section>
 					<section>
 						<h1>Local file disclusion</h1>
