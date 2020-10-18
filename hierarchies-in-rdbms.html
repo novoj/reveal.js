@@ -1,0 +1,359 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Modelování hierarchických struktur v relační databázi, 2020</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/clock.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <style>
+        @media screen and (max-height: 1000px) {
+            #logo {
+                display: none;
+                visibility: hidden;
+            } }
+    </style>
+</head>
+
+<body>
+
+<div style="display: block; position: absolute; bottom: 40px; left: 50%; width: 1000px; margin-left: -500px; z-index: 20;">
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+                <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2020/FG_Forrest_neg.png" height="30px"/></a>
+            </td>
+            <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+                <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2020/edeeone.svg" height="30px"/></a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="reveal">
+
+    <div class="slides">
+        <!-- INTRO -->
+        <section data-background="img/hierarchies-in-rdbms/TODO.jpg">
+            <img class="plain" src="img/javadayscz2020/Loga.jpg" style="box-shadow:1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff;">
+            <h1 style="color: black; margin-top: 0.5em">Modelování hierarchických struktur v relační databázi</h1>
+            <p style="color: black; margin: 2em;">
+                Jan <a style="color: #525252" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
+            </p>
+            <h4 style="color:#5e5e5e">Online verze prezentace<br/><a style="color: #212121" href="http://bit.ly/web_security_basics">http://bit.ly/TODO</a></h4>
+        </section>
+        <!-- ABOUT ME -->
+        <section data-background="img/backgrounds/red.jpg">
+            <h1>Kdo jsem?</h1>
+            <div style="align-content: center">
+                <table style="margin: 0 auto;">
+                    <tr>
+                        <td style="vertical-align: top; width: 50%">
+                            <h2>O mně</h2>
+                            <ul>
+                                <li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+                                <li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
+                                <li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+                                <li>20 let vývojářem webových aplikací</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h2>Použití v e-commerce</h2>
+                            <ul>
+                                <li><a href="https://www.senesi.cz">Senesi.cz (koupelny a kuchyně)</a></li>
+                                <li><a href="https://www.signal-nabytek.cz">Signál-nábytek.cz (vybavení domácnosti)</a></li>
+                                <li><a href="https://www.flangi.cz/">Flangi.cz (vybavení domácnosti)</a></li>
+                                <li><a href="https://www.warehouse1.cz">Warehouse1.cz (alkohol)</a></li>
+                                <li><a href="https://www.fjallraven-shop.cz">Fjallraven-Shop.cz (oblečení)</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+        <!-- PROBLEM AREA DESCRIPTION -->
+        <section data-background="img/backgrounds/red.jpg">
+            <section data-transition="fade">
+                <h2>Nejčastější použití</h2>
+                <div style="text-align: center">
+                    <p>Více-úrovňová menu (zobraz hierarchii).</p>
+                    <img src="img/hierarchies-in-rdbms/senesi-menu.png" height="600px">
+                </div>
+            </section>
+            <section data-transition="fade">
+                <h2>Nejčastější použití</h2>
+                <div style="text-align: center;">
+                    <p>Drobečková navigace (vypiš nadřízené).</p>
+                    <img src="img/hierarchies-in-rdbms/senesi-breadcrumb.png" height="600px">
+                </div>
+            </section>
+            <section data-transition="fade">
+                <h2>Nejčastější použití</h2>
+                <div style="text-align: center">
+                    <p>Výpis návazných produktů v omezené sekci stromu.</p>
+                    <img src="img/hierarchies-in-rdbms/senesi-product-listing.png" height="600px">
+                </div>
+            </section>
+        </section>
+        <!-- NAIVE SOLUTION -->
+        <section data-background="img/backgrounds/red.jpg">
+            <section>
+                <h2>Reprezentace vazbou na rodiče</h2>
+                <div style="text-align: center">
+                    <table style="width: 800px">
+                        <tr>
+                            <td style="vertical-align: top">
+                                <pre><code class="sql" data-trim data-noescape>
+CREATE TABLE category(
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    parent INT DEFAULT NULL
+);
+                    </code></pre>
+                            </td>
+                            <td style="vertical-align: top">
+                                <img src="img/hierarchies-in-rdbms/naive-rdm.png" height="200">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>ne všechny databáze podporují <a href="https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL">hierarchické dotazy</a></li>
+                    <li>špatně implementovaná rekurze je na větších datech příliš pomalá</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Hierarchické dotazy v Oracle DB</h2>
+                TODO
+                Vyzkoušet výkonnost
+            </section>
+            <section>
+                <h2>Předpřipravené JOIN dotazy</h2>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+SELECT t1.name AS lev1, t2.name as lev2, t3.name as lev3, t4.name as lev4
+FROM category AS t1
+LEFT JOIN category AS t2 ON t2.parent = t1.category_id
+LEFT JOIN category AS t3 ON t3.parent = t2.category_id
+LEFT JOIN category AS t4 ON t4.parent = t3.category_id;
+                    </code></pre>
+                </div>
+                <ul>
+                    <li>špatně škáluje na velkých datech</li>
+                    <li>limitováno na předem daný počet úrovní zanoření</li>
+                </ul>
+            </section>
+        </section>
+        <!-- TEXT BASED SOLUTION -->
+        <section data-background="img/backgrounds/red.jpg">
+            <section>
+                <h2>Reprezentace formou skládané cesty</h2>
+                <div style="text-align: center">
+                    <table style="width: 800px">
+                        <tr>
+                            <td style="vertical-align: top">
+                                <pre><code class="sql" data-trim data-noescape>
+CREATE TABLE category(
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    path VARCHAR(512) DEFAULT '/'
+);
+                    </code></pre>
+                            </td>
+                            <td style="vertical-align: top">
+                                <img src="img/hierarchies-in-rdbms/path-rdm.png" height="200">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                TODO UKÁZKA DAT
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <section>
+                    <h2>Reprezentace formou skládané cesty</h2>
+                    <table>
+                        <tr>
+                            <th>Výhody</th>
+                            <th>Nevýhody</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li>vyhneme se rekurzi</li>
+                                    <li>překvapivě relativně i rychlé i na větších datech</li>
+                                    <li>nadřízené položky jsou zakódované v cestě</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>vyžaduje větší prostor na disku</li>
+                                    <li>komplikovaně se udržuje při přesunech ve stromu</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+        </section>
+        <!-- MPTT SOLUTION -->
+        <section data-background="img/backgrounds/red.jpg">
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <p>Odlišný pohled na hierarchická data formou do sebe zanořených množin.</p>
+                <table>
+                    <tr>
+                        <td style="vertical-align: middle"><img src="https://cloud.githubusercontent.com/assets/1818373/7474091/7d7f409a-f33f-11e4-9979-9a0fc566ac59.png"/></td>
+                        <td style="vertical-align: middle; font-weight: bold; font-size: 140%">&rightarrow;</td>
+                        <td style="vertical-align: middle"><img src="https://cloud.githubusercontent.com/assets/1818373/7474097/80c09c5e-f33f-11e4-8437-63c243791261.png"/></td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <p>U každého uzlu se definují levé a pravé hranice, které jsou větší než levé a pravé hranice všech jejich dětí.</p>
+                <div style="text-align: center">
+                    <img src="https://cloud.githubusercontent.com/assets/1818373/7474104/869870d4-f33f-11e4-8d40-76518a332bce.png"/>
+                </div>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <div style="text-align: center">
+                    <p>Mapování v následující relační struktuře:</p>
+                    <img src="img/hierarchies-in-rdbms/mptt-base.png"/>
+                </div>
+                <p>Získej všechny podřízené uzly konkrétního uzlu</p>
+                <pre><code class="sql" data-trim data-noescape>
+select * from MPTT where left >= node.left and right <= node.right
+                </code></pre>
+                <p>Získej všechny nadřízené uzly konkrétního uzlu</p>
+                <pre><code class="sql" data-trim data-noescape>
+select * from MPTT where left <= node.left and right => node.right
+                </code></pre>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <p>Pro další typy dotazů je vhodné rozšířit MPTT informace o úroveň zanoření a počet dětí.</p>
+                <img src="img/hierarchies-in-rdbms/mptt-extended.png" style="float: left; width: 350px; margin-right: 40px; margin-top: 110px; margin-bottom: 60px"/>
+                <p>Získej uzly podřízené konkrétního uzlu do hloubky Y</p>
+                <pre><code class="sql" data-trim data-noescape>
+select * from MPTT
+         where left  >= node.left and
+               right <= node.right and
+               level >= node.level and
+               level <= node.level + Y
+                </code></pre>
+                <p>Získej uzly nadřízené konkrétnímu uzlu do hloubky Y</p>
+                <pre><code class="sql" data-trim data-noescape>
+select * from MPTT
+         where left <= node.left and
+               right => node.right and
+               level >= node.level and
+               level <= node.level + Y
+                </code></pre>
+                <p>Získej všechny podřízené "koncové" uzly konkrétního uzlu</p>
+                <pre><code class="sql" data-trim data-noescape>
+select * from MPTT a
+         where left <= node.left and
+               right => node.right and
+               node.numberOfChildren = 0
+                </code></pre>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <p>Zápisy do datové struktury jsou drahé. S každým zápisem je třeba zaktualizovat hranice ve velké části stromu.</p>
+                <p><strong>Běžné operace se stromem:</strong></p>
+                <ul>
+                    <li>přidání nového uzlu</li>
+                    <li>změna pořadí uzlu mezi "sourozenci"</li>
+                    <li>odstranění uzlu</li>
+                    <li>přesun uzlu včetně podstromu na jiné místo v hierarchii</li>
+                </ul>
+            </section>
+        </section>
+        <!-- PMPTT SOLUTION -->
+        <section data-background="img/backgrounds/red.jpg">
+            <section>
+                <h2>Precalculated Modified Preorder Tree Traversal (PMPTT) algoritmus</h2>
+                <p>Pokus o odpověď na negativa MPTT algoritmu v oblasti změn ve stromě.</p>
+                <p>Zavádí ovšem tři nové limitace:</p>
+                <ul>
+                    <li>je nutné předem stanovit maximální počet uzlů v rámci nadřízeného uzlu</li>
+                    <li>je nutné předem stanovit maximální počet zanořených úrovni</li>
+                    <li>součet všech rozsahů na nejnižší úrovni musí být <= rozsah číselného datového typu</li>
+                </ul>
+            </section>
+        </section>
+        <!-- OUTRO -->
+        <section data-background="img/backgrounds/attention.jpg">
+            <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                <h1>Díky za pozornost</h1>
+                <p><strong>Zdroje:</strong></p>
+                TODO
+                <ul>
+                    <li><a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle: Hierarchical Queries: Databases for Developers</a></li>
+                    <li><a href="https://gist.github.com/tmilos/f2f999b5839e2d42d751">Milos Tomic: Modified Preorder Tree Traversal</a></li>
+                    <li><a href="https://www.zdrojak.cz/serialy/ukladam/">Zdroják: Ukládáme hierarchická data v databázi (3 díly)</a></li>
+                    <li><a href="https://blog.novoj.net/posts/2019-05-05-pmptt/">Blog.novoj.net: Precalculated modified preorder tree traversal</a></li>
+                </ul>
+                <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+            </div>
+        </section>
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/clock.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        width: 1200,
+        height: 900,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+</script>
+
+</body>
+</html>
