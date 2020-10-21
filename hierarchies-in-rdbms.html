@@ -22,6 +22,11 @@
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
 
+    <!-- amCharts javascript sources -->
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/chalk.js"></script>
+
     <style>
         @media screen and (max-height: 1000px) {
             #logo {
@@ -580,7 +585,7 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-100 rows retrieved starting from 1 in 291 ms (execution: 207 ms, fetching: 84 ms)
+100 rows retrieved starting from 1 in 266 ms (execution: 197 ms, fetching: 69 ms)
                     </code></pre>
                 </div>
             </section>
@@ -641,11 +646,121 @@ select TC.* from T_CATEGORY TC
                 </p>
             </section>
         </section>
+        <section data-background="img/backgrounds/red.jpg">
+            <h2>Odezvy typizovaných dotazů</h2>
+            <!-- amCharts javascript code -->
+            <script type="text/javascript">
+                AmCharts.makeChart("chartdiv",
+                    {
+                        "type": "serial",
+                        "categoryField": "Typ dotazu",
+                        "startDuration": 1,
+                        "fontFamily": "Arial",
+                        "fontSize": 14,
+                        "theme": "chalk",
+                        "categoryAxis": {
+                            "gridPosition": "start",
+                            "title": ""
+                        },
+                        "trendLines": [],
+                        "graphs": [
+                            {
+                                "balloonText": "[[value]] ms",
+                                "fillAlphas": 1,
+                                "id": "AmGraph-1",
+                                "title": "Hierarchický dotaz",
+                                "type": "column",
+                                "valueField": "Hierarchický dotaz"
+                            },
+                            {
+                                "balloonText": "[[value]] ms",
+                                "fillAlphas": 1,
+                                "id": "AmGraph-2",
+                                "title": "Skládaná cesta (like)",
+                                "type": "column",
+                                "valueField": "Skládaná cesta (like)"
+                            },
+                            {
+                                "balloonText": "[[value]] ms",
+                                "fillAlphas": 1,
+                                "id": "AmGraph-3",
+                                "title": "MPTT",
+                                "type": "column",
+                                "valueField": "MPTT"
+                            },
+                            {
+                                "balloonText": "[[value]] ms",
+                                "fillAlphas": 1,
+                                "id": "AmGraph-4",
+                                "title": "MPTT de-normalizovaný",
+                                "type": "column",
+                                "valueField": "MPTT de-normalizovaný"
+                            }
+                        ],
+                        "guides": [],
+                        "valueAxes": [
+                            {
+                                "id": "ValueAxis-1",
+                                "title": "Odezva v ms"
+                            }
+                        ],
+                        "allLabels": [],
+                        "balloon": {
+                            "borderAlpha": 0
+                        },
+                        "legend": {
+                            "enabled": true,
+                            "useGraphSettings": true
+                        },
+                        "dataProvider": [
+                            {
+                                "Hierarchický dotaz": "794",
+                                "Skládaná cesta (like)": "211",
+                                "MPTT": "201",
+                                "MPTT de-normalizovaný": "84",
+                                "Typ dotazu": "Kategorie v sekci s alespoň jedním produktem"
+                            },
+                            {
+                                "Hierarchický dotaz": "1034",
+                                "Skládaná cesta (like)": "255",
+                                "MPTT": "291",
+                                "MPTT de-normalizovaný": "276",
+                                "Typ dotazu": "Kategorie v sekci s počtem produtků"
+                            },
+                            {
+                                "Hierarchický dotaz": "821",
+                                "Skládaná cesta (like)": "439",
+                                "MPTT": "482",
+                                "MPTT de-normalizovaný": "140",
+                                "Typ dotazu": "Produkty v sekci"
+                            },
+                            {
+                                "Hierarchický dotaz": "63",
+                                "Skládaná cesta (like)": "133",
+                                "MPTT": "45",
+                                "MPTT de-normalizovaný": "45",
+                                "Typ dotazu": "Nadřízené kategorie"
+                            }
+                        ]
+                    }
+                );
+            </script>
+            <div id="chartdiv" style="height: 600px; background-color: #282828;" ></div>
+            <p style="text-align: center">
+                <small><strong>Měřeno na:</strong> Oracle 11g, Intel® Core™ i7-5600U CPU @ 2.60GHz × 4, RAM 32GB, Ubuntu 20.04</small><br/>
+                <small>Absolutní hodnoty nemají smysl, klíčové v grafu jsou relativní vztahy.</small>
+            </p>
+        </section>
         <!-- PMPTT SOLUTION -->
         <section data-background="img/backgrounds/red.jpg">
             <section>
                 <h2>Precalculated Modified Preorder Tree Traversal (PMPTT) algoritmus</h2>
                 <p>Pokus o odpověď na negativa MPTT algoritmu v oblasti změn ve stromě.</p>
+                <ul>
+                    <li>deterministicky přiřazuje hranice kategoriím dle pořadí jejich vzniku</li>
+                    <li>pro kategorie na nižších úrovních jsou předem definované rozsahy "bucketů", které se postupně obsazují</li>
+                    <li>pořadí bucketů není rozhodující, zavádí se nový sloupec "order"</li>
+                </ul>
                 <p>Zavádí ovšem tři nové limitace:</p>
                 <ul>
                     <li>je nutné předem stanovit maximální počet uzlů v rámci nadřízeného uzlu</li>
@@ -653,18 +768,76 @@ select TC.* from T_CATEGORY TC
                     <li>součet všech rozsahů na nejnižší úrovni musí být <= rozsah číselného datového typu</li>
                 </ul>
             </section>
+            <section>
+                <h2>Prealokovaná struktura pro 3 úrovně o 2 položkách</h2>
+                <p>Struktura je zprvu "virtuální" a postupně se zaplňuje reálnými daty:</p>
+                <div style="text-align: center;">
+                    <img src="img/hierarchies-in-rdbms/pmptt.png">
+                </div>
+                <p>Level 0 je limitován maximálním rozpětím datového typu Java Long. Tj. reálně např. 10 úrovní při
+                    55 položkách. Toto množství by se dalo teoreticky dále rozšířit přechodem na unsigned long.</p>
+            </section>
+            <section>
+                <h2>Open source FTW!</h2>
+                <p>PMPTT knihovna je dostupná pod MIT licencí v Maven Central:</p>
+                <pre><code class="xml" data-trim data-noescape>
+&lt;dependency&gt;
+    &lt;groupId&gt;one.edee.oss&lt;/groupId&gt;
+    &lt;artifactId&gt;lib_pmptt&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;one.edee.oss&lt;/groupId&gt;
+    &lt;artifactId&gt;lib_pmptt_rdbms&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+                </code></pre>
+                <p>Dokumentace a zdrojové kódy jsou dostupné na GitHub:</p>
+                <p><a href="https://github.com/FgForrest/PMPTT">https://github.com/FgForrest/PMPTT</a></p>
+            </section>
+            <section>
+                <h2>Open source FTW!</h2>
+                <p>Použití v kódu:</p>
+                <pre><code class="java" data-trim data-noescape style="max-height: 800px">
+// create PMPTT instance
+final PMPTT pmptt = new PMPTT(new MemoryStorage());
+
+// PMPTT instance can handle several different "hierarchies" - ie. trees
+final Hierarchy hierarchy = pmptt.getOrCreateHierarchy("eshopCategories", (short) 10, (short) 51);
+
+// fill up hierarchy with categories
+final HierarchyItem tvs = hierarchy.createRootItem("Televize");
+final HierarchyItem washingMachines = hierarchy.createRootItem("Pračky");
+final HierarchyItem cellPhones = hierarchy.createRootItem("Mobily");
+final HierarchyItem lcd = hierarchy.createItem("LCD", tvs.getCode());
+
+// bounds are automatically computed and accessible for attaching to de-normalized structures
+final Long leftBound = tvs.getLeftBound();
+final Long rightBound = tvs.getRightBound();
+
+// all hierarchy modification operations are baked in
+hierarchy.removeItem(cellPhones.getCode());
+hierarchy.moveItemBetweenLevelsFirst(washingMachines.getCode(), tvs.getCode());
+
+// you can list categories top-bottom
+final List&lt;HierarchyItem&gt; childrens = hierarchy.getChildItems(tvs.getCode());
+final List&lt;HierarchyItem&gt; leafs = hierarchy.getLeafItems(tvs.getCode());
+
+// or bottom up
+final List&lt;HierarchyItem&gt; parents = hierarchy.getParentItems(lcd.getCode());
+                </code></pre>
+            </section>
         </section>
         <!-- OUTRO -->
         <section data-background="img/backgrounds/attention.jpg">
             <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
                 <h1>Díky za pozornost</h1>
                 <p><strong>Zdroje:</strong></p>
-                TODO
                 <ul>
                     <li><a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle: Hierarchical Queries: Databases for Developers</a></li>
                     <li><a href="https://gist.github.com/tmilos/f2f999b5839e2d42d751">Milos Tomic: Modified Preorder Tree Traversal</a></li>
                     <li><a href="https://www.zdrojak.cz/serialy/ukladam/">Zdroják: Ukládáme hierarchická data v databázi (3 díly)</a></li>
-                    <li><a href="https://blog.novoj.net/posts/2019-05-05-pmptt/">Blog.novoj.net: Precalculated modified preorder tree traversal</a></li>
+                    <li><a href="https://github.com/FgForrest/PMPTT">Precalculated modified preorder tree traversal na GitHub</a></li>
                 </ul>
                 <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
             </div>
