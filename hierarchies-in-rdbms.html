@@ -115,6 +115,7 @@
         <section data-background="img/backgrounds/red.jpg">
             <section>
                 <h2>Reprezentace vazbou na rodiče</h2>
+                <p>Naivní návrh datové struktury, byť hojně používaný v literatuře.</p>
                 <div style="text-align: center">
                     <table style="width: 800px">
                         <tr>
@@ -139,25 +140,137 @@ CREATE TABLE category(
                 </ul>
             </section>
             <section>
-                <h2>Hierarchické dotazy v Oracle DB</h2>
-                TODO
-                Vyzkoušet výkonnost
+                <h2>Emulace reálného stavu</h2>
+                <p>V praxi pracujeme s mnohem rozsáhlejšími daty a proto si pojďme devinovat situaci, která se alespoň
+                    velmi vzdáleně podobá reálným případům z praxe.</p>
+                <div style="text-align: center">
+                    <img src="img/hierarchies-in-rdbms/real-life-example.png" width="600px">
+                </div>
+                <p>Ukážeme si reálné SQL dotazy nad Oracle 11g databází.</p>
             </section>
             <section>
-                <h2>Předpřipravené JOIN dotazy</h2>
+                <h2>Hierarchické dotazy v Oracle DB</h2>
+                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
-SELECT t1.name AS lev1, t2.name as lev2, t3.name as lev3, t4.name as lev4
-FROM category AS t1
-LEFT JOIN category AS t2 ON t2.parent = t1.category_id
-LEFT JOIN category AS t3 ON t3.parent = t2.category_id
-LEFT JOIN category AS t4 ON t4.parent = t3.category_id;
+// zajímají nás kategorie
+select TC.* from T_CATEGORY TC
+
+// přes M:N vazbu produktu na kategorii
+     left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
+     left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// s vyloučením kategorií bez produktů
+where TP.PRODUCT_ID is not null
+
+// a hierarchickým dotazem od kategorie s ID = 2 s rekurzí přes podřízené
+start with TC.CATEGORY_ID = 2
+connect by prior TC.CATEGORY_ID = TC.PARENT;
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+1000 rows retrieved starting from 1 in 794 ms (execution: 636 ms, fetching: 158 ms)
+                    </code></pre>
+                </div>
+                <p>
+                    <small><strong>Zdroj:</strong> <a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle tutorial</a></small>
+                </p>
+            </section>
+            <section>
+                <h2>Hierarchické dotazy v Oracle DB</h2>
+                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+SELECT t3.* FROM T_CATEGORY t1
+
+// otrocky připojme X podřízených úrovní kategorií
+         LEFT JOIN T_CATEGORY t2 ON t2.parent = t1.category_id
+         LEFT JOIN T_CATEGORY t3 ON t3.parent = t2.category_id
+
+// s M:N vazbou produktu na kategorii
+         LEFT JOIN T_PRODUCT_CATEGORY TPC on t1.CATEGORY_ID = TPC.CATEGORY_ID OR t2.CATEGORY_ID = TPC.CATEGORY_ID OR t3.CATEGORY_ID = TPC.CATEGORY_ID
+         LEFT JOIN T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// s vyloučením kategorií bez produktů a nastavením úvodní kategorie na ID = 2
+where TP.PRODUCT_ID is not null
+      and t1.CATEGORY_ID = 2
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+1000 rows retrieved starting from 1 in 1 s 292 ms (execution: 335 ms, fetching: 957 ms)
                     </code></pre>
                 </div>
                 <ul>
                     <li>špatně škáluje na velkých datech</li>
                     <li>limitováno na předem daný počet úrovní zanoření</li>
+                    <li>nepraktické z více ohledů</li>
                 </ul>
+            </section>
+            <section>
+                <h2>Hierarchické dotazy v Oracle DB</h2>
+                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape style="max-height: 500px">
+// zajímají nás kategorie a počet produktů v nich
+select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
+ inner join (
+
+// zde můžeme získat pouze sloupce, které jsou použité v GROUP by sekci
+    select t1.CATEGORY_ID, count(0) as PRODUCT_COUNT
+        from T_CATEGORY t1
+
+// přes M:N vazbu produktu na kategorii
+             left join T_PRODUCT_CATEGORY TPC on t1.CATEGORY_ID = TPC.CATEGORY_ID
+             left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// s vyloučením kategorií bez produktů a nastavením úvodní kategorie na ID = 2
+    where TP.PRODUCT_ID is not null
+    start with t1.CATEGORY_ID = 2
+    connect by prior t1.CATEGORY_ID = t1.PARENT
+
+// seskupit podle kategorie
+    group by t1.CATEGORY_ID
+    having count(0) > 0
+
+ ) a on a.CATEGORY_ID = TC.CATEGORY_ID
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+100 rows retrieved starting from 1 in 1 s 34 ms (execution: 958 ms, fetching: 76 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Hierarchické dotazy v Oracle DB</h2>
+                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select * from T_CATEGORY TC
+
+// nadřízené kategorii s ID = 4
+start with TC.CATEGORY_ID = 4
+
+// s obrácenou rekurzivní vazbou
+connect by prior TC.PARENT = TC.CATEGORY_ID;
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+5 rows retrieved starting from 1 in 63 ms (execution: 6 ms, fetching: 57 ms)
+                    </code></pre>
+                </div>
+                <p>
+                    <small><strong>Zdroj:</strong> <a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle tutorial</a></small>
+                </p>
             </section>
         </section>
         <!-- TEXT BASED SOLUTION -->
@@ -167,8 +280,8 @@ LEFT JOIN category AS t4 ON t4.parent = t3.category_id;
                 <div style="text-align: center">
                     <table style="width: 800px">
                         <tr>
-                            <td style="vertical-align: top">
-                                <pre><code class="sql" data-trim data-noescape>
+                            <td style="vertical-align: middle">
+                                <pre><code class="sql" data-trim data-noescape style="width: 450px">
 CREATE TABLE category(
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
@@ -177,40 +290,136 @@ CREATE TABLE category(
                     </code></pre>
                             </td>
                             <td style="vertical-align: top">
-                                <img src="img/hierarchies-in-rdbms/path-rdm.png" height="200">
+                                <img src="img/hierarchies-in-rdbms/path-rdm.png" height="200px">
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                TODO UKÁZKA DAT
+                            <td colspan="2" style="text-align: center">
+                                <h4>Ukázka dat</h4>
+                                <img src="img/hierarchies-in-rdbms/composed-path-example.png">
                             </td>
                         </tr>
                     </table>
                 </div>
-                <section>
-                    <h2>Reprezentace formou skládané cesty</h2>
-                    <table>
-                        <tr>
-                            <th>Výhody</th>
-                            <th>Nevýhody</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ul>
-                                    <li>vyhneme se rekurzi</li>
-                                    <li>překvapivě relativně i rychlé i na větších datech</li>
-                                    <li>nadřízené položky jsou zakódované v cestě</li>
-                                </ul>
-                            </td>
-                            <td>
-                                <ul>
-                                    <li>vyžaduje větší prostor na disku</li>
-                                    <li>komplikovaně se udržuje při přesunech ve stromu</li>
-                                </ul>
-                            </td>
-                        </tr>
-                    </table>
-                </section>
+            </section>
+            <section>
+                <h2>Reprezentace formou skládané cesty</h2>
+                <table>
+                    <tr>
+                        <th>Výhody</th>
+                        <th>Nevýhody</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>vyhneme se rekurzi</li>
+                                <li>překvapivě relativně i rychlé i na větších datech</li>
+                                <li>nadřízené položky jsou zakódované v cestě</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>vyžaduje větší prostor na disku</li>
+                                <li>komplikovaně se udržuje při přesunech ve stromu</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h2>Reprezentace formou skládané cesty</h2>
+                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select TC.* from T_CATEGORY TC
+
+// přes M:N vazbu produktu na kategorii
+         left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
+         left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// s vyloučením kategorií bez produktů
+where TP.PRODUCT_ID is not null
+
+// jejichž cesta začíná cestou nadřízené kategorie
+      and TC.PATH like '/0/1/2/%';
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+1000 rows retrieved starting from 1 in 211 ms (execution: 43 ms, fetching: 168 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Reprezentace formou skládané cesty</h2>
+                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie a počet produktů v nich
+select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
+    inner join (
+
+// zde můžeme získat pouze sloupce, které jsou použité v GROUP by sekci
+        select T_CATEGORY.CATEGORY_ID, count(0) as PRODUCT_COUNT
+        from T_CATEGORY
+
+// přes M:N vazbu produktu na kategorii
+                 left join T_PRODUCT_CATEGORY TPC on T_CATEGORY.CATEGORY_ID = TPC.CATEGORY_ID
+                 left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// jejichž cesta začíná cestou nadřízené kategorie
+        where TP.PRODUCT_ID is not null
+              and T_CATEGORY.PATH like '/0/1/2/%'
+
+// seskupit podle kategorie
+        group by T_CATEGORY.CATEGORY_ID
+        having count(0) > 0
+    ) a on a.CATEGORY_ID = TC.CATEGORY_ID
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+100 rows retrieved starting from 1 in 255 ms (execution: 184 ms, fetching: 71 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Reprezentace formou skládané cesty</h2>
+                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select * from T_CATEGORY
+    where CATEGORY_ID in (
+
+// rozděl cestu na jednotlivé fragmenty
+    select regexp_substr(a.PATH, '[^/]+', 1, level)
+    from (
+
+            // nadřízené kategorii s ID = 4
+            select concat(PATH, concat('/', concat(CATEGORY_ID, '/'))) as PATH
+                        from T_CATEGORY where CATEGORY_ID = 4
+    ) a
+
+// fragmenty převeď na řádkovou reprezentaci (černá magie)
+    connect BY regexp_substr(a.PATH, '[^/]+', 1, level) is not null)
+
+// setřídit podle úrovně zanoření sestupně
+order by LVL desc;
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+5 rows retrieved starting from 1 in 133 ms (execution: 91 ms, fetching: 42 ms)
+                    </code></pre>
+                </div>
+                <p>
+                    <small><strong>Zdroj:</strong> <a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle tutorial</a></small>
+                </p>
             </section>
         </section>
         <!-- MPTT SOLUTION -->
@@ -278,7 +487,11 @@ select * from MPTT a
             </section>
             <section>
                 <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <p>Zápisy do datové struktury jsou drahé. S každým zápisem je třeba zaktualizovat hranice ve velké části stromu.</p>
+                <h3>Nevýhody</h3>
+                <ol>
+                    <li>zápisy do datové struktury jsou drahé. S každým zápisem je třeba zaktualizovat hranice ve velké části stromu.</li>
+                    <li>zhoršená čitelnost pro vývojáře - z hranic není ihned patrné umístění ve stromu</li>
+                </ol>
                 <p><strong>Běžné operace se stromem:</strong></p>
                 <ul>
                     <li>přidání nového uzlu</li>
@@ -286,6 +499,146 @@ select * from MPTT a
                     <li>odstranění uzlu</li>
                     <li>přesun uzlu včetně podstromu na jiné místo v hierarchii</li>
                 </ul>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select TC.* from T_CATEGORY TC
+
+// přes M:N vazbu produktu na kategorii
+    left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
+    left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// pouze kategorie jejichž hranice leží uvnitř intevalu
+where TC.LEFT > 3 and TC.RIGHT < 1357
+
+// s vyloučením kategorií bez produktů
+      and TP.PRODUCT_ID is not null;
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+1000 rows retrieved starting from 1 in 201 ms (execution: 51 ms, fetching: 150 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <p>Pokud de-normalizujeme strukturu tabulek a uložíme hranice blíže k produktu, potom:</p>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select TC.* from T_CATEGORY TC
+
+// s vazbou na produkty
+    inner join T_PRODUCT TP on TC.LEFT = TP.LEFT and TC.RIGHT = TP.RIGHT
+
+// jejichž hranice leží uvnitř intevalu
+where TP.LEFT > 3 and TP.RIGHT < 1357
+                    </code></pre>
+                </div>
+                <p><small>Poznámka: de-normalizací jsme zároveň porušili M:N vazbu, ale tento příklad je zde pouze pro ilustraci</small></p>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+1000 rows retrieved starting from 1 in 84 ms (execution: 4 ms, fetching: 80 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie a počet produktů v nich
+select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
+    inner join (
+
+// zde můžeme získat pouze sloupce, které jsou použité v GROUP by sekci
+        select T_CATEGORY.CATEGORY_ID, count(0) as PRODUCT_COUNT
+               from T_CATEGORY
+
+// přes M:N vazbu produktu na kategorii
+               left join T_PRODUCT_CATEGORY TPC on T_CATEGORY.CATEGORY_ID = TPC.CATEGORY_ID
+               left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
+
+// jejichž hranice leží uvnitř intevalu
+            where T_CATEGORY.LEFT > 3 and T_CATEGORY.RIGHT < 1357
+                  and TP.PRODUCT_ID is not null
+
+// seskupit podle kategorie
+            group by T_CATEGORY.CATEGORY_ID
+            having count(0) > 0
+    ) a on a.CATEGORY_ID = TC.CATEGORY_ID
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+100 rows retrieved starting from 1 in 291 ms (execution: 207 ms, fetching: 84 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <p>Pokud de-normalizujeme strukturu tabulek a uložíme hranice blíže k produktu, potom:</p>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie a počet produktů v nich
+select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
+    inner join (
+
+// které se váží na hranice produktů
+        select left, right, count(0) as PRODUCT_COUNT from T_PRODUCT TP
+
+// jejichž hranice leží uvnitř intevalu
+        where TP.LEFT > 3 and TP.RIGHT < 1357
+
+// seskupeno dle hranic (pouze ty a počet nás zajímají)
+        group by left, RIGHT
+
+// sloučeno dle shodných hranic
+    ) a on TC.LEFT = a.LEFT and TC.RIGHT = a.RIGHT
+                    </code></pre>
+                </div>
+                <p><small>Poznámka: de-normalizací jsme zároveň porušili M:N vazbu, ale tento příklad je zde pouze pro ilustraci</small></p>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+100 rows retrieved starting from 1 in 276 ms (execution: 195 ms, fetching: 81 ms)
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <div style="text-align: center">
+                    <pre><code class="sql" data-trim data-noescape>
+// zajímají nás kategorie
+select TC.* from T_CATEGORY TC
+
+// jejichž hranice obklopují hranice koncové kategorie
+    where TC.LEFT <= 5 and TC.RIGHT >= 15
+
+// setřídit podle úrovně zanoření sestupně
+    order by LVL desc;
+                    </code></pre>
+                </div>
+                <p>S přibližným výsledkem:</p>
+                <div style="text-align: center">
+                    <pre><code>
+5 rows retrieved starting from 1 in 45 ms (execution: 3 ms, fetching: 42 ms)
+                    </code></pre>
+                </div>
+                <p>
+                    <small><strong>Zdroj:</strong> <a href="https://livesql.oracle.com/apex/livesql/file/tutorial_GQMLEEPG5ARVSIFGQRD3SES92.html">Oracle tutorial</a></small>
+                </p>
             </section>
         </section>
         <!-- PMPTT SOLUTION -->
