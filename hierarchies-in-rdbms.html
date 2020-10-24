@@ -55,45 +55,41 @@
 
     <div class="slides">
         <!-- INTRO -->
-        <section data-background="img/hierarchies-in-rdbms/TODO.jpg">
-            <img class="plain" src="img/javadayscz2020/Loga.jpg" style="box-shadow:1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff;">
-            <h1 style="color: black; margin-top: 0.5em">Modelování hierarchických struktur v relační databázi</h1>
+        <section data-background="img/backgrounds/bridge.jpg">
+            <h1 style="color: gold; margin-top: 0.5em; text-shadow: 0 1px 0 orange, 0 2px 0 goldenrod, 0 3px 0 goldenrod, 0 4px 0 goldenrod, 0 5px 0 orange, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.15);">Modelování hierarchických struktur v relační databázi</h1>
             <p style="color: black; margin: 2em;">
-                Jan <a style="color: #525252" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
+                Jan <a style="color: whitesmoke" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
             </p>
-            <h4 style="color:#5e5e5e">Online verze prezentace<br/><a style="color: #212121" href="http://bit.ly/javadays2020">http://bit.ly/javadays2020</a></h4>
+            <h4 style="color: orange">Online verze prezentace<br/><a style="color: goldenrod" href="http://bit.ly/javadays2020">http://bit.ly/javadays2020</a></h4>
         </section>
         <!-- ABOUT ME -->
-        <section data-background="img/backgrounds/red.jpg">
-            <h1>Kdo jsem?</h1>
-            <div style="align-content: center">
-                <table style="margin: 0 auto;">
-                    <tr>
-                        <td style="vertical-align: top; width: 50%">
-                            <h2>O mně</h2>
-                            <ul>
-                                <li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
-                                <li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
-                                <li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
-                                <li>20 let vývojářem webových aplikací</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <h2>Použití v e-commerce</h2>
-                            <ul>
-                                <li><a href="https://www.senesi.cz">Senesi.cz (koupelny a kuchyně)</a></li>
-                                <li><a href="https://www.signal-nabytek.cz">Signál-nábytek.cz (vybavení domácnosti)</a></li>
-                                <li><a href="https://www.flangi.cz/">Flangi.cz (vybavení domácnosti)</a></li>
-                                <li><a href="https://www.warehouse1.cz">Warehouse1.cz (alkohol)</a></li>
-                                <li><a href="https://www.fjallraven-shop.cz">Fjallraven-Shop.cz (oblečení)</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+        <section data-background="img/backgrounds/jno.jpg" data-background-size="contain" style="padding-left: 25%">
+            <h4>
+                <span style="font-size: 180%">Sledujte prezentaci se mnou</span><br/>
+                <a href="http://bit.ly/javadays2020" style="font-size: 105%">http://bit.ly/javadays2020</a>
+            </h4>
+            <h4 style="margin-bottom: 1em;">
+                <span style="font-size: 180%">Pohrejte si s kódem</span><br/>
+                <a href="https://github.com/novoj/JavaDays2020" style="font-size: 105%">https://github.com/novoj/JavaDays2020.git</a>
+            </h4>
+            <h2>O mně</h2>
+            <ul style="margin-left: 3em; margin-bottom: 1em;">
+                <li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+                <li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
+                <li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+                <li>20 let vývojářem webových aplikací</li>
+            </ul>
+            <h4>Použití v e-commerce</h4>
+            <ul style="margin-left: 3em; font-size: 70%;">
+                <li><a href="https://www.senesi.cz">Senesi.cz (koupelny a kuchyně)</a></li>
+                <li><a href="https://www.signal-nabytek.cz">Signál-nábytek.cz (vybavení domácnosti)</a></li>
+                <li><a href="https://www.flangi.cz/">Flangi.cz (vybavení domácnosti)</a></li>
+                <li><a href="https://www.warehouse1.cz">Warehouse1.cz (alkohol)</a></li>
+                <li><a href="https://www.fjallraven-shop.cz">Fjallraven-Shop.cz (oblečení)</a></li>
+            </ul>
         </section>
         <!-- PROBLEM AREA DESCRIPTION -->
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <section data-transition="fade">
                 <h2>Nejčastější použití</h2>
                 <div style="text-align: center">
@@ -117,9 +113,9 @@
             </section>
         </section>
         <!-- NAIVE SOLUTION -->
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <section>
-                <h2>Reprezentace vazbou na rodiče</h2>
+                <h2 style="margin-bottom: 1em;">Reprezentace vazbou na rodiče</h2>
                 <p>Naivní návrh datové struktury, byť hojně používaný v literatuře.</p>
                 <div style="text-align: center">
                     <table style="width: 800px">
@@ -145,17 +141,18 @@ CREATE TABLE category(
                 </ul>
             </section>
             <section>
-                <h2>Emulace reálného stavu</h2>
+                <h2 style="margin-bottom: 1em;">Emulace reálného stavu</h2>
                 <p>V praxi pracujeme s mnohem rozsáhlejšími daty a proto si pojďme devinovat situaci, která se alespoň
                     velmi vzdáleně podobá reálným případům z praxe.</p>
                 <div style="text-align: center">
                     <img src="img/hierarchies-in-rdbms/real-life-example.png" width="600px">
                 </div>
                 <p>Ukážeme si reálné SQL dotazy nad Oracle 11g databází.</p>
+                <p>Zkuste si je sami: <a href="https://github.com/novoj/JavaDays2020" style="font-size: 105%">https://github.com/novoj/JavaDays2020.git</a></p>
             </section>
             <section>
-                <h2>Hierarchické dotazy v Oracle DB</h2>
-                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <h2 style="margin-bottom: 1em;">Hierarchické dotazy v Oracle DB</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -176,7 +173,7 @@ connect by prior TC.CATEGORY_ID = TC.PARENT;
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-1000 rows retrieved starting from 1 in 794 ms (execution: 636 ms, fetching: 158 ms)
+1000 rows retrieved starting from 1 in 133 ms (execution: 9 ms, fetching: 124 ms)
                     </code></pre>
                 </div>
                 <p>
@@ -184,8 +181,8 @@ connect by prior TC.CATEGORY_ID = TC.PARENT;
                 </p>
             </section>
             <section>
-                <h2>Hierarchické dotazy v Oracle DB</h2>
-                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <h2 style="margin-bottom: 1em;">Hierarchické dotazy v Oracle DB</h2>
+                <h4  style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -207,7 +204,7 @@ where TP.PRODUCT_ID is not null
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-1000 rows retrieved starting from 1 in 1 s 292 ms (execution: 335 ms, fetching: 957 ms)
+1000 rows retrieved starting from 1 in 148 ms (execution: 12 ms, fetching: 136 ms)
                     </code></pre>
                 </div>
                 <ul>
@@ -217,8 +214,8 @@ where TP.PRODUCT_ID is not null
                 </ul>
             </section>
             <section>
-                <h2>Hierarchické dotazy v Oracle DB</h2>
-                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <h2  style="margin-bottom: 1em;">Hierarchické dotazy v Oracle DB</h2>
+                <h4  style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape style="max-height: 500px">
 // zajímají nás kategorie a počet produktů v nich
@@ -248,13 +245,13 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-100 rows retrieved starting from 1 in 1 s 34 ms (execution: 958 ms, fetching: 76 ms)
+100 rows retrieved starting from 1 in 224 ms (execution: 153 ms, fetching: 71 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Hierarchické dotazy v Oracle DB</h2>
-                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <h2 style="margin-bottom: 1em;">Hierarchické dotazy v Oracle DB</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ NADŘÍZENÉ KATEGORIE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -279,9 +276,9 @@ connect by prior TC.PARENT = TC.CATEGORY_ID;
             </section>
         </section>
         <!-- TEXT BASED SOLUTION -->
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <section>
-                <h2>Reprezentace formou skládané cesty</h2>
+                <h2 style="margin-bottom: 1em;">Reprezentace formou skládané cesty</h2>
                 <div style="text-align: center">
                     <table style="width: 800px">
                         <tr>
@@ -308,7 +305,7 @@ CREATE TABLE category(
                 </div>
             </section>
             <section>
-                <h2>Reprezentace formou skládané cesty</h2>
+                <h2 style="margin-bottom: 2em;">Reprezentace formou skládané cesty</h2>
                 <table>
                     <tr>
                         <th>Výhody</th>
@@ -332,8 +329,8 @@ CREATE TABLE category(
                 </table>
             </section>
             <section>
-                <h2>Reprezentace formou skládané cesty</h2>
-                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <h2 style="margin-bottom: 1em;">Reprezentace formou skládané cesty</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -353,13 +350,13 @@ where TP.PRODUCT_ID is not null
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-1000 rows retrieved starting from 1 in 211 ms (execution: 43 ms, fetching: 168 ms)
+1000 rows retrieved starting from 1 in 108 ms (execution: 4 ms, fetching: 104 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Reprezentace formou skládané cesty</h2>
-                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <h2 style="margin-bottom: 1em;">Reprezentace formou skládané cesty</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie a počet produktů v nich
@@ -387,13 +384,13 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-100 rows retrieved starting from 1 in 255 ms (execution: 184 ms, fetching: 71 ms)
+100 rows retrieved starting from 1 in 144 ms (execution: 73 ms, fetching: 71 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Reprezentace formou skládané cesty</h2>
-                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <h2 style="margin-bottom: 1em;">Reprezentace formou skládané cesty</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ NADŘÍZENÉ KATEGORIE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -419,7 +416,7 @@ order by LVL desc;
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-5 rows retrieved starting from 1 in 133 ms (execution: 91 ms, fetching: 42 ms)
+5 rows retrieved starting from 1 in 111 ms (execution: 83 ms, fetching: 28 ms)
                     </code></pre>
                 </div>
                 <p>
@@ -428,15 +425,19 @@ order by LVL desc;
             </section>
         </section>
         <!-- MPTT SOLUTION -->
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
                 <p>Odlišný pohled na hierarchická data formou do sebe zanořených množin.</p>
                 <table>
                     <tr>
-                        <td style="vertical-align: middle"><img src="https://cloud.githubusercontent.com/assets/1818373/7474091/7d7f409a-f33f-11e4-9979-9a0fc566ac59.png"/></td>
-                        <td style="vertical-align: middle; font-weight: bold; font-size: 140%">&rightarrow;</td>
-                        <td style="vertical-align: middle"><img src="https://cloud.githubusercontent.com/assets/1818373/7474097/80c09c5e-f33f-11e4-8437-63c243791261.png"/></td>
+                        <td style="vertical-align: middle">
+                            <img src="https://cloud.githubusercontent.com/assets/1818373/7474091/7d7f409a-f33f-11e4-9979-9a0fc566ac59.png"/>
+                        </td>
+                        <td style="vertical-align: middle; font-weight: bold; font-size: 220%; color: goldenrod; padding: 0;">&rightarrow;</td>
+                        <td style="vertical-align: middle">
+                            <img src="https://cloud.githubusercontent.com/assets/1818373/7474097/80c09c5e-f33f-11e4-8437-63c243791261.png" width="1200px"/>
+                        </td>
                     </tr>
                 </table>
             </section>
@@ -492,12 +493,12 @@ select * from MPTT a
             </section>
             <section>
                 <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>Nevýhody</h3>
+                <h3 style="margin-top: 1em;">Nevýhody</h3>
                 <ol>
-                    <li>zápisy do datové struktury jsou drahé. S každým zápisem je třeba zaktualizovat hranice ve velké části stromu.</li>
+                    <li>zápisy do datové struktury jsou drahé.<br/>S každým zápisem je třeba zaktualizovat hranice ve velké části stromu.</li>
                     <li>zhoršená čitelnost pro vývojáře - z hranic není ihned patrné umístění ve stromu</li>
                 </ol>
-                <p><strong>Běžné operace se stromem:</strong></p>
+                <h3 style="margin-top: 1em;">Běžné operace se stromem:</h3>
                 <ul>
                     <li>přidání nového uzlu</li>
                     <li>změna pořadí uzlu mezi "sourozenci"</li>
@@ -506,8 +507,8 @@ select * from MPTT a
                 </ul>
             </section>
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -518,7 +519,7 @@ select TC.* from T_CATEGORY TC
     left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
 
 // pouze kategorie jejichž hranice leží uvnitř intevalu
-where TC.LEFT > 3 and TC.RIGHT < 1357
+where TC.LEFT >= 3 and TC.RIGHT <= 21052
 
 // s vyloučením kategorií bez produktů
       and TP.PRODUCT_ID is not null;
@@ -527,13 +528,13 @@ where TC.LEFT > 3 and TC.RIGHT < 1357
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-1000 rows retrieved starting from 1 in 201 ms (execution: 51 ms, fetching: 150 ms)
+1000 rows retrieved starting from 1 in 91 ms (execution: 5 ms, fetching: 86 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h3>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S ALESPOŇ JEDNÍM PRODUKTEM V PODKATEGORIÍCH SEKCE</h4>
                 <p>Pokud de-normalizujeme strukturu tabulek a uložíme hranice blíže k produktu, potom:</p>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
@@ -544,20 +545,20 @@ select TC.* from T_CATEGORY TC
     inner join T_PRODUCT TP on TC.LEFT = TP.LEFT and TC.RIGHT = TP.RIGHT
 
 // jejichž hranice leží uvnitř intevalu
-where TP.LEFT > 3 and TP.RIGHT < 1357
+where TP.LEFT >= 3 and TP.RIGHT <= 21052
                     </code></pre>
                 </div>
                 <p><small>Poznámka: de-normalizací jsme zároveň porušili M:N vazbu, ale tento příklad je zde pouze pro ilustraci</small></p>
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-1000 rows retrieved starting from 1 in 84 ms (execution: 4 ms, fetching: 80 ms)
+1000 rows retrieved starting from 1 in 85 ms (execution: 4 ms, fetching: 81 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie a počet produktů v nich
@@ -573,7 +574,7 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                left join T_PRODUCT TP on TP.PRODUCT_ID = TPC.PRODUCT_ID
 
 // jejichž hranice leží uvnitř intevalu
-            where T_CATEGORY.LEFT > 3 and T_CATEGORY.RIGHT < 1357
+            where T_CATEGORY.LEFT >= 3 and T_CATEGORY.RIGHT <= 21052
                   and TP.PRODUCT_ID is not null
 
 // seskupit podle kategorie
@@ -585,13 +586,13 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-100 rows retrieved starting from 1 in 266 ms (execution: 197 ms, fetching: 69 ms)
+100 rows retrieved starting from 1 in 133 ms (execution: 49 ms, fetching: 84 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h3>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ KATEGORIE S POČTEM PRODUKTŮ V NICH</h4>
                 <p>Pokud de-normalizujeme strukturu tabulek a uložíme hranice blíže k produktu, potom:</p>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
@@ -603,7 +604,7 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
         select left, right, count(0) as PRODUCT_COUNT from T_PRODUCT TP
 
 // jejichž hranice leží uvnitř intevalu
-        where TP.LEFT > 3 and TP.RIGHT < 1357
+        where TP.LEFT >= 3 and TP.RIGHT <= 21052
 
 // seskupeno dle hranic (pouze ty a počet nás zajímají)
         group by left, RIGHT
@@ -616,13 +617,13 @@ select TC.*, A.PRODUCT_COUNT from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-100 rows retrieved starting from 1 in 276 ms (execution: 195 ms, fetching: 81 ms)
+100 rows retrieved starting from 1 in 143 ms (execution: 68 ms, fetching: 75 ms)
                     </code></pre>
                 </div>
             </section>
             <section>
-                <h2>Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
-                <h3>VYPIŠ NADŘÍZENÉ KATEGORIE</h3>
+                <h2 style="margin-bottom: 1em;">Modified Preorder Tree Traversal (MPTT) algoritmus</h2>
+                <h4 style="color: goldenrod; margin-bottom: 1em;">VYPIŠ NADŘÍZENÉ KATEGORIE</h4>
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
@@ -638,7 +639,7 @@ select TC.* from T_CATEGORY TC
                 <p>S přibližným výsledkem:</p>
                 <div style="text-align: center">
                     <pre><code>
-5 rows retrieved starting from 1 in 45 ms (execution: 3 ms, fetching: 42 ms)
+5 rows retrieved starting from 1 in 43 ms (execution: 4 ms, fetching: 39 ms)
                     </code></pre>
                 </div>
                 <p>
@@ -646,7 +647,7 @@ select TC.* from T_CATEGORY TC
                 </p>
             </section>
         </section>
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <h2>Odezvy typizovaných dotazů</h2>
             <!-- amCharts javascript code -->
             <script type="text/javascript">
@@ -714,31 +715,31 @@ select TC.* from T_CATEGORY TC
                         },
                         "dataProvider": [
                             {
-                                "Hierarchický dotaz": "794",
-                                "Skládaná cesta (like)": "211",
-                                "MPTT": "201",
-                                "MPTT de-normalizovaný": "84",
+                                "Hierarchický dotaz": "133",
+                                "Skládaná cesta (like)": "108",
+                                "MPTT": "91",
+                                "MPTT de-normalizovaný": "85",
                                 "Typ dotazu": "Kategorie v sekci s alespoň jedním produktem"
                             },
                             {
-                                "Hierarchický dotaz": "1034",
-                                "Skládaná cesta (like)": "255",
-                                "MPTT": "291",
-                                "MPTT de-normalizovaný": "276",
+                                "Hierarchický dotaz": "224",
+                                "Skládaná cesta (like)": "144",
+                                "MPTT": "133",
+                                "MPTT de-normalizovaný": "143",
                                 "Typ dotazu": "Kategorie v sekci s počtem produtků"
                             },
                             {
-                                "Hierarchický dotaz": "821",
-                                "Skládaná cesta (like)": "439",
-                                "MPTT": "482",
-                                "MPTT de-normalizovaný": "140",
+                                "Hierarchický dotaz": "406",
+                                "Skládaná cesta (like)": "224",
+                                "MPTT": "210",
+                                "MPTT de-normalizovaný": "151",
                                 "Typ dotazu": "Produkty v sekci"
                             },
                             {
                                 "Hierarchický dotaz": "63",
-                                "Skládaná cesta (like)": "133",
-                                "MPTT": "45",
-                                "MPTT de-normalizovaný": "45",
+                                "Skládaná cesta (like)": "111",
+                                "MPTT": "43",
+                                "MPTT de-normalizovaný": "43",
                                 "Typ dotazu": "Nadřízené kategorie"
                             }
                         ]
@@ -752,16 +753,16 @@ select TC.* from T_CATEGORY TC
             </p>
         </section>
         <!-- PMPTT SOLUTION -->
-        <section data-background="img/backgrounds/red.jpg">
+        <section data-background="img/backgrounds/metalworking.jpg">
             <section>
-                <h2>Precalculated Modified Preorder Tree Traversal (PMPTT) algoritmus</h2>
+                <h2 style="margin-bottom: 1em;">Precalculated Modified Preorder Tree Traversal (PMPTT) algoritmus</h2>
                 <p>Pokus o odpověď na negativa MPTT algoritmu v oblasti změn ve stromě.</p>
                 <ul>
                     <li>deterministicky přiřazuje hranice kategoriím dle pořadí jejich vzniku</li>
                     <li>pro kategorie na nižších úrovních jsou předem definované rozsahy "bucketů", které se postupně obsazují</li>
                     <li>pořadí bucketů není rozhodující, zavádí se nový sloupec "order"</li>
                 </ul>
-                <p>Zavádí ovšem tři nové limitace:</p>
+                <h4 style="margin-top: 1em;">Zavádí ovšem tři nové limitace:</h4>
                 <ul>
                     <li>je nutné předem stanovit maximální počet uzlů v rámci nadřízeného uzlu</li>
                     <li>je nutné předem stanovit maximální počet zanořených úrovni</li>
@@ -778,7 +779,7 @@ select TC.* from T_CATEGORY TC
                     55 položkách. Toto množství by se dalo teoreticky dále rozšířit přechodem na unsigned long.</p>
             </section>
             <section>
-                <h2>Open source FTW!</h2>
+                <h2 style="margin-bottom: 1em;">Open source FTW!</h2>
                 <p>PMPTT knihovna je dostupná pod MIT licencí v Maven Central:</p>
                 <pre><code class="xml" data-trim data-noescape>
 &lt;dependency&gt;
@@ -796,7 +797,7 @@ select TC.* from T_CATEGORY TC
                 <p><a href="https://github.com/FgForrest/PMPTT">https://github.com/FgForrest/PMPTT</a></p>
             </section>
             <section>
-                <h2>Open source FTW!</h2>
+                <h2 style="margin-bottom: 1em;">Open source FTW!</h2>
                 <p>Použití v kódu:</p>
                 <pre><code class="java" data-trim data-noescape style="max-height: 800px">
 // create PMPTT instance
@@ -825,6 +826,21 @@ final List&lt;HierarchyItem&gt; leafs = hierarchy.getLeafItems(tvs.getCode());
 
 // or bottom up
 final List&lt;HierarchyItem&gt; parents = hierarchy.getParentItems(lcd.getCode());
+                </code></pre>
+            </section>
+            <section>
+                <h2 style="margin-bottom: 1em;">Open source FTW!</h2>
+                <p>Podpora pro de-normalizované modely:</p>
+                <pre><code class="java" data-trim data-noescape style="max-height: 800px">
+// register callback for updating bounds in custom tables
+pmptt.registerChangeListener(
+	new HierarchyChangeListenerAdapter() {
+		@Override
+		public void itemUpdated(HierarchyItem updatedItem, HierarchyItem originalItem) {
+			//update bounds in other tables
+		}
+	}
+);
                 </code></pre>
             </section>
         </section>
