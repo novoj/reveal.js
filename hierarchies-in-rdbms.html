@@ -784,12 +784,12 @@ select TC.* from T_CATEGORY TC
                 <pre><code class="xml" data-trim data-noescape>
 &lt;dependency&gt;
     &lt;groupId&gt;one.edee.oss&lt;/groupId&gt;
-    &lt;artifactId&gt;lib_pmptt&lt;/artifactId&gt;
+    &lt;artifactId&gt;pmptt_core&lt;/artifactId&gt;
     &lt;version&gt;1.0.0&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;one.edee.oss&lt;/groupId&gt;
-    &lt;artifactId&gt;lib_pmptt_rdbms&lt;/artifactId&gt;
+    &lt;artifactId&gt;pmptt_rdbms&lt;/artifactId&gt;
     &lt;version&gt;1.0.0&lt;/version&gt;
 &lt;/dependency&gt;
                 </code></pre>
@@ -895,9 +895,6 @@ pmptt.registerChangeListener(
             { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
     });
-
-    var deadline = new Date(Date.parse(new Date()) + 0.85 * 60 * 60 * 1000);
-    initializeClock(deadline);
 </script>
 
 </body>
