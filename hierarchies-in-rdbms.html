@@ -895,6 +895,9 @@ pmptt.registerChangeListener(
             { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
     });
+
+    var deadline = new Date(Date.parse(new Date()) + 0.85 * 60 * 60 * 1000);
+    initializeClock(deadline);
 </script>
 
 </body>
