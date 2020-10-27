@@ -156,7 +156,7 @@ CREATE TABLE category(
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
-select TC.* from T_CATEGORY TC
+select distinct TC.* from T_CATEGORY TC
 
 // přes M:N vazbu produktu na kategorii
      left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
@@ -186,7 +186,7 @@ connect by prior TC.CATEGORY_ID = TC.PARENT;
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
-SELECT t3.* FROM T_CATEGORY t1
+SELECT distinct t3.* FROM T_CATEGORY t1
 
 // otrocky připojme X podřízených úrovní kategorií
          LEFT JOIN T_CATEGORY t2 ON t2.parent = t1.category_id
@@ -334,7 +334,7 @@ CREATE TABLE category(
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
-select TC.* from T_CATEGORY TC
+select distinct TC.* from T_CATEGORY TC
 
 // přes M:N vazbu produktu na kategorii
          left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
@@ -512,7 +512,7 @@ select * from MPTT a
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
-select TC.* from T_CATEGORY TC
+select distinct TC.* from T_CATEGORY TC
 
 // přes M:N vazbu produktu na kategorii
     left join T_PRODUCT_CATEGORY TPC on TC.CATEGORY_ID = TPC.CATEGORY_ID
@@ -539,7 +539,7 @@ where TC.LEFT >= 3 and TC.RIGHT <= 21052
                 <div style="text-align: center">
                     <pre><code class="sql" data-trim data-noescape>
 // zajímají nás kategorie
-select TC.* from T_CATEGORY TC
+select distinct TC.* from T_CATEGORY TC
 
 // s vazbou na produkty
     inner join T_PRODUCT TP on TC.LEFT = TP.LEFT and TC.RIGHT = TP.RIGHT
@@ -716,9 +716,9 @@ select TC.* from T_CATEGORY TC
                         "dataProvider": [
                             {
                                 "Hierarchický dotaz": "133",
-                                "Skládaná cesta (like)": "108",
-                                "MPTT": "91",
-                                "MPTT de-normalizovaný": "85",
+                                "Skládaná cesta (like)": "140",
+                                "MPTT": "133",
+                                "MPTT de-normalizovaný": "153",
                                 "Typ dotazu": "Kategorie v sekci s alespoň jedním produktem"
                             },
                             {
@@ -729,10 +729,10 @@ select TC.* from T_CATEGORY TC
                                 "Typ dotazu": "Kategorie v sekci s počtem produtků"
                             },
                             {
-                                "Hierarchický dotaz": "406",
-                                "Skládaná cesta (like)": "224",
-                                "MPTT": "210",
-                                "MPTT de-normalizovaný": "151",
+                                "Hierarchický dotaz": "571",
+                                "Skládaná cesta (like)": "347",
+                                "MPTT": "302",
+                                "MPTT de-normalizovaný": "163",
                                 "Typ dotazu": "Produkty v sekci"
                             },
                             {
