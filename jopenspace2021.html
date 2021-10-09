@@ -114,6 +114,15 @@
 			</table>
 		</section>
 		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Bitmaps</h1>
+			<p>Set of integers between 70,000 and 130,000</p>
+			<ul>
+				<li>java.util.BitSet requires circa 16KB (130,000/8)</li>
+				<li>int array requires circa 16KB (60,000*4 + small overhead)</li>
+				<li>run length compression requires only few bytes</li>
+			</ul>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
 			<h1>Roaring bitmaps</h1>
 			<p>Allows to execute fast boolean operations (AND,OR,NOT) on large arrays of sorted integers.</p>
 			<ul>
@@ -133,6 +142,10 @@
 				<li><a href="http://roaringbitmap.org/about/">Roaring bitmap documentation</a></li>
 				<li><a href="https://richardstartin.github.io/posts/roaringbitmap-performance-tricks">Performance tricks</a></li>
 			</ul>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Who uses RoaringBitmap</h1>
+			<img class="plain" src="img/jopenspace2021/who_uses_roaringbitmap.png">
 		</section>
 		<section data-background="img/backgrounds/brown.jpg">
 			<h1>Kryo</h1>
