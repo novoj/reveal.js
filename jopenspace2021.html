@@ -184,10 +184,36 @@
 				<li>used for testing transactional memory</li>
 				<li>very quickly discovers real bugs, it has no bias</li>
 			</ul>
-			<pre>
-				TransactionalUnorderedIntArrayTest,
-				HistogramIndexTest
-			</pre>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Random testing</h1>
+			<pre><code class="java" data-trim data-noescape style="max-height: 40em">
+@Test
+void generationalProofTest() {
+	final Random rnd = new Random();
+	int[] controlArray = initRandomData();
+	TxArray txArray = new TxArray(controlArray);
+	do {
+		assertStateAfterCommit(
+			() -> {
+				if (rnd.nextBoolean()) {
+					int randomRecord = rnd.nextInt(100);
+					txArray.add(randomRecord);
+					controlArray.add(randomRecord);
+				} else {
+					int randomRecord = controlArray[rnd.nextInt(controlArray.length)];
+					txArray.remove(randomRecord);
+					controlArray.remove(randomRecord);
+				}
+			},
+			(original, committed) -> {
+				assertArrayEquals(txArray, controlArray);
+				controlArray = txArray;
+			}
+		);
+	} while (true);
+}
+			</code></pre>
 		</section>
 		<section data-background="img/backgrounds/brown.jpg">
 			<h1>Performance tests</h1>
