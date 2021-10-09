@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Evita DB, 2021</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/clock.css">
+	<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	<style>
+		@media screen and (max-height: 1000px) {
+			#logo {
+				display: none;
+				visibility: hidden;
+			} }
+	</style>
+</head>
+
+<body>
+
+<div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+	<a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+</div>
+
+<div class="reveal">
+
+	<div class="slides">
+		<!-- INTRO -->
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Evita DB</h1>
+			<img class="plain" src="img/jopenspace2021/eva.svg" style="width: 20%">
+			<p>
+				<small style="color: #a6a6a6">Evita Perón</small>
+			</p>
+			<p>
+				<small style="color: #a6a6a6">Interpretation by Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+			</p>
+			<h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://bit.ly/evitadb">https://bit.ly/evitadb</a></h4>
+		</section>
+		<!-- CONTENT -->
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>E-commerce API</h1>
+			<table style="margin-top: 2em">
+				<tr>
+					<td>
+						<ul>
+							<li>attribute filtering</li>
+							<li>facets</li>
+							<li>price&nbsp;handling&nbsp;(currencies,&nbsp;validity,&nbsp;VAT)</li>
+							<li>range / overlap filtering</li>
+							<li>localization</li>
+							<li>fulltext search</li>
+						</ul>
+					</td>
+					<td style="width: 2em">
+
+					</td>
+					<td style="vertical-align: top">
+						<ul>
+							<li>ultra-fast reads</li>
+							<li>search index, not primary data store</li>
+							<li>optimized for query batching - reuse intermediate results</li>
+							<li>backed by schema, schema defined along the way</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Research grant</h1>
+			<img class="plain" src="img/jopenspace2021/fim-uhk-abb.svg" style="width: 20%">
+			<table>
+				<tr>
+					<td>
+						<ul>
+							<li>3 competing teams</li>
+							<li>same API, data, queries</li>
+							<li>separate implementations:
+								<ol>
+									<li>PostgreSQL (1st university team)</li>
+									<li>Elasticsearch (2nd university team)</li>
+									<li>Internal in-memory, noSQL (FG team)</li>
+								</ol>
+							</li>
+							<li>the most performant, the least demanding solution wins</li>
+						</ul>
+					</td>
+					<td style="width: 2em">
+
+					</td>
+					<td style="vertical-align: top">
+						<ul>
+							<li>shared functional tests, performance tests</li>
+							<li>artificial and multiple real life datasets</li>
+							<li>replaying production traffic</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Roaring bitmaps</h1>
+			<p>Allows to execute fast boolean operations (AND,OR,NOT) on large arrays of sorted integers.</p>
+			<ul>
+				<li>compressed - 4B int, 2B shared for block, 2B shorts encoded in 8KB container</li>
+				<li>3 types of containers:
+					<ul>
+						<li>sparse: array of shorts (chars), 2B per value</li>
+						<li>dense: bitmap (like BitSet), 1bit per value</li>
+						<li>ultra dense: uses <a href="https://en.wikipedia.org/wiki/Run-length_encoding">run-length encoding</a></li>
+					</ul>
+				</li>
+				<li>good for integers that are based on sequences, bad for random numbers</li>
+				<li>types of containers are automatically converted</li>
+			</ul>
+			<h3>References</h3>
+			<ul>
+				<li><a href="http://roaringbitmap.org/about/">Roaring bitmap documentation</a></li>
+				<li><a href="https://richardstartin.github.io/posts/roaringbitmap-performance-tricks">Performance tricks</a></li>
+			</ul>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Kryo</h1>
+			<p>Ultra-fast (de)serialization library. GB/s</p>
+			<img src="img/jopenspace2021/kryo-bytesize.png" alt="Produced Byte size" width="480">
+			<img src="img/jopenspace2021/kryo-speed.png" alt="performance" width="480">
+			<table>
+				<tr>
+					<td style="width: 25em">
+						<h3>References</h3>
+						<ul>
+							<li><a href="https://github.com/EsotericSoftware/kryo">Kryo home</a></li>
+							<li><a href="https://www.alibabacloud.com/blog/an-introduction-and-comparison-of-several-common-java-serialization-frameworks_597900">Alibaba performance tests</a></li>
+							<li><a href="https://hazelcast.com/blog/comparing-serialization-options/">Hazelcast performance tests</a></li>
+						</ul>
+					</td>
+					<td style="width: 2em">
+
+					</td>
+					<td style="width: 25em; vertical-align: top">
+						<h3>Tight corners:</h3>
+						<ul>
+							<li>class registration if you don't know them up-front</li>
+							<li>tricky to extend stream processing (adding own CRC, length observing, chunking mechanics)</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Random testing</h1>
+			<p><a href="https://en.wikipedia.org/wiki/Random_testing">Wiki</a></p>
+			<p>Uses randomized operations on the dataset and verifies results against formal specification.</p>
+			<ul>
+				<li>very handy for testing data structures</li>
+				<li>used for testing transactional memory</li>
+				<li>very quickly discovers real bugs, it has no bias</li>
+			</ul>
+			<pre>
+				TransactionalUnorderedIntArrayTest,
+				HistogramIndexTest
+			</pre>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Performance tests</h1>
+			<img src="img/jopenspace2021/gitlab-cicd.png" alt="GitLab CI/CD" width="800">
+			<ul>
+				<li>compiles Java sources</li>
+				<li>builds Docker image with data and shell script</li>
+				<li>provisions infrastructure in Digital Ocean</li>
+				<li>deploys Docker in Kubernetes</li>
+				<li>executes performance tests and exports JSON file</li>
+				<li>during tests exports telemetry to Prometheus/Grafana</li>
+				<li>exports JSON as Gist</li>
+				<li>destroys and releases infrastructure</li>
+			</ul>
+			<p>Results are available online via <a href="https://github.com/jzillmann/jmh-visualizer">JMH Visualizer</a> <a href="https://jmh.morethan.io/?gist=22cfc1fabfaeee01a1ac7a9279ace362&topBar=Evita%20DB%20InMemory%20Performance%20results">as nice graphs</a>.</p>
+		</section>
+		<!-- OUTRO -->
+		<section data-background="img/backgrounds/attention.jpg">
+			<div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+				<h1>Thank you for your attention</h1>
+				<p><strong>Sources:</strong></p>
+				<ul>
+					<li><a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a></li>
+				</ul>
+				<p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+			</div>
+		</section>
+	</div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/clock.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+</body>
+</html>
