@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Evita DB, 2021</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/clock.css">
+	<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	<style>
+		@media screen and (max-height: 1000px) {
+			#logo {
+				display: none;
+				visibility: hidden;
+			} }
+	</style>
+</head>
+
+<body>
+
+<div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+	<a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+</div>
+
+<div class="reveal">
+
+	<div class="slides">
+		<!-- INTRO -->
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Evita DB</h1>
+			<h2>prototype performance results</h2>
+			<img class="plain" src="img/jopenspace2021/eva.svg" style="width: 20%">
+			<p>
+				<small style="color: #a6a6a6">Evita Perón</small>
+			</p>
+			<p>
+				<small style="color: #a6a6a6">Interpretation by Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+			</p>
+			<h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://bit.ly/evitadb">https://bit.ly/evitadb</a></h4>
+		</section>
+		<!-- CONTENT -->
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Hypothesis</h1>
+			<blockquote>
+				A single-purpose NoSQL database for fast reading, tailored to the requirements of e-shop solutions
+				not only in the Czech Republic, but also abroad, will have an order of magnitude better throughput on
+				the same hardware configuration than generic SQL or NoSQL database solutions
+			</blockquote>
+		</section>
+		<section data-background="img/backgrounds/brown.jpg">
+			<h1>Domain-specific databases</h1>
+			<table style="width: 100%; height: 20em; padding-top: 1em">
+				<tr>
+					<td style="width: 50%">
+						<blockquote class="twitter-tweet" data-lang="en" data-theme="dark">
+							<p lang="en" dir="ltr">Domain-specific databases. This might become the next trend in databases.
+								How often did I wonder where I could find a proper implementation for double-entry accounting for
+								language X - now it might be there. What other domains could use their own DB? 🤔
+								<a href="https://t.co/iW0VNElvSV">https://t.co/iW0VNElvSV</a>
+							</p>
+							&mdash; Alexander Flatter (@aflatter)
+							<a href="https://twitter.com/aflatter/status/1568512280421371904?ref_src=twsrc%5Etfw">September 10, 2022</a>
+						</blockquote>
+						<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+					</td>
+					<td style="width: 50%; text-align: left; vertical-align: top">
+						<p>Examples:</p>
+						<ul>
+							<li>Time series: <a href="https://www.timescale.com/">TimescaleDB</a>, <a href="https://prometheus.io/">Prometheus</a>, <a href="https://questdb.io/">QuestDB</a></li>
+							<li>Financial operations: <a href="https://tigerbeetle.com/">TigerBeetleDB</a></li>
+							<li>Fulltext search: <a href="https://algolia.com">Algolia</a>, <a href="https://typesense.org/">TypeSense</a>,
+								<a href="https://www.elastic.co/">Elasticsearch</a></li>
+							<li>Machine learning: <a href="https://mldb.ai/">MLDB</a>, <a href="https://vespa.ai/">Vespa</a></li>
+							<li>Spatial: usually on top of general databases</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<section>
+			<section data-background="img/backgrounds/brown.jpg">
+				<h1>Performance testing</h1>
+
+				<h2>Hardware</h2>
+
+				<div style="width: 100%; align-content: center; margin-bottom: 1em">
+					<table style="text-align: left;">
+						<tr>
+							<th>CPU:</th>
+							<td>Intel (R) Core™ i7-8700 3.20 GHz (6xCORE)</td>
+						</tr>
+						<tr>
+							<th>RAM:</th>
+							<td>16 GB X 4 (2666 Mhz) CL13</td>
+						</tr>
+						<tr>
+							<th>OS:</th>
+							<td>Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-42-generic x86_64)</td>
+						</tr>
+					</table>
+				</div>
+
+				<h2>Senesi Dataset</h2>
+
+				<table style="float: left">
+					<thead>
+						<tr>
+							<th>Collection</th>
+							<th>Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Entity</td>
+							<td>117,475</td>
+						</tr>
+						<tr>
+							<td>Prices of entities</td>
+							<td>3,361,040</td>
+						</tr>
+						<tr>
+							<td>Attributes of entities</td>
+							<td>3,848,705</td>
+						</tr>
+						<tr>
+							<td>Associated data of entities</td>
+							<td>698,095</td>
+						</tr>
+						<tr>
+							<td>References of entities</td>
+							<td>967,553</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table style="float: right">
+					<thead>
+						<tr>
+							<th>Entity inner components</th>
+							<th>Average cardinality</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Prices of entities</td>
+							<td>28.61</td>
+						</tr>
+						<tr>
+							<td>Attributes of entities</td>
+							<td>32.76</td>
+						</tr>
+						<tr>
+							<td>Associated data</td>
+							<td>5.94</td>
+						</tr>
+						<tr>
+							<td>References</td>
+							<td>8.24</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-out">
+				<h1>Performance results</h1>
+				<p>147.47x PostgreSQL, 12.4x Elasticsearch</p>
+				<img src="img/jopenspace2022/keramika.png" alt="Keramika Soukup" width="800">
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+				<h1>Performance results</h1>
+				<p>20.24x PostgreSQL, 4.38x Elasticsearch</p>
+				<img src="img/jopenspace2022/signal.png" alt="Signál nábytek" width="800">
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
+				<h1>Performance results</h1>
+				<p>105.25x PostgreSQL, 7.05x Elasticsearch</p>
+				<img src="img/jopenspace2022/senesi.png" alt="Senesi" width="800">
+			</section>
+		</section>
+		<section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-out">
+				<h1>PostgreSQL implementation</h1>
+
+				<ul>
+					<li>tables used only as "indexes"</li>
+					<li>entities are stored as blob (documents)</li>
+					<li>facets are stored as JSON of precomputed data</li>
+				</ul>
+
+				<blockquote>The most visible change is the shift in the purpose of
+					tables representing the inner entity datasets (attributes, prices, and references). In the original model, all tables
+					were used to search entities as well as to reconstruct entities into memory which turned out to be quite expensive.
+					Therefore, in the new model, entities are reconstructed from binary form, and tables of these collections are now used
+					only as indexes to search entities.</blockquote>
+
+				<p style="color: red; vertical-align: middle">
+					<img src="img/exclamation.svg" class="plain" style="height: 36px; display: inline; padding: 0px; margin: 0px;"/>
+					This layout complicates transactional updates (lock per document).
+				</p>
+
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
+				<h1>PostgreSQL implementation</h1>
+				<ul>
+					<li style="padding-bottom: 1em">
+						4x speedup was when inserts were trapped in memory during entity inserts<br/>
+						and flushed in batch updates (inversion of <a href="https://github.com/graphql/dataloader">data loader</a> pattern but for writes)</li>
+					<li style="padding-bottom: 1em">
+						in warming phase no indexes were present,<br/>
+						create index statements were issued when the database was filled up
+					</li>
+				</ul>
+
+				<p style="color: red; vertical-align: middle">
+					<img src="img/exclamation.svg" class="plain" style="height: 36px; display: inline; padding: 0px; margin: 0px;"/>
+					This means, that those data cannot be queried at the same time.
+				</p>
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
+				<h1>PostgreSQL implementation</h1>
+
+				<ul>
+					<li style="padding-bottom: 1em">frequent usage of <a href="https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-cte/">CTEs</a></li>
+					<li style="padding-bottom: 1em">hierarchy is computed by <a href="https://github.com/FgForrest/PMPTT">PMPTT</a> algorithm instead of recursive query</li>
+					<li style="padding-bottom: 1em">instead of external business keys (entityId + id), or simple int ids per collection<br/>
+						they generate unique id for all entities from single sequence</li>
+				</ul>
+			</section>
+		</section>
+		<section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-out">
+				<h1>Elasticsearch implementation</h1>
+
+				<p>Storing single entity into a single document was not enough.</p>
+				<p>Multiple indexes are affected by entity upsert / delete.</p>
+
+				<p style="color: red; text-align: center; margin-top: 2em">
+					This introduces consistency problems - since ES guarantee atomicity on document level only.
+
+					<img src="img/exclamation.svg" class="plain" style="height: 168px; float: left; margin: 50px;"/>
+					<ul style="color: red; text-align: left">
+						<li>locking (global, index Locking, document, tree)<br/>
+							no automatic unlock mechanism when process is killed</li>
+						<li>introduce 2-phase commit on application level</li>
+						<li>or something like compensation process on rollback</li>
+						<li>this was not implemented in the prototype and<br/>
+							would further complicate existing code and limit write performance</li>
+					</ul>
+				</p>
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+				<h1>Elasticsearch implementation</h1>
+
+				<ul>
+					<li style="padding-bottom: 1em">PK sequence was solved by single document versioning process<br/>
+					    it's slow when fetching 1-by-1, and ids were fetched in bulk (hundreds)</li>
+					<li style="padding-bottom: 1em">hierarchical queries are not supported by ES and <a href="https://github.com/FgForrest/PMPTT">PMPTT</a> approach was used in the end<br/>
+					    there is alternative maintaining `/parent/path/structure` with wildcard matching<br/>
+						but it cannot be easily used for category statistics and was quite slow</li>
+					<li style="padding-bottom: 1em">facet queries couldn't have been used either<br/>
+						because we need to support different relation operations (not)<br/>
+						impact computation triggers a bunch of parallel queries for each possible combination<br/>
+						parallel queries deplete thread pools in a unpredictable fashion
+					</li>
+				</ul>
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
+				<h1>Elasticsearch implementation</h1>
+
+				<p>Price calculation is complex and required using "painless scripting language" to produce runtime field and
+					post-filter is used for "between" constraint, this prevents valid evaluation of queries like:</p>
+
+				<pre><code class="sql" style="font-size: 1.5em; line-height: 40px" data-trim data-noescape>
+	or(
+		and(
+			facet("Category", 5),
+			startsWith("code, "Gorgeous-Rubber-Wallet-2-15"),
+			priceBetween(800, 2000)
+		),
+		facet("Category", 1)
+	)
+				</code></pre>
+			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
+				<h1>Elasticsearch implementation</h1>
+
+				<ul>
+					<li>team fought with the memory consumption trying to balance performance achieved by denormalization and
+						the size of the index held in memory</li>
+					<li>when ES needed more memory than available the ES shuts down unpredictably due to:
+						<ul>
+							<li>the indexed data size</li>
+							<li>complex aggregations requiring a lot of operational memory</li>
+						</ul>
+					</li>
+					<li>changes in the API:
+						<blockquote>
+							According to the documentation, several different functionalities can be used for this in ES,
+							starting with the enabled tag, indexed, or even the field type (object) itself. Unfortunately,
+							the use of these features in the mapping varied in different versions of ES, and therefore,
+							the references in different parts of the documentation were not consistent about which attribute
+							did what.
+						</blockquote>
+					</li>
+					<li>high level client deprecated with no mention of compatibility mode in
+						<a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html#java-rest-high">documentation</a>
+					</li>
+					<li>
+						hard to debug - the DSL is very verbose, the queries span over thousands lines of code<br/>
+						may be that's why <a href="https://github.com/henszey/elasticsearch-query-visualizer">query visualizers exist?!</a>
+					</li>
+				</ul>
+			</section>
+		</section>
+		<!-- OUTRO -->
+		<section data-background="img/backgrounds/attention.jpg">
+			<div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+				<h1>Thank you for your attention</h1>
+				<p><strong>Sources:</strong></p>
+				<ul>
+
+				</ul>
+				<p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+			</div>
+		</section>
+	</div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/clock.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+</body>
+</html>
