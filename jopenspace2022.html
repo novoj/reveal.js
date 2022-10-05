@@ -46,9 +46,6 @@
 			<h2>prototype performance results</h2>
 			<img class="plain" src="img/jopenspace2021/eva.svg" style="width: 20%">
 			<p>
-				<small style="color: #a6a6a6">Evita Perón</small>
-			</p>
-			<p>
 				<small style="color: #a6a6a6">Interpretation by Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
 			</p>
 			<h4 style="color:#a6a6a6">Go through presentation with me<br/><a style="color: white" href="https://bit.ly/evita_prototype">https://bit.ly/evita_prototype</a></h4>
@@ -56,7 +53,7 @@
 		<!-- CONTENT -->
 		<section data-background="img/backgrounds/brown.jpg">
 			<h1>Hypothesis</h1>
-			<blockquote>
+			<blockquote style="display: inline-block">
 				A single-purpose NoSQL database for fast reading, tailored to the requirements of e-shop solutions
 				not only in the Czech Republic, but also abroad, will have an order of magnitude better throughput on
 				the same hardware configuration than generic SQL or NoSQL database solutions
@@ -79,7 +76,7 @@
 						<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 					</td>
 					<td style="width: 50%; text-align: left; vertical-align: top">
-						<p>Examples:</p>
+						<h3>Examples:</h3>
 						<ul>
 							<li>Time series: <a href="https://www.timescale.com/">TimescaleDB</a>, <a href="https://prometheus.io/">Prometheus</a>, <a href="https://questdb.io/">QuestDB</a></li>
 							<li>Financial operations: <a href="https://tigerbeetle.com/">TigerBeetleDB</a></li>
@@ -175,20 +172,20 @@
 					</tbody>
 				</table>
 			</section>
+			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
+				<h1>Performance results</h1>
+				<p>104x PostgreSQL, 8.7x Elasticsearch</p>
+				<img src="img/jopenspace2022/senesi.png" alt="Senesi" width="1000px" style="background-color: white">
+			</section>
 			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-out">
 				<h1>Performance results</h1>
-				<p>147.47x PostgreSQL, 12.4x Elasticsearch</p>
-				<img src="img/jopenspace2022/keramika.png" alt="Keramika Soukup" width="800">
+				<p>109x PostgreSQL, 20x Elasticsearch</p>
+				<img src="img/jopenspace2022/keramika.png" alt="Keramika Soukup" width="1000px" style="background-color: white">
 			</section>
 			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in fade-out">
 				<h1>Performance results</h1>
-				<p>20.24x PostgreSQL, 4.38x Elasticsearch</p>
-				<img src="img/jopenspace2022/signal.png" alt="Signál nábytek" width="800">
-			</section>
-			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
-				<h1>Performance results</h1>
-				<p>105.25x PostgreSQL, 7.05x Elasticsearch</p>
-				<img src="img/jopenspace2022/senesi.png" alt="Senesi" width="800">
+				<p>39x PostgreSQL, 15x Elasticsearch</p>
+				<img src="img/jopenspace2022/signal.png" alt="Signál nábytek" width="1000px" style="background-color: white">
 			</section>
 		</section>
 		<section>
@@ -285,14 +282,14 @@
 					post-filter is used for "between" constraint, this prevents valid evaluation of queries like:</p>
 
 				<pre><code class="sql" style="font-size: 1.5em; line-height: 40px" data-trim data-noescape>
-	or(
-		and(
-			facet("Category", 5),
-			startsWith("code, "Gorgeous-Rubber-Wallet-2-15"),
-			priceBetween(800, 2000)
-		),
-		facet("Category", 1)
-	)
+or(
+      and(
+            facet("Category", 5),
+            startsWith("code, "Gorgeous-Rubber-Wallet-2-15"),
+            priceBetween(800, 2000)
+      ),
+      facet("Category", 1)
+)
 				</code></pre>
 			</section>
 			<section data-background="img/backgrounds/brown.jpg" data-transition="fade-in">
@@ -329,10 +326,10 @@
 		<!-- OUTRO -->
 		<section data-background="img/backgrounds/attention.jpg">
 			<div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
-				<h1>Thank you for your attention</h1>
-				<p><strong>Sources:</strong></p>
+				<h1>Follow us</h1>
 				<ul>
-
+					<li><a href="https://evitadb.io">https://evitadb.io</a></li>
+					<li><a href="https://twitter.com/evitadb_io">@evitadb_io on Twitter</a></li>
 				</ul>
 				<p>Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
 			</div>
