@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Nebojte se benchmarků při vývoji, 2022</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            @media screen and (max-height: 1000px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; width: 1000px; margin-left: -500px; z-index: 20;">
+	        <table style="width: 100%">
+		        <tr>
+			        <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+				        <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2019/FG_Forrest_neg.png" height="30px"/></a>
+			        </td>
+			        <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+				        <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2019/edeeone.svg" height="30px"/></a>
+			        </td>
+		        </tr>
+	        </table>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/web_security_basics/cyber-white.jpg">
+	                <img class="plain" src="img/javadayscz2022/Loga.jpg" style="box-shadow:1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff;">
+	                <h1 style="color: black; margin-top: 0.5em">Nebojte se benchmarků při vývoji</h1>
+	                <p style="color: black; margin: 2em;">
+                        Jan <a style="color: #525252" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
+                    </p>
+                    <h4 style="color:#5e5e5e">Go through presentation with me<br/><a style="color: #212121" href="https://bit.ly/performance_tests">https://bit.ly/performance_tests</a></h4>
+                </section>
+				<!-- ABOUT ME -->
+				<section data-background="img/backgrounds/red.jpg">
+					<h1>O mě</h1>
+					<div style="align-content: center">
+						<ul>
+							<li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+							<li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
+							<li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+							<li>přes 20 let vývojářem webových aplikací</li>
+						</ul>
+					</div>
+				</section>
+				<!-- BASICS -->
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Kdy a proč používáme výkonnostní testy?</h1>
+						<h2>Jaká je vlastně realita?</h2>
+						<div class="fragment">
+							<ol>
+								<li>pro prototypování a spike testing</li>
+								<li>pro ověření hotového díla před spuštěním v produkci</li>
+								<li>až když aplikace nestíhá</li>
+							</ol>
+						</div>
+					</section>
+					<section>
+						<h1>Java Microbenchmark Harness</h1>
+						<p>Nízkoúrovňový testovací framework pro rychlé psaní výkonnostních testů.</p>
+						<pre><code class="xml" data-trim contenteditable style="font-size: 18px;">
+
+					</code></pre>
+					</section>
+				</section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/attention.jpg">
+                    <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                        <h1>Díky za pozornost</h1>
+                        <p><strong>Zdroje:</strong></p>
+                        <ul>
+	                        <li><a href="https://github.com/openjdk/jmh/">Java Microbenchmark Harness</a></li>
+	                        <li><a href="https://github.com/openjdk/jmh/tree/master/jmh-samples/src/main/java/org/openjdk/jmh/samples">JHM Samples (správné / špatné použití)</a></li>
+	                        <li><a href="https://github.com/rgolder1/jmh">Ukázka integrace se Spring Boot</a></li>
+	                        <li><a href="https://blog.aspiresys.pl/technology/testing-code-performance-jmh-tool/">Vysvětlení JMH a proč jej používat</a></li>
+	                        <li><a href="https://github.com/jzillmann/jmh-visualizer">JMH visualizer</a></li>
+	                        <li><a href="https://jenkov.com/tutorials/java-performance/jmh.html">Jenkov tutorial</a></li>
+                        </ul>
+                        <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                    </div>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
