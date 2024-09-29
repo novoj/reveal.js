@@ -1,0 +1,493 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Fly with Java Recorder, 2024</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/clock.css">
+	<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	<style>
+		section {
+			background-color: rgba(0, 0, 0, 0.7);
+		}
+
+		@media screen and (max-height: 1000px) {
+			#logo {
+				display: none;
+				visibility: hidden;
+			} }
+	</style>
+</head>
+
+<body>
+
+<div id="logo" style="display: block; position: absolute; bottom: 40px; left: 50%; margin-left: -70px; z-index: 20;">
+	<a target="_blank" href="http://www.fg.cz" target="_blank"><img src="img/jopenspace2013/FG_Forrest_neg.png" width="140px"/></a>
+</div>
+
+<div class="reveal">
+
+	<div class="slides">
+		<!-- INTRO -->
+		<section data-background="img/jopenspace2024/intro.png">
+			<h1>Fly with Java Recorder</h1>
+			<p>
+				<small style="color: #a6a6a6">Jan <a style="color: #a6a6a6" href="http://www.twiter.com/novoj">@Novoj</a> Novotný</small>
+			</p>
+			<h4 style="color:#a6a6a6">
+				Go through presentation with me<br/>
+				<a style="color: white" href="https://bit.ly/flyjr">https://bit.ly/flyjr</a><br/>
+				<img src="img/jopenspace2024/bit.ly_flyjr.png" class="plain" style="height: 400px">
+			</h4>
+		</section>
+		<!-- CONTENT -->
+		<section data-background="img/jopenspace2024/dissasembly.png">
+			<section>
+				<h1>Java Flight Recorder</h1>
+				<h2 style="padding-bottom: 1em">What is it?</h2>
+				<ol style="padding-bottom: 5em">
+					<li>low-overhead tool integrated deeply in JVM</li>
+					<li>collects runtime statistics in form of events</li>
+					<li>originated in (BEA) JRockit JVM</li>
+					<li>made freely available in JDK 11</li>
+					<li>actively developed and extended</li>
+					<li>tied to JVM, so can be used from Kotlin, Scala, Groovy (you name it)</li>
+				</ol>
+			</section>
+			<section>
+				<h1 style="padding-bottom: 1em">What it could be used for?</h1>
+				<ul style="padding-bottom: 5em">
+					<li>Metrics collection (instead of JMX Beans)</li>
+					<li>Performance analysis</li>
+					<li>Memory leaks detection</li>
+					<li>Poor man tracking user interactions (what features are used and how often)</li>
+					<li>Post-mortem analysis</li>
+					<li>Gathering resources for analysis from your clients</li>
+					<li>Regression testing (JFR Unit)</li>
+				</ul>
+			</section>
+		</section>
+		<section data-background="img/jopenspace2024/dissasembly.png">
+			<section>
+				<h1>Command line access</h1>
+				<pre>
+					<code class="language-bash" style="font-size: 100%; line-height: 2em; max-height: 600px" data-trim data-noescape>
+# Start & finish with JVM
+java -jar my-application.jar \
+     -XX:StartFlightRecording=name=my-application_recording,dumponexit=true,filename=myrecording.jfr
+					</code>
+				</pre>
+				<p>or</p>
+				<pre>
+					<code class="language-bash" style="font-size: 120%; line-height: 2em; max-height: 600px" data-trim data-noescape>
+# retrieve Java PID
+$ jps
+# use jcmd to start recording for particular PID
+$ jcmd 1 JFR.start duration=10s filename=recording.jfr
+# use jcmd to dump current results of recording
+$ jcmd 1 JFR.dump filename=recording.jfr
+# use jcmd to stop recording
+$ jcmd 1 JFR.stop
+					</code>
+				</pre>
+				Support for multiple recordings at a time!
+			</section>
+			<section>
+				<h1>Reading results</h1>
+				<pre style="padding-bottom: 3em">
+					<code class="language-bash" style="font-size: 120%; line-height: 2em; max-height: 600px" data-trim data-noescape>
+# prints summary of recording (how many events, duration, allocation sizes, etc.)
+$ jfr summary recording.jfr
+# prints all events in recording
+$ jfr print recording.jfr
+# prints filtered events in recording
+$ jfr print recording.jfr --event jdk.GarbageCollection
+# exports events to CSV
+$ jfr print recording.jfr --event jdk.GarbageCollection --format csv
+# concatenates multiple recordings into single file
+$ jfr assemble /path concatenated-file.jfr
+# divide large recording into smaller chunks
+$ jfr disassemble --max-chunks 5 /path/to/recording.jfr
+					</code>
+				</pre>
+				<p>But you should probably want to use <a href="https://www.oracle.com/java/technologies/jdk-mission-control.html">Java Mission Control</a> or such tool.</p>
+			</section>
+			<section>
+				<h1>Remote usage</h1>
+				<video id="remote" height="600" controls autoplay>
+					<source src="img/jopenspace2024/jfr_remote.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+			</section>
+			<section>
+				<h1>Programmatic usage</h1>
+				<pre>
+					<code class="language-java" style="font-size: 80%; max-height: 600px" data-trim data-noescape>
+public class JfrTest {
+
+	public static void main(String[] args) throws InterruptedException {
+		// Create a new recording
+		try (Recording recording = new Recording()) {
+
+			// Limit memory allocations: only capture allocations larger than 1MB (1048576 bytes)
+			recording.setSettings(Map.of(
+				"jdk.ObjectAllocationInNewTLAB#threshold", "1 ms", // Only record events if they exceed 1ms
+				"jdk.ObjectAllocationOutsideTLAB#threshold", "1 ms",  // Threshold for non-TLAB allocations
+				"jdk.GarbageCollection#threshold", "10 ms",           // Record GC events if GC pause exceeds 10ms
+				"jdk.CPULoad#period", "500 ms",                       // Set sampling period to 500ms for CPU load
+				"jdk.ThreadSleep#threshold", "1 ms"                       // Record if thread sleep exceeds 1ms
+			));
+
+			// Start the recording
+			recording.start();
+
+			// Keep the recording running for some time, then stop it
+			Thread.sleep(10000); // Simulate workload for 10 seconds
+			recording.stop();
+		}
+	}
+
+}
+					</code>
+				</pre>
+			</section>
+			<section>
+				<h1>Programmatic usage - streaming</h1>
+				<pre>
+					<code class="language-java" style="font-size: 80%; max-height: 600px" data-trim data-noescape>
+public class JfrTest {
+
+	public static void main(String[] args) {
+		try (RecordingStream stream = new RecordingStream()) {
+			// Set a sampling interval for CPU load events
+			stream.enable("jdk.CPULoad").withPeriod(Duration.of(500, ChronoUnit.MILLIS));
+
+			// Set a threshold for memory allocations (only large allocations)
+			stream.enable("jdk.ObjectAllocationInNewTLAB").withThreshold(Duration.of(1, ChronoUnit.MILLIS));
+			stream.enable("jdk.ObjectAllocationOutsideTLAB").withThreshold(Duration.of(1, ChronoUnit.MILLIS));
+
+			// Handle the event in real-time
+			stream.onEvent(event -> {
+				System.out.println(event.getEventType().getName() + ": " + event);
+			});
+
+			// Start the stream
+			stream.start();
+		}
+	}
+
+}
+					</code>
+				</pre>
+			</section>
+			<section>
+				<h1>Programmatic usage - Periodic events</h1>
+				<pre>
+					<code class="language-java" style="font-size: 80%; max-height: 600px" data-trim data-noescape>
+@Category("MyEvents")
+@Label("Cache Stats")
+@Description("Simple cache statistics")
+@Period("10s")
+@StackTrace(false)
+public class CacheStatsEvent extends Event {
+
+    @Label("Cache Name")
+    public String cacheName;
+
+    @Label("Cache Size")
+    public int cacheSize;
+
+	public static void enableStatsRecording(String cacheName, Map<?, ?> cache) {
+		final WeakReference<Map<?, ?>> ref = new WeakReference<Map<?,?>>(cache);
+		final CacheStatsEvent event = new CacheStatsEvent();
+		event.cacheName = cacheName;
+		FlightRecorder.addPeriodicEvent(CacheStatsEvent.class, new Runnable() {
+			@Override
+			public void run() {
+				Map<?, ?> cache = ref.get();
+				if (cache == null) {
+					FlightRecorder.removePeriodicEvent(this);
+				} else {
+					event.begin();
+					event.cacheSize = cache.size();
+					event.commit();
+				}
+			}
+		});
+	}
+}
+					</code>
+				</pre>
+			</section>
+		</section>
+		<section data-background="img/jopenspace2024/examination.png">
+			<section>
+				<h1>Your own events</h1>
+				<pre>
+					<code class="language-java" style="font-size: 70%; line-height: 1.5em; max-height: 600px;" data-trim data-noescape>
+@Name("io.evitadb.system.BackgroundTaskTimedOut")
+@EventGroup(
+	value = "io.evitadb.system",
+	name = "evitaDB - System",
+	description = "evitaDB events related to system-wide operations such as tasks, threads, etc."
+)
+@Category({"evitaDB", "System"})
+@Description("Event that is raised when a background task has timed out and has been canceled.")
+@Label("Background task timed out")
+public class BackgroundTaskTimedOutEvent extends AbstractSystemEvent {
+
+	/**
+	 * Number of timed out tasks.
+	 */
+	@Label("Timed out tasks")
+	@Description("Number of timed out and canceled tasks.")
+	@ExportMetric(metricType = MetricType.COUNTER)
+	private final int timedOutTasks;
+
+	/**
+	 * The name of the background task.
+	 */
+	@Label("Task name")
+	@Description("Name of the background task.")
+	@ExportMetricLabel
+	final String taskName;
+
+	public BackgroundTaskTimedOutEvent(@Nonnull String taskName, int timedOutTasks) {
+		this.taskName = taskName;
+		this.timedOutTasks = timedOutTasks;
+	}
+
+}
+					</code>
+				</pre>
+				<p>
+					<a href="https://evitadb.io/documentation/operate/observe?lang=java#java-flight-recorder-jfr-events">Generated documentation for all custom JFR events</a>
+				</p>
+			</section>
+			<section>
+				<h1>Grafana</h1>
+				<div style="max-height: 650px; overflow: auto">
+					<img src="img/jopenspace2024/grafana-full-page.png" class="plain">
+				</div>
+			</section>
+			<section>
+				<h1>On demand recording</h1>
+				<video id="showtime" height="600" controls autoplay>
+					<source src="img/jopenspace2024/jfr_evita.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+			</section>
+			<section>
+				<h1>Instrumenting unaware classes</h1>
+				<video id="jmc-agent" height="600" controls autoplay>
+					<source src="img/jopenspace2024/jmc-agent.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+				<p>
+					<a href="https://github.com/openjdk/jmc/blob/master/agent/README.md">🕵🏼‍♂️ JMC Agent</a> | <a href="img/jopenspace2024/evita_preset.xml">JMC Agent preset</a>
+				</p>
+			</section>
+			<section>
+				<h1>Event filtering / configuration</h1>
+				<div style="display:flex;">
+				<div style="flex: 1">
+				<pre style="padding-bottom: 3em">
+					<code class="language-java" style="font-size: 68%; line-height: 1.9em; max-height: 600px" data-trim data-noescape>
+@Label("CustomEvent")
+public class CustomEvent extends Event {
+    @Label("Message")
+    private String message;
+
+    @SettingDefinition
+    public static MessageLengthThresholdControl messageLengthThreshold
+                                            = new MessageLengthThresholdControl();
+
+    public CustomEvent(String message) {
+        this.message = message;
+    }
+
+    public static void recordEvent(String message) {
+        // Use the threshold in the logic
+        if (message != null && message.length() > messageLengthThreshold.getValue()) {
+            CustomEvent event = new CustomEvent(message);
+            if (event.isEnabled()) {
+                event.commit();
+            }
+        }
+    }
+}
+					</code>
+				</pre>
+				</div>
+				<div style="flex: 1">
+				<pre style="padding-bottom: 3em">
+					<code class="language-java" style="font-size: 68%; line-height: 1.9em; max-height: 600px" data-trim data-noescape>
+public class MessageLengthThresholdControl extends SettingControl<Integer> {
+    private static int threshold = 10;  // Default threshold
+
+    @Override
+    public Integer combine(Integer currentValue, Integer newValue) {
+        return newValue;  // Replace the current value with the new one
+    }
+
+    @Override
+    public Integer parse(String value) {
+        return Integer.parseInt(value);  // Parse the string setting into an integer
+    }
+
+    @Override
+    public Integer getValue() {
+        return threshold;  // Get the current threshold
+    }
+
+    @Override
+    public void setValue(Integer value) {
+        threshold = value;  // Update the threshold dynamically
+    }
+}</code>
+				</pre>
+				</div>
+				</div>
+			</section>
+			<section>
+				<h1>Profiles</h1>
+				<p style="margin: 0px; padding: 0px; line-height: 0.5em;">Using `jfr configure`:</p>
+				<pre>
+					<code class="language-bash" style="font-size: 70%; line-height: 2em; max-height: 600px" data-trim data-noescape>
+# sets messageLengthThreshold to 20 for CustomEvent in Java process with PID 12345
+$ jcmd 12345 JFR.configure jdk.jfr.CustomEvent#messageLengthThreshold=20
+# starts recording with custom profile
+java -XX:StartFlightRecording:filename=recording.jfr,settings=path/to/custom_profile.jfc -cp yourapp.jar com.example.Main
+					</code>
+				</pre>
+				<p style="margin: 0px; padding: 0px; line-height: 0.5em;">With particular JFC configuration:</p>
+				<pre>
+					<code class="language-xml" style="font-size: 70%; line-height: 2em; max-height: 600px" data-trim>
+<flightrecorder>
+  <!-- Name of the configuration -->
+  <configuration name="CustomJFRProfile" label="Custom JFR Profile" description="Profile with custom settings">
+
+    <!-- Custom Event Configuration -->
+    <event name="com.example.CustomEvent" label="Custom Event">
+      <setting name="messageLengthThreshold" value="20"></setting> <!-- Initial message length threshold -->
+      <setting name="enabled" value="true"></setting>              <!-- Enable the event -->
+      <setting name="stackTrace" value="true"></setting>           <!-- Enable stack traces for the event -->
+    </event>
+
+    <!-- we can also set `period` for minimal cooldown and `threshold` for minimal duration -->
+  </configuration>
+</flightrecorder>
+					</code>
+				</pre>
+			</section>
+			<section>
+				<h1>Where you can encounter it?</h1>
+				<ul>
+					<li><a href="https://grafana.com/oss/pyroscope/">Grafana Pyroscope</a></li>
+					<li><a href="https://docs.datadoghq.com/profiler/">DataDogs Continuous Profiler</a></li>
+					<li><a href="https://docs.newrelic.com/docs/apm/agents/java-agent/features/real-time-profiling-java-using-jfr-metrics/">New Relic</a></li>
+					<li><a href="https://www.jetbrains.com/help/idea/custom-profiler-configurations.html#jfr">IntelliJ Idea</a></li>
+				</ul>
+				<img src="img/jopenspace2024/jetbrains-profiler.png" class="plain">
+				<!-- CPU Profiling -->
+				<!-- https://docs.oracle.com/javacomponents/jmc-5-5/jfr-runtime-guide/about.htm#JFRRT107 -->
+				<!-- https://jpbempel.github.io/2022/06/22/debug-non-safepoints.html -->
+			</section>
+			<section>
+				<h1>Grafana - Pyroscope</h1>
+				<div style="max-height: 650px; overflow: auto">
+					<img src="img/jopenspace2024/grafana-pyroscope.png" class="plain">
+				</div>
+			</section>
+		</section>
+		<!-- OUTRO -->
+		<section data-background="img/jopenspace2024/ending.png">
+			<div style="display: inline-block;">
+				<h1>Happy post-mortems!</h1>
+				<h3>Resources</h3>
+				<ul style="padding-bottom: 1em">
+					<li><a href="https://www.morling.dev/blog/rest-api-monitoring-with-custom-jdk-flight-recorder-events">REST API monitoring with custom JDK Flight Recorder events by Gunnar Morling</a></li>
+					<li><a href="https://www.morling.dev/blog/towards-continuous-performance-regression-testing/">Towards Continuous Performance Regression Testing</a></li>
+					<li><a href="https://tech.olx.com/jvm-profiling-in-kubernetes-with-java-flight-recorder-b39a6181a99c">JVM Profiling in Kubernetes with Java Flight Recorder by Abhinav Rohatgi</a></li>
+					<li><a href="https://github.com/moditect/jfrunit">JFR Unit</a></li>
+					<li><a href="https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Fix-Java-memory-leaks-JVM-heap-dumps-Recorder-Mission-Control">Catching memory leaks with JFR</a></li>
+					<li><a href="https://bestsolution-at.github.io/jfr-doc/openjdk-18.html">JFR built-in Events listing</a></li>
+					<li><a href="https://jpbempel.github.io/2022/06/22/debug-non-safepoints.html">Debug non-safe points</a></li>
+					<li><a href="https://bell-sw.com/announcements/2021/01/29/JDK-Flight-Recorder-The-Programmatic-Way/">JDK Flight Recorder, The Programmatic Way</a></li>
+				</ul>
+				<h2>Follow us on:</h2>
+				<ul style="padding-bottom: 1em">
+					<li><a href="https://evitadb.io">https://evitadb.io</a></li>
+					<li><a href="https://twitter.com/evitadb_io">@evitadb_io on Twitter</a></li>
+				</ul>
+				<p style="padding-bottom: 1em;">Contact me <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> or <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+			</div>
+		</section>
+	</div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/clock.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			function playShowTime() {
+				var vid = document.getElementById("showtime");
+				vid.play();
+			}
+
+            Reveal.addEventListener( 'showtime', playShowTime, false );
+
+            var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
+            initializeClock(deadline);
+
+		</script>
+
+</body>
+</html>
