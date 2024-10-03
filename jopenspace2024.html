@@ -65,7 +65,7 @@
 					<li>low-overhead tool integrated deeply in JVM</li>
 					<li>collects runtime statistics in form of events</li>
 					<li>originated in (BEA) JRockit JVM</li>
-					<li>made freely available in JDK 11</li>
+					<li>made freely available in JDK 11 (current version is 23)</li>
 					<li>actively developed and extended</li>
 					<li>tied to JVM, so can be used from Kotlin, Scala, Groovy (you name it)</li>
 				</ol>
@@ -75,7 +75,7 @@
 				<ul style="padding-bottom: 5em">
 					<li>Metrics collection (instead of JMX Beans)</li>
 					<li>Performance analysis</li>
-					<li>Memory leaks detection</li>
+					<li>Memory leaks detection (with a little bit of luck)</li>
 					<li>Poor man tracking user interactions (what features are used and how often)</li>
 					<li>Post-mortem analysis</li>
 					<li>Gathering resources for analysis from your clients</li>
@@ -196,45 +196,6 @@ public class JfrTest {
 					</code>
 				</pre>
 			</section>
-			<section>
-				<h1>Periodic events</h1>
-				<pre>
-					<code class="language-java" style="font-size: 80%; max-height: 600px" data-trim data-noescape>
-@Category("MyEvents")
-@Label("Cache Stats")
-@Description("Simple cache statistics")
-@Period("10s")
-@StackTrace(false)
-public class CacheStatsEvent extends Event {
-
-    @Label("Cache Name")
-    public String cacheName;
-
-    @Label("Cache Size")
-    public int cacheSize;
-
-	public static void enableStatsRecording(String cacheName, Map<?, ?> cache) {
-		final WeakReference<Map<?, ?>> ref = new WeakReference<Map<?,?>>(cache);
-		final CacheStatsEvent event = new CacheStatsEvent();
-		event.cacheName = cacheName;
-		FlightRecorder.addPeriodicEvent(CacheStatsEvent.class, new Runnable() {
-			@Override
-			public void run() {
-				Map<?, ?> cache = ref.get();
-				if (cache == null) {
-					FlightRecorder.removePeriodicEvent(this);
-				} else {
-					event.begin();
-					event.cacheSize = cache.size();
-					event.commit();
-				}
-			}
-		});
-	}
-}
-					</code>
-				</pre>
-			</section>
 		</section>
 		<section data-background="img/jopenspace2024/examination.png">
 			<section>
@@ -279,6 +240,45 @@ public class BackgroundTaskTimedOutEvent extends AbstractSystemEvent {
 				<p>
 					<a href="https://evitadb.io/documentation/operate/observe?lang=java#java-flight-recorder-jfr-events">Generated documentation for all custom JFR events</a>
 				</p>
+			</section>
+			<section>
+				<h1>Periodic events</h1>
+				<pre>
+					<code class="language-java" style="font-size: 80%; max-height: 600px" data-trim data-noescape>
+@Category("MyEvents")
+@Label("Cache Stats")
+@Description("Simple cache statistics")
+@Period("10s")
+@StackTrace(false)
+public class CacheStatsEvent extends Event {
+
+    @Label("Cache Name")
+    public String cacheName;
+
+    @Label("Cache Size")
+    public int cacheSize;
+
+	public static void enableStatsRecording(String cacheName, Map<?, ?> cache) {
+		final WeakReference<Map<?, ?>> ref = new WeakReference<Map<?,?>>(cache);
+		final CacheStatsEvent event = new CacheStatsEvent();
+		event.cacheName = cacheName;
+		FlightRecorder.addPeriodicEvent(CacheStatsEvent.class, new Runnable() {
+			@Override
+			public void run() {
+				Map<?, ?> cache = ref.get();
+				if (cache == null) {
+					FlightRecorder.removePeriodicEvent(this);
+				} else {
+					event.begin();
+					event.cacheSize = cache.size();
+					event.commit();
+				}
+			}
+		});
+	}
+}
+					</code>
+				</pre>
 			</section>
 			<section>
 				<h1>Grafana</h1>
