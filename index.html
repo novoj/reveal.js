@@ -1,20 +1,43 @@
-<html>
-<head>
-    <title>GitHub pages of Novoj presentations</title>
-    <meta charset="utf-8">
-</head>
-<body>
-<h1>Index</h1>
-<ul>
-    <li><a href="jopenspace2017.html">jOpenSpace 2017 - Neurolink</a></li>
-    <li><a href="jopenspace2017-full.html">jOpenSpace 2017 - Neurolink (nezkrácená verze)</a></li>
-    <li><a href="jopenspace2016.html">jOpenSpace 2016 - Proč nám rozbíjejí hračky</a></li>
-    <li><a href="jopenspace2013.html">jOpenSpace 2013 - Co mě naučio 5 let modulárního vývoje</a></li>
-    <li><a href="mail-module-v5.html">Školení Mail Module</a></li>
-    <li><a href="retrospektiva-hackathon-no3.html">Retrospektiva 3. FG hackathonu</a></li>
-    <li><a href="kappa-architecture.html">jOpenSpace 2014 - Kappa architecture</a></li>
-    <li><a href="monkey-tracker.html">Monkey Tracker</a></li>
-    <li><a href="spring-security.html">Spring Security (podzim 2016)</a></li>
-</ul>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css" />
+		<link rel="stylesheet" href="dist/reveal.css" />
+		<link rel="stylesheet" href="dist/theme/black.css" />
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="dist/plugin/highlight/monokai.css" />
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>Slide 1</section>
+				<section>Slide 2</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="dist/plugin/notes.js"></script>
+		<script src="dist/plugin/markdown.js"></script>
+		<script src="dist/plugin/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+			});
+		</script>
+	</body>
 </html>

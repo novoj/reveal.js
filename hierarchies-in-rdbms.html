@@ -651,6 +651,7 @@ select TC.* from T_CATEGORY TC
             <h2>Odezvy typizovaných dotazů</h2>
             <!-- amCharts javascript code -->
             <script type="text/javascript">
+                if (window.AmCharts) {
                 AmCharts.makeChart("chartdiv",
                     {
                         "type": "serial",
@@ -745,6 +746,7 @@ select TC.* from T_CATEGORY TC
                         ]
                     }
                 );
+                }
             </script>
             <div id="chartdiv" style="height: 600px; background-color: #282828;" ></div>
             <p style="text-align: center">
@@ -863,7 +865,7 @@ pmptt.registerChangeListener(
 </div>
 
 <script src="lib/js/head.min.js"></script>
-<script src="js/reveal.js"></script>
+<script src="dist/reveal.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/clock.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -882,8 +884,7 @@ pmptt.registerChangeListener(
         width: 1200,
         height: 900,
 
-        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+        transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
 
         // Optional libraries used to extend on reveal.js
         dependencies: [

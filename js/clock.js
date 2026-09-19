@@ -12,7 +12,10 @@ function getTimeRemaining(endtime) {
 function initializeClock(endtime) {
     var id = "clockdiv";
     if (!document.getElementById(id)) {
-        window.document.write("<div id=\"" + id + "\"><div><span class=\"clock\"></span></div>");
+        var clockElement = document.createElement('div');
+        clockElement.id = id;
+        clockElement.innerHTML = '<div><span class="clock"></span></div>';
+        document.body.appendChild(clockElement);
     }
     var clock = document.getElementById(id);
     var clockDiv = clock.querySelector('div');
