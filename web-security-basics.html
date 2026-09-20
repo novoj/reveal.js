@@ -1,0 +1,809 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Co byste měli vědět, když se mluví o webové bezpečnosti, 2019</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/clock.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <style>
+            @media screen and (max-height: 1000px) {
+                #logo {
+                    display: none;
+                    visibility: hidden;
+                } }
+        </style>
+	</head>
+
+	<body>
+
+        <div style="display: block; position: absolute; bottom: 40px; left: 50%; width: 1000px; margin-left: -500px; z-index: 20;">
+	        <table style="width: 100%">
+		        <tr>
+			        <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+				        <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2019/FG_Forrest_neg.png" height="30px"/></a>
+			        </td>
+			        <td style="text-align: center; vertical-align: bottom; padding-top: 2px; width: 20%">
+				        <a href="http://www.fg.cz" target="_blank"><img src="img/javadayscz2019/edeeone.svg" height="30px"/></a>
+			        </td>
+		        </tr>
+	        </table>
+        </div>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <!-- INTRO -->
+                <section data-background="img/web_security_basics/cyber-white.jpg">
+	                <img class="plain" src="img/javadayscz2019/Loga.jpg" style="box-shadow:1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff, 1px 1px 200px #fff;">
+	                <h1 style="color: black; margin-top: 0.5em">Co byste měli vědět, když se mluví o webové bezpečnosti</h1>
+	                <p style="color: black; margin: 2em;">
+                        Jan <a style="color: #525252" href="http://www.twiter.com/novoj">@Novoj</a> Novotný
+                    </p>
+                    <h4 style="color:#5e5e5e">Go through presentation with me<br/><a style="color: #212121" href="http://bit.ly/web_security_basics">http://bit.ly/web_security_basics</a></h4>
+                </section>
+				<!-- ABOUT ME -->
+				<section data-background="img/backgrounds/red.jpg">
+					<h1>Proč bych vám měl zrovna já něco povídat o bezpečnosti?</h1>
+					<div style="align-content: center">
+						<table style="margin: 0 auto;">
+							<tr>
+								<td style="vertical-align: top; width: 50%">
+									<h2>O mně</h2>
+									<ul>
+										<li>backend vývojář v <a href="https://www.fg.cz">FG Forrest</a></li>
+										<li>organizátor <a href="https://www.jopenspace.cz">jOpenSpace</a> ne-konference</li>
+										<li>spoluautor podcastu <a href="https://kafemlejnek.tv">Kafemlejnek.TV</a></li>
+										<li>20 let vývojářem webových aplikací</li>
+									</ul>
+								</td>
+								<td>
+									<h2>Exponované aplikace</h2>
+									<ul>
+										<li><a href="https://www.hrad.cz">Hrad.cz (web)</a></li>
+										<li><a href="https://www.cez.cz">ČEZ.cz (web, aplikace, intranet)</a></li>
+										<li><a href="https://www.flexi.cz/">Flexi.cz (pojištění)</a></li>
+										<li><a href="https://www.kb.cz">KB.cz (web, aplikace)</a></li>
+										<li><a href="https://www.doxx.sk">DOXX.sk (stravenky)</a></li>
+										<li><a href="https://www.ikem.cz">IKEM (intranet nemocnice)</a></li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<!-- BASICS -->
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Hacknuli vás někdy?</h1>
+						<div class="fragment">
+							<p>mě ano</p>
+							<div>
+								<h2>Bezpečnost je nerovnice</h2>
+								<pre><code data-trim data-noescape style="font-size: x-large; padding: 1em">f(náklady, znalosti) > f(náklady, znalosti, chráněná hodnota, komplexita)</code></pre>
+							</div>
+						</div>
+					</section>
+					<section>
+						<h1>Vždy je nějaká hodnota</h1>
+						<ul>
+							<li>zdroje - botnet, mining</li>
+							<li>data - hesla, karty, e-maily, osobní informace, know-how</li>
+							<li>nefunkčnost služby - ransomware, finanční ztráty, poškození konkurence</li>
+						</ul>
+						<p>Hacking je dnes již průmysl. Hackitivsm je otázka minulosti.</p>
+						<div style="text-align: center">
+							U zavedeného e-shopu může být hodinový výpadek ztráta v řádech 100,000 Kč.<br/>
+							<a href="https://www.theguardian.com/business/2015/nov/06/nearly-157000-had-data-breached-in-talktalk-cyber-attack">Mobilní operátor TalkTalk po útoku v roce 2015</a>
+							musel zaplatit pokutu £400k a už se nevzpamatoval.
+							<img src="img/web_security_basics/talktalk.jpg" height="300px"/><br/>
+							<small><a href="https://darknetdiaries.com/episode/4/">Poslechněte si jejich příběh</a></small>
+						</div>
+					</section>
+					<section>
+						<h1>Spray'n'pray</h1>
+						<p>Většina útoků probíhajících na internetu je hloupá</p>
+						<p>kobercové nálety na nejrozšířenější software využívající známých exploitů</p>
+						<p>brute force útoky a automatizované testy např. na SQL injection</p>
+						<p>DOS útoky</p>
+						<h2>Kobercové útoky lze poměrně jednoduše automatizovat a cílit</h2>
+						<ul>
+							<li><a href="https://www.shodan.io/">Shodan</a> - databáze strojů a otevřených rozhraní</li>
+							<li><a href="https://github.com/NullArray/AutoSploit">AutoSploit</a> -  automatizovaný nástroj, který na základě výsledku v Shodanu aplikuje vybrané exploity</li>
+							<li><a href="https://whatcms.org/">CMS detection</a> - nástroj pro detekci použitých CMS</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Bezpečnostní hygiena</h1>
+						<ol>
+							<li>aktualizujte software (<a href="https://www.google.com/search?q=automated+security+dependency+upgrade&oq=automated+security+dependency+upgrade">automatizujte</a>)</li>
+							<li>monitorujte podezřelé aktivity</li>
+							<li>zálohujte (<a href="https://about.gitlab.com/2017/02/10/postmortem-of-database-outage-of-january-31/">a ověřujte funkčnost záloh</a>)</li>
+							<li>vzdělávajte se</li>
+							<li>šifrujte veškerou komunikaci</li>
+							<li>whitelistujte pouze nezbytně nutné</li>
+							<li>neprozrazujte víc než je nutné (<a href="https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/setting-honeytraps-with-modsecurity-adding-fake-html-comments/">oni to budou hledat</a>)</li>
+							<li>nedávejte více práv než je nutné</li>
+							<li>používejte klíče, pokud musíte hesla - přidejte 2FA a používejte klíčenky</li>
+							<li>segmentujte prostředí (omezte dopady úspěšného útoku)</li>
+						</ol>
+					</section>
+					<section>
+						<h1>Víte jaká je nejstarší bezpečnostní chyba?</h1>
+						<div class="fragment" style="text-align: center;">
+							<p>Slabé případně výchozí přihlašovací jméno a heslo. Poprvé byla reportována v roce <strong>1969</strong>.</p>
+							<p>V roce <a href="https://darknetdiaries.com/episode/13/">2012</a> vznikl botnet, který se pokusil najít všechny
+							   stroje na internetu, s výchozími nebo slabými hesly. Našel jich <a
+										href="https://en.wikipedia.org/wiki/Carna_botnet">420,000</a></p>
+							<img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Carnabotnet_geovideo_lowres.gif"/>
+						</div>
+					</section>
+				</section>
+				<!-- BASICS -->
+				<section data-background="img/backgrounds/red.jpg">
+					<h1>OWASP TOP 10 v 2017</h1>
+					<ol>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">Injection</a>
+							<span style="font-size: 60%; display: block">zneužití SQL, NoSQL, OS a LDAP dotazů</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication">Broken Authentication</a>
+							<span style="font-size: 60%; display: block">nesprávná implementace autentizačního procesu</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">Sensitive Data Exposure</a>
+							<span style="font-size: 60%; display: block">nedostatečně chráněné citlivé údaje</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A4-XML_External_Entities_(XXE)">XML External Entities (XXE)</a>
+							<span style="font-size: 60%; display: block">nesprávná konfigurace XML parserů umožňující jejich zneužití</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control">Broken Access Control</a>
+							<span style="font-size: 60%; display: block">nedostatečně kontrolovaná přístupová práva</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">Security Misconfiguration</a>
+							<span style="font-size: 60%; display: block">nesprávná konfigurace použitých komponent - omylem či z neznalosti</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_(XSS)">Cross-Site Scripting (XSS)</a>
+							<span style="font-size: 60%; display: block">injekce a vykonání JS kódu v relaci jiného uživatele</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A8-Insecure_Deserialization">Insecure Deserialization</a>
+							<span style="font-size: 60%; display: block">zneužití interních dat po deserializaci do programové reprezentace</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A9-Using_Components_with_Known_Vulnerabilities">Using Components with Known Vulnerabilities</a>
+							<span style="font-size: 60%; display: block">zneužití známé zranitelnosti použité SW/HW komponenty</span>
+						</li>
+						<li>
+							<a href="https://www.owasp.org/index.php/Top_10-2017_A10-Insufficient_Logging%26Monitoring">Insufficient Logging&Monitoring</a>
+							<span style="font-size: 60%; display: block">pomalá detekce útoku, útočník dostane dostatečný časový prostor k akci</span>
+						</li>
+					</ol>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Zneužití vstupních parametrů</h1>
+						<p>Spočívá v úpravě vstupních parametrů aplikace</p>
+						<div style="align-content: center">
+							<table style="margin: 0 auto;">
+								<tr>
+									<td style="vertical-align: top; width: 50%">
+										<h2>Zajímavé cíle</h2>
+										<ul>
+											<li>skrytá pole</li>
+											<li>výběrové položky</li>
+											<li>názvy souborů</li>
+											<li>obsah souborů</li>
+											<li>hlavičky</li>
+											<li>cookies (součástí hlavičky)</li>
+										</ul>
+									</td>
+									<td>
+										<h2>Nástroje</h2>
+										<ul>
+											<li><a href="https://www.youtube.com/embed/MNDkzkR8TBI?start=345">BurpSuite</a></li>
+											<li><a href="https://www.owasp.org/index.php/OWASP_WebScarab_NG_Project">WebScarab</a></li>
+											<li><a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">ZAP</a></li>
+											<li><a href="https://www.wireshark.org/">WireShark</a></li>
+											<li><a href="https://addons.mozilla.org/cs/firefox/addon/tamper-data-for-ff-quantum/">Tamper Data</a></li>
+											<li><a href="https://www.telerik.com/fiddler">Fiddler2</a></li>
+										</ul>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<p>A zneužití nedostatečné kontroly na straně aplikace.</p>
+						<p><small><a href="https://darknetdiaries.com/episode/7/">Zajímavý podcast na téma hackování MMORPG her.</a></small></p>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Injection</h1>
+						<p>lze obecně kdekoliv, kde se nějakému engine předává dotaz ve formě textu:</p>
+						<ul>
+							<li><a href="https://www.zdrojak.cz/clanky/sql-injection-pre-kazdeho/">SQL</a></li>
+							<li>noSQL: <a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">MongoDB</a>, <a href="https://stackoverflow.com/questions/54769528/preventing-nosql-injections-with-elasticsearch">Elastic Search</a></li>
+							<li><a href="https://www.owasp.org/index.php/Testing_for_Command_Injection_(OTG-INPVAL-013)">operační systém</a> (příklad pro <a href="https://www.netsparker.com/blog/web-security/command-injection-vulnerability/">ping</a>)</li>
+							<li><a href="https://www.owasp.org/index.php/Testing_for_LDAP_Injection_(OTG-INPVAL-006)">LDAP</a></li>
+							<li>
+								<a href="https://www.owasp.org/index.php/Test_Local_Storage_(OTG-CLIENT-012)">local data storage</a>,
+								<a href="https://www.tutorialspoint.com/html5/html5_web_sql.htm">web SQL database</a>
+							</li>
+						</ul>
+						<p>Pokud taková zranitelnost existuje je velká pravděpodobnost, že útočník získá VŠECHNA data.</p>
+						<p>Útočník může přes SQL injection i <a href="https://dev.mysql.com/doc/refman/5.7/en/load-data.html">číst</a> a
+							<a href="https://dev.mysql.com/doc/refman/5.7/en/select-into.html">zapisovat</a> soubory na serveru s oprávněním jaké má aplikace.</p>
+						<p>V některých DB, <a href="https://turbofuture.com/computers/Using-xp_cmdshell-to-Query-the-Windows-File-System">pokud je to povoleno</a> může útočník i spouštět příkazy OS.</p>
+						<p>Čím více toho engine umí, tím je pro vás nebezpečnější. Jenže vývojáři mají rádi mocné stroje.</p>
+					</section>
+					<section>
+						<h1>Ochrana proti injection</h1>
+						<ul>
+							<li>vstupy od uživatele předávat stroji jako argumenty (tj. tak aby, je stroj nemohl považovat za součást dotazu)</li>
+							<li>tam, kde to není možné (v SQL např. ORDER BY) nikdy nevkládat vstup uživatele přímo do dotazu, ale překládat nebo whitelistovat</li>
+							<li>escapování znaků není spolehlivá cesta!</li>
+						</ul>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Útoky na autentizaci</h1>
+						<ul>
+							<li>hádání hesla: brute force, dictionary attack, leaked pwd databases</li>
+							<li>zneužití slabin procesu pro obnovu zapomenutého hesla
+								<ul>
+									<li>kontrolní otázky (sic!)</li>
+									<li>ověřování na základě veřejně dostupných informací</li>
+									<li>možnost změny e-mailové adresy ve formuláři pro zaslání kódu</li>
+									<li>slabé / odhadnutelné tokeny vygenerované aplikací</li>
+								</ul>
+							</li>
+						</ul>
+						<p><a href="https://darknetdiaries.com/episode/33/">při útoku na společnost RockYou se zjistilo, že 5000 hesel odemkne 20% účtů</a></p>
+						<p>Díky bezpečnostním otázkám přišel <a href="https://darknetdiaries.com/episode/26/">americký daňový úřad</a> v roce <strong>2015</strong> o desítky milionů $.</p>
+					</section>
+					<section>
+						<h1>Doporučení pro přihlašovací formuláře</h1>
+						<ul>
+							<li>přihlašování akceptujte pouze přes šifrovaný protokol (HTTPS)</li>
+							<li>chraňte přihlašování proti CSRF útoku (viz. dále)</li>
+							<li>vyzkoušejte, že se váš přihlašovací formulář dobře používá s klíčenkami (LastPass např.)</li>
+							<li>zaveďte kontrolu proti útoku silou - při opakovaných neplatných pokusech o přihlášení
+								<ul>
+									<li>vložte captchu</li>
+									<li>zaveďte časovou penalizaci (pozor penalizace musí být aplikována i když by
+										útočník heslo uhádl, jinak je možné díky paralelnímu přístupu jednoduše
+										odhadnout zásah)</li>
+								</ul>
+							</li>
+							<li>při chybě používejte stejnou - generickou hlášku "Vaše přihlašovací údaje nejsou správné!"</li>
+							<li>auditujte všechny pokusy o přihlášení: datum a čas, IP adresa, User agent, výsledek</li>
+							<li>pokud používáte funkcionalitu "zapamatuj si mě na tomto počítači", vyžadujte přihlášení před změnou citlivých údajů</li>
+							<li>zvažte zavedení vícefaktorové autentizace</li>
+						</ul>
+						<p><small>Další doporučení naleznete <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md">v OWASP cheatsheetu</a></small></p>
+					</section>
+					<section>
+						<h1>Doporučení pro práci se sezením</h1>
+						<ul>
+							<li>pro přenos bezpečnostního tokenu (session cookie např.)
+								<ul>
+									<li>používejte atribut <strong>secure</strong></li>
+									<li>používejte atribut <strong>httpOnly</strong></li>
+									<li>používejte atribut <strong>sameSite</strong></li>
+									<li>nastavujte správně doménu a cestu</li>
+								</ul>
+								<li>nespravujte session token sami, případně použijte dostatečně silný generátor náhodných čísel a délku tokenu</li>
+								<li>po přihlášení zahoďte starou session a vygenerujte novou</li>
+								<li>po odhlášení zahoďte session</li>
+								<li>mějte maximální dobu života sezení a pak vynuťte znovu přihlášení uživatele</li>
+							</li>
+						</ul>
+						<p><small>Další doporučení naleznete <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md">v OWASP cheatsheetu</a></small></p>
+					</section>
+					<section>
+						<h1>Doporučení pro práci s hesly</h1>
+						<ul>
+							<li>neomezujte maximální délku hesla nebo znaky v heslu</li>
+							<li>neořezávejte mezery, nijak neupravujte uživatelské heslo na vstupu</li>
+							<li>používejte pomalé hashovací funkce s unikátní solí per záznam (BCrypt, PBKDF2, scrypt, Argon 2)</li>
+							<li>neposílejte hesla e-mailem</li>
+							<li>vyžadujte po uživatelích rozumně složitá hesla</li>
+							<li>pokud uživatel mění heslo / e-mail, vyžadujte vložení původního hesla</li>
+							<li>nenačítejte uživatele z databáze včetně jeho hesla</li>
+							<li>zajistěte, že se hesla nemohou otisknout do logů</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Proč ukládat saltovaná hesla v pomale hashované podobě?</h1>
+						<img src="https://www.codeproject.com/KB/aspnet/844722/hash_picture1_en.jpg"/><br/>
+						<small>Credit: <a href="https://www.codeproject.com/Articles/844722/Hashing-Passwords-using-ASP-NETs-Crypto-Class">Hashing Passwords using ASP.NET's Crypto Class</a></small>
+						<ul>
+							<li>uživatelé často přepoužívají hesla k více službám</li>
+							<li>cracking hashů se v současné době dá provádět velice efektivně</li>
+							<li>pokud nejsou hesla unikátně osolená pak je možné využít předpočítaných "rainbow" tables pro rychlé vyhledání předpočítaných hesel</li>
+							<li>pokud použijeme běžný hashovací algoritmus je možné vypočítávat miliony / miliardy kombinací za sekundu</li>
+							<li>hesla si můžete i jednoduše <a href="https://www.lightbluetouchpaper.org/2007/11/16/google-as-a-password-cracker/">vygůglit</a></li>
+						</ul>
+					</section>
+					<section>
+						<h1>Doporučení pro obnovu zapomenutého hesla</h1>
+						<ul>
+							<li>pokud uživatel zapomene heslo, pošlete mu odkaz na reset hesla obsahující jednorázový bezpečný token s omezenou časovou platností</li>
+							<li>formulář pro odeslání zapomenutého hesla by měl dávat stejnou odpověď pro existující i neexistující uživatelský účet</li>
+							<li>token musí mít dostatečnou délku, jinak se stane cílem útoku silou</li>
+							<li>token musí být unikátní a musí být vygenerován algoritmem s dostatečně náhodným výstupem</li>
+							<li>token by měl být v databázi uložen také v zahashované formě, stejně jako heslo</li>
+							<li>token by měl být po použití odstraněn</li>
+							<li>token by měl být funkční pouze po omezenou dobu - např. 24 hodin</li>
+							<li>po použití tokenu nabídněte uživateli změnu jeho hesla</li>
+						</ul>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Útoky na autorizaci</h1>
+						<p>Aplikace kontroluje, zda mohu něco udělat, ale už nekontroluje s čím to dělám.</p>
+						<p><i>Příklad:</i> rajce.net má soukromá alba obrázků, která nezobrazí cizím, z obrázků je možné
+							si nechat udělat fyzické obrázky a nechat si poslat poštou, při přidávání do košíku bylo možné
+							si přes odhadnutí ID nechat vyrobit zamčené fotografie cizích lidí</p>
+						<p>Některé aplikace (a dříve i Windows) řeší práva tak, že nezobrazí linky / tlačítka pro provedení
+							akce. Pokud ale uživatel zná správnou kombinaci URL, tak může akci provést. Typicky platí
+							pro systémy, které na oprávnění nebyly připravované od začátku.</p>
+					</section>
+					<section>
+						<h2>Cross-Site Request Forgery</h2>
+						<p>útočník zneužije uživatele, aby sám nevědomě odeslal potřebné požadavky serveru</p>
+						<table>
+							<tr>
+								<td>
+									<a href="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png">
+										<img src="https://consideratecode.com/wp-content/uploads/2017/08/csrf-3.png" height="600px" width="1000px"/>
+									</a><br/>
+									<small>Credit: <a href="https://consideratecode.com/2017/08/31/csrf/">CSRF – Security Acronyms explained</a></small>
+								</td>
+								<td style="vertical-align: middle">
+									Zranitelné HTTP metody: GET a POST<br/><br/>
+									Pro GET je možné využít IMG a LINK/SCRIPT tagy.<br/><br/>
+									Nebezpečné v kombinaci s funkcionalitou "trvalého přihlášení"
+								</td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<h2>Obrana proti CSRF</h2>
+						<h3>Autorizační token platný po dobu trvání sezení</h3>
+						<ol>
+							<li>zajistit dostatečnou entropii a délku tokenu</li>
+							<li>pohlídat si prozrazení CSRF tokenu
+								<ul>
+									<li>neměl by se vyskytovat v lincích (leak přes Referer)</li>
+									<li>pozor <a href="https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930">Breach &amp; Heist útoky</a>,
+										CSRF token je dobré pro každé vykreslení maskovat (stačí i obyčejná XOR šifra)</li>
+								</ul>
+							</li>
+						</ol>
+						<p>Ideálně by CSRF ochranu měl transparentně poskytovat webový framework. Ne jako je to u <a href="https://codex.wordpress.org/WordPress_Nonces">Worpressu</a>!</p>
+						<h3>SameSite cookie</h3>
+						<p>Příznak u cookie <a href="https://www.owasp.org/index.php/SameSite">zamezí zaslání této cookie</a> ze stránky na jiné doméně.
+							Má dva režimy:</p>
+						<ul>
+							<li><strong>LAX (default)</strong> chrání pouze POST metody, GET metody jen, pokud se nejedná o top-level navigaci (kliknutí na link se změnou adresy v URL)</li>
+							<li><strong>STRICT</strong> cookie se nikdy nepošle skrz navigaci mezi doménami (při prokliknutí odkazu na jiném webu bude vždy požadováno přihlášení)</li>
+						</ul>
+						<p>Je již <a href="https://caniuse.com/#feat=same-site-cookie-attribute">rozumně podporované</a> v současných prohlížečích.</p>
+					</section>
+					<section>
+						<h1>Clickjacking</h1>
+						<p>Útočník na své stránce vyrobí iframe a otevře v ní aplikaci, na kterou chce útočit. Iframe
+							nastaví jako průhledný (opacity), takže ji uživatel nevidí i když do ní kliká. Iframe může mít
+							velikost i jen 1x1px a útočná stránka bude pohybovat výřezem tak, aby se klikalo na "správná" místa.
+							Iframe pak putuje spolu s kurzorem myši uživatele.</p>
+						<p>Nemusí jí jen o klikání, ale i vyplňování formulářů a drag'n'drop operace.</p>
+						<p>Pomocí adresy <i>view-source:https://www.domain.cz</i> a drag'n'drop je možné přesvědčit uživatele,
+							aby nevědomky poslal útočníkovi obsah stránky načtené přes HTTPS i s CSRF tokenem.</p>
+						<p>Používá se v kombinaci se sociálním inženýrstvím.</p>
+						<p><a href="https://www.youtube.com/watch?v=ZFCdibgaL6I">Vysvětlení techniky v detailu</a></p>
+					</section>
+					<section>
+						<h1>Ochrana proti Clickjackingu</h1>
+						<h2>Content Security Policy</h2>
+						<p>Použití <strong>Content Security Policy</strong> a direktivy <strong>frame-ancestors</strong>. Funkčně analogická k X-Frame-Options</p>
+						<pre><code class="hlxml" data-trim data-noescape>
+							Content-Security-Policy: frame-ancestors 'none';
+						</code></pre>
+						<h2>X-Frame-Options (starší řešení)</h2>
+						<p>Použití hlavičky <strong>X-Frame-Options</strong> pro povolení otevření aplikace v rámu.</p>
+						<ul>
+							<li><strong>DENY</strong> - zakázáno</li>
+							<li><strong>SAMEORIGIN</strong> - povoleno jen na stejné doméně</li>
+							<li><strong>ALLOW-FROM</strong> - 1 doména, odkud je možné použít rámy, není podporováno všemi prohlížeči</li>
+						</ul>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h2>Nedostatečně chráněné citlivé informace</h2>
+						<p>Proč bych měl přístup k tomuto skriptu zaheslovat, když nikdo neví jaké je jeho URL?</p>
+						<img src="img/web_security_basics/senat.jpg" height="400px"/>
+						<p>Apple v červnu 2018 <a href="https://medium.com/@jonathanbouman/how-i-hacked-apple-com-unrestricted-file-upload-bcda047e27e3">měl nezabepečený přístup k některým svým Amazon S3 bucketům</a>.</p>
+						<p>Některé Android aplikace si ukládají citlivá údaje <a href="https://fs0c131y.com/posts/2018-10-16_how-i-found-the-database-of-the-donald-daters-app/">v čitelné podobě</a>.</p>
+						<p>ČR má i slavnou kauzu týkající se nezabezpečeného directory listingu:<br/>
+							<a href="https://www.lupa.cz/clanky/porno-na-psp-cz-par-dalsich-pouceni-z-teto-kauzy/">Porno na webu poslanecké sněmovny</a>
+						</p>
+					</section>
+					<section>
+						<h1>Staré zálohy a "servisní" soubory</h1>
+						<p>Roboti automatizovaně prohledávají internet po specificky pojmenovaných souborech.</p>
+						<pre><code data-trim data-noescape>index.bak, index.old, index.php~, index.php_, backup.sql</code></pre>
+						<p>K vyhledání můžete použít třeba google:</p>
+						<pre><code data-trim data-noescape>filetype:php_ "password"</code></pre>
+						<pre><code data-trim data-noescape>site:home.tiscali.cz "index of"</code></pre>
+						<p>Častou chybou je také provozování aplikace v development režimu na produkčním prostředí.</p>
+					</section>
+					<section>
+						<h1>Únik repozitáře kódu</h1>
+						<p>Celá řada SW je instalována jako prostý "pull" z repository zdrojového kódu. Tedy zdrojové
+						   kódy leží často na produkčních serverech. V roce 2015 se zjistilo, že velké množství těchto
+						   repositářů je <a href="https://en.internetwache.org/dont-publicly-expose-git-or-how-we-downloaded-your-websites-sourcecode-an-analysis-of-alexas-1m-28-07-2015/">veřejně přístupných</a>.</p>
+						<img src="https://en.internetwache.org/images/posts/tlds.png" height="400px">
+					</section>
+					<section>
+						<h1>Lidé jsou nepoučitelní</h1>
+						<div class="position: relative; top: 0; left: 0;">
+							<img src="img/web_security_basics/ulozto.JPG"                height="600px" style="position: relative; top: 0px; left: 0px"/><br/>
+							<img class="fragment" src="img/web_security_basics/pwd1.jpg" height="600px" style="position: relative; top: -647px; left: 0px"/><br/>
+							<img class="fragment" src="img/web_security_basics/pwd2.jpg" height="600px" style="position: relative; top: -1294px; left: 0px"/><br/>
+						</div>
+					</section>
+					<section>
+						<h1>Útok zevnitř</h1>
+						<table>
+							<tr>
+								<td width="50%" style="vertical-align: top">
+									<ul>
+										<li>sociální inženýrství</li>
+										<li>phishing</li>
+										<li>fyzická penetrace firmy</li>
+									</ul>
+								</td>
+								<td width="50%" style="vertical-align: top">
+									<ul>
+										<li>je potřeba vzdělávat všechny včetně sekretářek</li>
+										<li>je potřeba vzdělávat pravidelně</li>
+										<li>co se týká bezpečnosti, je potřeba, aby všichni byli preventivně podezřívaví</li>
+										<li>pokud si to firma může dovolit, nechat si otestovat sociální/fyzický útok od profesionálů</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+						<div>
+							<p>95% všech úspěšných útoků je založeno na <a href="https://duo.com/blog/human-error-accounts-for-over-95-percent-of-security-incidents-reports-ibm">lidské chybě</a></p>
+							<p>Hrozivé historky: <a href="https://darknetdiaries.com/episode/40/">#1</a>, <a href="https://darknetdiaries.com/episode/41/">#2</a>, <a href="https://darknetdiaries.com/episode/36/">#3</a></p>
+						</div>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>XXE - XML External Entity (XXE) Processing</h1>
+						<p>Zneužití obrovských a rozličných <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">možností XML parserů</a>.</p>
+						<p>XML je možná trochu zastaralý formát, ale <a href="https://github.com/BuffaloWill/oxml_xxe">je použití všude možně</a> a díky jeho benefitům<br/>(čitelnost, schéma, web-services standardy) tu ještě nějakou dobu bude.</p>
+					</section>
+					<section>
+						<h1>XML Injection</h1>
+						<p>Uživateli umožníme vložit část, která XML poškodí.</p>
+						<pre><code class="hlxml" data-trim data-noescape>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;note&gt;
+	&lt;to&gt;Tove &lt; &lt;/to&gt;
+&lt;/note&gt;
+						</code></pre>
+						<p>Někdy nám server může vrátit takto hezky návodnou chybu včetně prozrazení interní struktury serveru.</p>
+						<img src="https://www.soom.cz/data/XXE_FPD.png">
+						<p>Uživateli umožníme vložit spustitelný kód:</p>
+						<pre><code class="hlxml" data-trim data-noescape>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;note&gt;
+	&lt;to&gt;Tove &amp;gt;script&amp;lt;alert(1)&amp;gt;/script&amp;lt;&lt;/to&gt;
+&lt;/note&gt;
+						</code></pre>
+					</section>
+					<section>
+						<h3>Podvržení obsahu</h3>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;users&gt;
+	&lt;user&gt;
+		&lt;login&gt;Tove&lt;/login&gt;
+		&lt;pwd&gt;heslo&lt;/pwd&gt;
+		&lt;role&gt;user&lt;/role&gt;
+	&lt;/user&gt;
+&lt;/users&gt;
+						</code></pre>
+						<p>Uživatel si následně založí účet s přihlašovacím jménem:</p>
+						<pre><code data-trim data-noescape style="font-size: smaller">Jan&amp;amp;lt;/login&amp;gt;&amp;lt;/user&amp;gt;&amp;lt;user&amp;gt;&amp;lt;login&amp;gt;Hacker&amp;lt;/login&amp;gt;&amp;lt;pwd&amp;gt;heslo&amp;lt;/pwd&amp;gt;&amp;lt;role&amp;gt;admin&amp;lt;/role&amp;gt;&amp;lt;/user&amp;gt;&amp;lt;user&amp;gt;&amp;lt;login&amp;gt;</code></pre>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;users&gt;
+	&lt;user&gt;
+		&lt;login&gt;Tove&lt;/login&gt;
+		&lt;pwd&gt;heslo&lt;/pwd&gt;
+		&lt;role&gt;user&lt;/role&gt;
+	&lt;/user&gt;
+	&lt;user&gt;
+		&lt;login&gt;Jan&lt;/login&gt;
+	&lt;/user&gt;
+	&lt;user&gt;
+		&lt;login&gt;Hacker&lt;/login&gt;
+		&lt;pwd&gt;heslo&lt;/pwd&gt;
+		&lt;role&gt;admin&lt;/role&gt;
+	&lt;/user&gt;
+	&lt;user&gt;
+		&lt;login&gt;&lt;/login&gt;
+		&lt;pwd&gt;heslo&lt;/pwd&gt;
+		&lt;role&gt;user&lt;/role&gt;
+	&lt;/user&gt;
+&lt;/users&gt;
+						</code></pre>
+					</section>
+					<section>
+						<h1>Document Type Definition</h1>
+						<pre><code class="hlxml" data-trim data-noescape>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE note
+[
+	&lt;!ELEMENT note (to,from,heading,body)&gt;
+	&lt;!ELEMENT to (#PCDATA)&gt;
+	&lt;!ELEMENT from (#PCDATA)&gt;
+	&lt;!ELEMENT heading (#PCDATA)&gt;
+	&lt;!ELEMENT body (#PCDATA)&gt;
+	&lt;!ENTITY friend "Jani"&gt;
+]&gt;
+&lt;note&gt;
+	&lt;to&gt;Tove&lt;/to&gt;
+	&lt;from&gt;&amp;friend;&lt;/from&gt;
+	&lt;heading&gt;Reminder&lt;/heading&gt;
+	&lt;body&gt;Don't forget me this weekend!&lt;/body&gt;
+&lt;/note&gt;
+						</code></pre>
+						<p>Více detailů o <a href="https://www.soom.cz/clanky/1137--XXE-a-dalsi-XML-zranitelnosti">XML zranitelnostech</a>.</p>
+					</section>
+					<section>
+						<h1>Local file disclusion</h1>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE contacts [
+	&lt;!ENTITY entita SYSTEM "/etc/passwd"&gt;
+]&gt;
+&lt;contacts&gt;
+  &lt;contact&gt;
+  &lt;login&gt;soubor&lt;/login&gt;
+  &lt;name&gt;&amp;entita;&lt;/name&gt;
+  &lt;/contact&gt;
+&lt;/contacts&gt;
+						</code></pre>
+					</section>
+					<section>
+						<h1>Server side request forgery</h1>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE contacts [
+	&lt;!ENTITY entita SYSTEM "http://www.target.com?attack-string"&gt;
+]&gt;
+&lt;contacts&gt;
+  &lt;contact&gt;
+  &lt;login&gt;soubor&lt;/login&gt;
+  &lt;name&gt;&amp;entita;&lt;/name&gt;
+  &lt;/contact&gt;
+&lt;/contacts&gt;
+						</code></pre>
+					</section>
+					<section>
+						<h2>Průnik na BOL.com e-commerce</h2>
+						<div style="text-align: center">
+							<img src="https://miro.medium.com/max/1736/1*9ro87L9jNBcVoW2pgssylA.gif">
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/xxe-at-bol-com-7d331186de54">XXE at Bol.com</a></small>
+					</section>
+					<section>
+						<h1>DoS</h1>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE contacts [
+	&lt;!ENTITY entita SYSTEM "/dev/random"&gt;
+]&gt;
+&lt;contact&gt;
+  &lt;login&gt;soubor&lt;/login&gt;
+  &lt;name&gt;&amp;entita;&lt;/name&gt;
+&lt;/contact&gt;
+						</code></pre>
+						<h2><a href="https://en.wikipedia.org/wiki/Billion_laughs_attack">Million LOLs attack</a></h2>
+						<pre><code class="hlxml" data-trim data-noescape style="font-size: smaller">
+&amp;lt;?xml version="1.0" encoding="utf-8"?&amp;gt;
+							&amp;lt;!DOCTYPE lolz [
+ &amp;lt;!ENTITY lol "lol"&amp;gt;
+ &amp;lt;!ENTITY lol1 "&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;"&amp;gt;
+ &amp;lt;!ENTITY lol2 "&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;"&amp;gt;
+ &amp;lt;!ENTITY lol3 "&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;"&amp;gt;
+ &amp;lt;!ENTITY lol4 "&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;"&amp;gt;
+ &amp;lt;!ENTITY lol5 "&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;"&amp;gt;
+ &amp;lt;!ENTITY lol6 "&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;"&amp;gt;
+ &amp;lt;!ENTITY lol7 "&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;"&amp;gt;
+ &amp;lt;!ENTITY lol8 "&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;"&amp;gt;
+ &amp;lt;!ENTITY lol9 "&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;"&amp;gt;
+]&amp;gt;
+&amp;lt;lolz&amp;gt;&amp;lol9;&amp;lt;/lolz&amp;gt;
+						</code></pre>
+						<p>Podobným problémem může trpět i váš <a href="https://github.com/yaml/pyyaml/issues/235">YAML parser</a>.</p>
+					</section>
+					<section>
+						<h1>Ponaučení</h1>
+						<ol>
+							<li>pro práci (nejen) s XML používejte knihovny k tomu určené!</li>
+							<li>XML z externího zdroje může být extrémně nebezpečné a proto je třeba se k němu tak chovat</li>
+							<li>konzumentem i producentem XML může být často i úplně jiná aplikace!<br/>(proxy útoky přes externí špatně zabezpečené aplikace)</li>
+							<li>seznamte se s tím, co všechno váš parser umí a zablokujte všechny funkce, co nepotřebujete</li>
+							<li>pokud to lze, limitujte objem a čas na parsování dokumentu</li>
+						</ol>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>XSS - cross site scripting</h1>
+						<p>Podvržení spustitelného JavaScript kódu to těla cizí stránky. Možností, jak XSS provést je velmi mnoho - doporučuji alespoň prolistovat knihu
+							<a href="https://www.soom.cz/data/Cross-Site_Scripting_v_praxi__Roman_Kummel.pdf">XSS v praxi</a> (přes 300 stránek), která je sice už starší, ale pořád dává
+						   slušný přehled o tom, co lze s XSS provádět.</p>
+						<h2>Co může útočník pomocí XSS provést<br/><small>(není kompletní výčet)</small></h2>
+						<ul>
+							<li>krádež session</li>
+							<li>krádež citlivých údajů (odposlouchávání, úprava DOM)</li>
+							<li>zjištění informací v jakých dalších aplikacích je uživatel přihlášen</li>
+							<li>využít kapacity počítače např. k těžení bitcoinů</li>
+							<li>skrz prohlížeč uživatele skenovat / útočit na jeho vnitřní síť (intranet)<br/>
+							    existuje řada nástrojů k vytvoření backdooru (<a href="https://beefproject.com/">BeEF</a>, <a href="https://github.com/portcullislabs/xssshell-xsstunnell">XSS Tunnel</a>)
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Zcizení přihlašovacích údajů pomocí reflected XSS</h2>
+						<div style="text-align: center">
+							<img src="https://miro.medium.com/max/1988/1*21SP-EeJItl7wDON1mBawg.gif">
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/reflected-xss-at-philips-com-e48bf8f9cd3c">Reflected XSS at Philips.com</a></small>
+					</section>
+					<section>
+						<h1>Browser Exploitation Framework (BeEF)</h1>
+						<p><a href="https://beefproject.com/">https://beefproject.com/</a></p>
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/WtLTtbe5JcM?start=467" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</section>
+					<section>
+						<h1>Plný přístup k obsahu webu</h1>
+						<p>a práci uživatele s ním, včetně všech vkládaných informací.</p>
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/afGv3Y7ugfw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<p>Z této funkcionality čerpá řada marketingových nástrojů jako je <a href="https://www.hotjar.com" target="_blank">HotJar</a> nebo český
+							<a href="https://www.smartlook.cz" target="_blank">SmartLook</a></p>
+					</section>
+					<section>
+						<h1>Ochrana proti XSS</h1>
+						<h2><a href="https://content-security-policy.com/">Content Security Policy</a></h2>
+						<p>Jediná skutečně efektivní obrana proti XSS.</p>
+						<dl>
+							<dt>default-src</dt>
+							<dd>výchozí politika pro načítání obsahu typu JavaScript, obrázky, CSS, fonty, AJAX požadavky, rámy, HTML5 média</dd>
+							<dt>script-src</dt>
+							<dd>politika pro načítání JavaScriptů
+								<pre><code class="hlxml" data-trim data-noescape>script-src 'self' www.google-analytics.com ajax.googleapis.com;</code></pre>
+								pozor na povolení <cite>unsafe-inline</cite> a <cite>unsafe-eval</cite>, protože to jsou místa, kam budou útočníci cílit
+							</dd>
+							<dt>form-action</dt>
+							<dd>definuje URL, kam mohou být směřovány POST akce form elementů na webu</dd>
+						</dl>
+						<p>Je možné provozovat i pouze jen v "reportovacím režimu" (<a href="https://report-uri.com/">existují služby pro zpracování dat</a>)</p>
+					</section>
+					<section>
+						<h1>Ochrana proti XSS</h1>
+						<h2>Důsledné escapování vstupů uživatele</h2>
+						<p>Problémem je, že pro odlišné "formáty" je nutné escapovat odlišně. Existuje celá řada escapovacích funkcí:</p>
+						<img src="img/web_security_basics/escaping.JPG" height="500px"/>
+					</section>
+				</section>
+				<section data-background="img/backgrounds/red.jpg">
+					<section>
+						<h1>Path traversal</h1>
+						<p>Útok pomocí zneužití navigace v adresářové struktuře. Nelze se spolehnout na to, že na OS
+						   nelze pojmenovat soubor, který by obsahoval znaky: <code>/.:</code>, pomocí BurpProxy lze
+						   podvrhnout cokoliv.</p>
+						<p>Pokud má uživatel možnost uploadovat soubory, může také zkusit uploadnout soubor s názvem:</p>
+						<pre><code data-trim data-noescape>../../../../../../etc/passwd</code></pre>
+						<p>nebo</p>
+						<pre><code data-trim data-noescape>..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></pre>
+						<p>A následně si ho stáhnout :)</p>
+					</section>
+					<section>
+						<h1>Local file inclusion</h1>
+						<p>U interpretovaných jazyků (PHP, JavaScript) se útočník může pokusit nahrát soubor na server
+						   do složky se zdrojovými soubory a nechat ho v rámci běžné obsluhy požadavku vyhodnotit.</p>
+						<p>
+						<div style="text-align: center">
+							<img src="https://cdn-images-1.medium.com/max/1200/1*iIMnV0gGyL4Bb0hZSAu0hQ.gif"/>
+						</div>
+						<p><small>Credits: <a href="https://medium.com/@jonathanbouman/local-file-inclusion-at-ikea-com-e695ed64d82f">Local File Inclusion at Ikea.com</a></small>
+					</section>
+				</section>
+                <!-- OUTRO -->
+                <section data-background="img/backgrounds/attention.jpg">
+                    <div style="display: inline-block; padding: 1em; background-color: rgba(0, 0, 0, 0.7);">
+                        <h1>Díky za pozornost</h1>
+                        <p><strong>Zdroje:</strong></p>
+                        <ul>
+	                        <li><a href="https://www.soom.cz/">SOOM.cz - portál o hackovacích technikách</a></li>
+	                        <li><a href="https://darknetdiaries.com/">Darknet diaries - podcast o temné straně internetu</a></li>
+	                        <li><a href="https://www.michalspacek.cz/clanky/">Blog Michala Špačka</a></li>
+	                        <li><a href="https://medium.com/@jonathanbouman">Blog Jonathana Boumena</a></li>
+                        </ul>
+                        <p>Kontaktujte mě na <a target="_blank" href="https://www.twitter.com/novoj">@Novoj</a> nebo <a target="_blank" href="mailto:novotnaci@gmail.com">novotnaci@gmail.com</a></p>
+                    </div>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="dist/plugin/markdown.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    history: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+                width: 1200,
+                height: 900,
+
+				transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+				plugins: [ RevealMarkdown ],
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
