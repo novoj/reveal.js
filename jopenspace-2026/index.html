@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Život je změna — jOpenSpace 2026</title>
+    <link rel="stylesheet" href="../dist/reset.css" />
+    <link rel="stylesheet" href="../dist/reveal.css" />
+    <link rel="stylesheet" href="../dist/theme/black.css" />
+    <style>
+      :root { --accent: #78b8ff; --muted: #a9b7c0; --surface: #12212a; }
+      .reveal { font-size: 34px; }
+      .reveal .slide-background.stack .slide-background-content { inset: 0; }
+      .reveal h1, .reveal h2 { color: #fff; letter-spacing: -0.04em; text-transform: none; }
+      .reveal h1 { font-size: 2.5em; }
+      .reveal h2 { font-size: 1.65em; }
+      .reveal p, .reveal li { line-height: 1.35; }
+      .reveal a { color: var(--accent); }
+      .eyebrow { color: var(--accent); font-size: .62em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+      .muted, .source { color: var(--muted); }
+      .source { font-size: .48em; line-height: 1.35; margin-top: 1.8em; }
+      .source.centered { text-align: center; }
+      .source.compact { font-size: .42em; margin-top: .65em; }
+      .quote { border-left: 7px solid var(--accent); margin: .8em auto; max-width: 90%; padding: .15em 0 .15em .8em; text-align: left; }
+      .quote p { font-size: 1.3em; font-style: italic; }
+      .quote cite { color: var(--muted); font-size: .66em; font-style: normal; }
+      .reveal .slides section.title-slide { padding: 1.15em 1.45em; text-align: left; }
+      .title-slide .title-copy { max-width: 10.5em; text-shadow: 0 2px 16px #000; }
+      .title-slide .eyebrow { margin: 0 0 1.05em; }
+      .title-slide h1 { font-size: 2.7em; line-height: .97; margin: 0; }
+      .title-slide .muted { font-size: .55em; margin: .75em 0 0; }
+      .title-slide .title-quote { border-left: 4px solid var(--accent); margin-top: 2.1em; max-width: 13.5em; padding: .1em 0 .1em .55em; }
+      .title-slide .title-quote p { font-size: .58em; line-height: 1.32; margin: 0; }
+      .title-slide .title-quote cite { color: var(--muted); display: block; font-size: .43em; font-style: normal; margin-top: .45em; }
+      .cards { display: grid; gap: .45em; grid-template-columns: 1fr 1fr; margin-top: .7em; text-align: left; }
+      .card { background: var(--surface); border-radius: .35em; padding: .55em .7em; }
+      .card strong { color: var(--accent); display: block; font-size: .72em; margin-bottom: .3em; }
+      .card span { font-size: .59em; line-height: 1.3; }
+      .evolution-slide { padding: .75em 1.05em !important; }
+      .evolution-slide h2 { font-size: 1.28em; line-height: 1.05; margin: .08em 0 .48em; }
+      .evolution-path { align-items: stretch; display: grid; gap: .28em; grid-template-columns: 1fr .55em 1fr .55em 1fr; }
+      .era-card { background: rgba(10, 24, 33, .9); border-radius: .34em; border-top: .16em solid var(--era-color); box-shadow: 0 8px 24px rgba(0, 0, 0, .25); min-height: 5.5em; padding: .42em .52em .5em; }
+      .era-card.manual { --era-color: #82929b; }
+      .era-card.agent { --era-color: #78b8ff; }
+      .era-card.fleet { --era-color: #f1b56d; background: rgba(20, 29, 34, .94); }
+      .era-meta { align-items: center; display: flex; justify-content: space-between; }
+      .era-step { color: var(--era-color); font-size: .4em; font-weight: 800; letter-spacing: .13em; }
+      .era-period { color: #8fa1ab; font-size: .31em; letter-spacing: .04em; }
+      .era-card h3 { color: #fff; font-size: .76em; line-height: 1.05; margin: .28em 0 .22em; text-transform: none; }
+      .era-mode { color: #e3ebef; font-size: .42em; font-weight: 650; line-height: 1.28; margin: 0; min-height: 2.55em; }
+      .era-tool { color: #98aab4; font-size: .33em; margin: .22em 0 .42em; }
+      .era-output { border-top: 1px solid rgba(255, 255, 255, .14); padding-top: .33em; }
+      .era-output strong { color: var(--era-color); display: block; font-size: 1.02em; line-height: 1; }
+      .era-output span { color: #bdcbd2; display: block; font-size: .31em; margin-top: .16em; }
+      .era-bar { background: rgba(255, 255, 255, .1); border-radius: 1em; height: .13em; margin-top: .3em; overflow: hidden; }
+      .era-bar i { background: var(--era-color); border-radius: inherit; display: block; height: 100%; width: var(--level); }
+      .era-tests { align-items: baseline; display: flex; gap: .24em; margin-top: .3em; }
+      .era-tests strong { color: var(--era-color); font-size: .5em; }
+      .era-tests span { color: #9fb0b9; font-size: .28em; line-height: 1.15; }
+      .era-arrow { align-items: center; color: #8fbfec; display: flex; font-size: 1em; font-weight: 800; justify-content: center; }
+      .evolution-proof { display: grid; gap: .28em; grid-template-columns: 1fr .55em 1fr .55em 1fr; margin-top: .4em; }
+      .methodology-box, .productivity-result { align-items: center; border-radius: .3em; display: flex; min-height: 1.75em; padding: .32em .48em; }
+      .methodology-box { background: rgba(14, 39, 55, .92); border-left: 4px solid var(--accent); gap: .5em; grid-column: 1 / 4; }
+      .methodology-box span { color: #c3d0d7; font-size: .3em; line-height: 1.3; }
+      .methodology-box a { flex: 0 0 auto; font-size: .3em; line-height: 1.25; text-align: right; }
+      .productivity-result { background: rgba(62, 39, 20, .86); border-right: 4px solid #f1b56d; gap: .34em; justify-content: center; }
+      .productivity-result { grid-column: 5; }
+      .productivity-result strong { color: #f1b56d; font-size: 1.12em; line-height: 1; }
+      .productivity-result span { color: #f8e9d7; font-size: .36em; font-weight: 650; line-height: 1.15; max-width: 8em; }
+      .evolution-slide .source { margin-top: .42em; }
+      .cost-slide { padding: .78em 1.05em !important; }
+      .cost-slide h2 { font-size: 1.42em; line-height: 1.05; margin: .08em 0 .2em; }
+      .cost-slide .cost-subtitle { color: #f3c5b5; font-size: .65em; margin: 0 0 .55em; }
+      .cost-grid { display: grid; gap: .4em; grid-template-columns: repeat(3, 1fr); }
+      .cost-card { background: rgba(24, 17, 22, .9); border-radius: .34em; border-top: .15em solid #d87861; min-height: 3.8em; padding: .42em .55em; }
+      .cost-card .cost-label { color: #c7b7b7; font-size: .35em; font-weight: 700; letter-spacing: .08em; margin: 0; text-transform: uppercase; }
+      .cost-card strong { color: #ff9a7f; display: block; font-size: 1.05em; line-height: 1; margin: .2em 0 .15em; }
+      .cost-card .cost-series { color: #f2e4e0; font-size: .42em; margin: 0; }
+      .cost-card .cost-series span { color: #9e8d8d; }
+      .dopamine-box { background: rgba(34, 19, 25, .93); border-left: 5px solid #f1b56d; border-radius: 0 .36em .36em 0; margin-top: .45em; padding: .38em .55em .46em; }
+      .dopamine-head { align-items: baseline; display: flex; gap: .45em; }
+      .dopamine-head strong { color: #f1b56d; font-size: .56em; text-transform: uppercase; }
+      .dopamine-head span { color: #f6eee9; font-size: .52em; font-weight: 650; }
+      .dopamine-insight { color: #d7c4be; font-size: .34em; margin: .32em 0 0; }
+      .dopamine-insight strong { color: #fff; }
+      .dopamine-loop { align-items: center; display: flex; gap: .28em; margin-top: .35em; }
+      .dopamine-loop span { background: rgba(255, 255, 255, .075); border-radius: 2em; color: #e8d9d3; font-size: .36em; padding: .26em .55em; }
+      .dopamine-loop i { color: #f1b56d; font-size: .52em; font-style: normal; font-weight: 800; }
+      .cost-caveat { background: rgba(20, 10, 15, .88); border-radius: .28em; color: #eadfdf; font-size: .36em; line-height: 1.3; margin: .38em 0 0; padding: .34em .55em; text-align: left; }
+      .release-slide { padding: .72em 1.05em !important; }
+      .release-slide h2 { font-size: 1.48em; margin: .08em 0 .15em; }
+      .release-slide > .muted { font-size: .5em; margin: 0; max-width: 34em; }
+      .release-facts { display: grid; gap: .34em; grid-template-columns: repeat(3, 1fr); margin-top: .42em; text-align: left; }
+      .release-facts .card { min-height: 3.35em; padding: .36em .48em; }
+      .release-facts .card strong { font-size: .64em; margin-bottom: .2em; }
+      .release-facts .card span { display: block; font-size: .45em; line-height: 1.24; }
+      .release-proof { align-items: baseline; display: flex; flex-wrap: wrap; gap: .12em .32em; margin: .16em 0 .2em; }
+      .release-proof b { color: #f1b56d; font-size: .82em; line-height: 1; }
+      .release-proof small { color: #c3d0d7; font-size: .32em; font-weight: 650; line-height: 1.15; }
+      .release-proof.dual { gap: .24em; }
+      .release-proof.dual small { background: rgba(255, 255, 255, .07); border-radius: 2em; padding: .25em .42em; }
+      .release-proof.dual small b { font-size: 1.7em; margin-right: .12em; }
+      .decision-slide .subtitle { color: var(--accent); font-size: 1.05em; font-weight: 700; margin: -.2em 0 .55em; }
+      .decision-slide .card span { font-size: .54em; }
+      .decision-list { font-size: .5em; line-height: 1.35; margin: .2em 0 0; padding-left: 1.1em; }
+      .decision-list li { margin: .16em 0; }
+      .takeaway { color: var(--accent); font-size: 1.3em; font-weight: 700; margin-top: .8em; }
+      .reveal .slides section { text-align: left; }
+      .reveal .slides section.center { text-align: center; }
+      .reveal .slides section.image-slide { padding: 1.2em 1.5em; }
+      .image-slide .slide-copy { max-width: 11em; text-shadow: 0 2px 14px #000; }
+      .image-slide .slide-copy h2 { font-size: 1.35em; }
+      .image-slide .slide-copy p { font-size: .7em; }
+      .choice-slide { padding: .85em 1.05em !important; }
+      .choice-slide .eyebrow { text-align: center; text-shadow: 0 2px 12px #000; }
+      .choice-columns { display: grid; gap: 7.1em; grid-template-columns: 1fr 1fr; margin-top: .2em; }
+      .choice-panel { background: rgba(4, 10, 15, .78); border-radius: .42em; box-shadow: 0 8px 26px rgba(0, 0, 0, .32); min-height: 7.1em; padding: .45em .65em; }
+      .choice-panel h2 { font-size: .82em; margin: 0 0 .25em; }
+      .choice-panel ul { font-size: .48em; line-height: 1.28; margin: 0; padding-left: 1.05em; }
+      .choice-panel li { margin: .08em 0; }
+      .choice-panel.blockers { border-left: 4px solid #68a8e8; }
+      .choice-panel.blockers h2 { color: #a8d5ff; }
+      .choice-panel.accelerators { border-right: 4px solid #ff6767; text-align: right; }
+      .choice-panel.accelerators h2 { color: #ffaaa1; }
+      .choice-panel.accelerators ul { list-style: none; padding: 0; text-align: right; }
+      .choice-panel.accelerators li { padding-right: 1em; position: relative; }
+      .choice-panel.accelerators li::after { color: #fff; content: "•"; position: absolute; right: .15em; top: 0; }
+      .adoption-slide { padding: .8em 1.05em !important; }
+      .adoption-copy { background: rgba(4, 10, 15, .76); border-left: 4px solid var(--accent); border-radius: 0 .42em .42em 0; max-width: 14.6em; padding: .45em .65em .55em; text-shadow: 0 2px 14px #000; }
+      .adoption-copy .eyebrow { margin: 0 0 .25em; }
+      .adoption-copy h2 { font-size: 1.08em; line-height: 1.05; margin: 0 0 .28em; }
+      .adoption-copy > p { color: #d6e0e5; font-size: .5em; line-height: 1.3; margin: 0 0 .5em; }
+      .adoption-grid { display: grid; gap: .26em; grid-template-columns: 1fr 1fr; }
+      .adoption-item { background: rgba(18, 33, 42, .82); border-radius: .24em; color: #e7f1f5; font-size: .39em; line-height: 1.24; padding: .3em .4em; }
+      .adoption-item strong { color: var(--accent); font-weight: 700; }
+      .reality-list { color: #f1f5f7; font-size: .52em; line-height: 1.32; margin: .1em 0 0; padding-left: 1.05em; }
+      .reality-list li { margin: .23em 0; }
+      .case-study-slide { padding: .95em 1.15em !important; }
+      .case-study-card { background: rgba(4, 10, 15, .8); border-left: 5px solid var(--accent); border-radius: 0 .48em .48em 0; max-width: 14.5em; padding: .65em .8em .75em; text-shadow: 0 2px 14px #000; }
+      .case-study-card .eyebrow { margin: 0 0 .35em; }
+      .case-study-card h2 { font-size: 1.38em; line-height: 1.03; margin: 0 0 .38em; }
+      .case-study-card h2 a { color: inherit; text-decoration: none; }
+      .case-study-card .case-metric { color: #f1b56d; font-size: .65em; font-weight: 650; letter-spacing: .01em; line-height: 1.24; margin: 0 0 .6em; }
+      .case-study-card .case-detail { color: #d9e3e9; font-size: .55em; line-height: 1.34; margin: 0; }
+      .debugger-layout { align-items: center; display: grid; gap: .65em; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); height: 100%; }
+      .debugger-layout .case-study-card { max-width: none; }
+      .debugger-capabilities { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; font-size: .43em; line-height: 1.35; margin: .65em 0 0; padding-top: .5em; }
+      .debugger-quote { background: rgba(24, 34, 42, .88); border-left: 3px solid var(--accent); box-shadow: 4px 6px 13px rgba(0, 0, 0, .35); color: #f3f7fa; display: inline-block; font-size: .47em; font-style: italic; line-height: 1.32; margin: .75em 0 .1em .8em; padding: .38em .55em; transform: rotate(-4.1deg); transform-origin: center; }
+      .debugger-quote cite { color: #a9b7c0; display: block; font-size: .8em; font-style: normal; margin-top: .35em; }
+      .debugger-demo { background: #1e1e1e; border: 2px solid rgba(120, 184, 255, .75); border-radius: .25em; box-shadow: 0 10px 28px rgba(0, 0, 0, .55); margin: 0; overflow: hidden; transform: rotate(-1.8deg); }
+      .debugger-demo img { display: block; font-size: .4em; margin: 0; max-height: none; max-width: 100%; min-height: 7em; width: 100%; }
+      .debugger-demo figcaption { background: rgba(4, 10, 15, .95); color: #c8d8e2; font-size: .36em; line-height: 1.25; padding: .4em .5em; text-align: left; }
+      .resource-guru-layout { align-items: center; display: grid; gap: .65em; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); height: 100%; }
+      .resource-guru-layout .case-study-card { max-width: none; }
+      .resource-guru-features { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; font-size: .43em; line-height: 1.35; margin: .62em 0 0; padding-top: .48em; }
+      .case-quote { background: rgba(24, 34, 42, .88); border-left: 3px solid var(--accent); box-shadow: 4px 6px 13px rgba(0, 0, 0, .35); color: #f3f7fa; display: inline-block; font-size: .47em; font-style: italic; line-height: 1.32; margin: .72em 0 .1em .8em; padding: .38em .55em; transform: rotate(1.7deg); transform-origin: center; }
+      .case-quote cite { color: #a9b7c0; display: block; font-size: .8em; font-style: normal; margin-top: .35em; }
+      .resource-guru-shots { align-self: center; height: 11.4em; position: relative; }
+      .resource-guru-shot { background: #f4f4f4; border: 2px solid rgba(120, 184, 255, .75); border-radius: .25em; box-shadow: 0 10px 28px rgba(0, 0, 0, .55); margin: 0; overflow: hidden; position: absolute; width: 86%; }
+      .resource-guru-shot:first-child { right: 0; top: .2em; transform: rotate(3.6deg); z-index: 2; }
+      .resource-guru-shot:last-child { bottom: .1em; left: 0; transform: rotate(-4.1deg); z-index: 1; }
+      .resource-guru-shot img { display: block; height: 5em; margin: 0; max-height: none; max-width: 100%; object-fit: cover; object-position: center; width: 100%; }
+      .resource-guru-shot figcaption { background: rgba(4, 10, 15, .95); color: #c8d8e2; font-size: .34em; line-height: 1.25; padding: .35em .5em; text-align: left; }
+      .hole-layout { align-items: center; display: grid; gap: .72em; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); height: 100%; }
+      .hole-layout .case-study-card { max-width: none; }
+      .hole-safety { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; font-size: .43em; line-height: 1.35; margin: .62em 0 0; padding-top: .48em; }
+      .hole-safety code { color: #f1ba78; }
+      .hole-terminal-wrap { position: relative; transform: rotate(2.65deg); transform-origin: center; }
+      .hole-terminal { border: 2px solid rgba(120, 184, 255, .78); border-radius: .42em; box-shadow: 0 14px 30px rgba(0, 0, 0, .58); margin: 0; overflow: hidden; }
+      .hole-terminal img { display: block; margin: 0; max-height: none; max-width: 100%; width: 100%; }
+      .hole-yolo-zoom { background: #030506; border: 2px solid #f09d45; border-radius: .22em; bottom: -.78em; box-shadow: 0 8px 18px rgba(0, 0, 0, .62); height: 1.62em; left: -.35em; overflow: hidden; position: absolute; width: 4.9em; z-index: 2; }
+      .hole-yolo-zoom::before { background: #d05a42; color: #fff; content: "YOLO MODE"; font-family: system-ui, sans-serif; font-size: .24em; font-weight: 800; left: -.1em; letter-spacing: .08em; padding: .22em .35em; position: absolute; text-shadow: none; top: -.04em; z-index: 3; }
+      .hole-yolo-zoom::after { background: rgba(3, 5, 6, .8); color: #ffd084; content: "› bypass permissions"; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .36em; font-weight: 700; left: .45em; padding: .08em .18em; position: absolute; text-shadow: 0 1px 3px #000; top: .92em; white-space: nowrap; z-index: 3; }
+      .hole-yolo-zoom img { bottom: 0; left: 0; max-width: none; position: absolute; width: 510%; }
+      .riffado-layout { align-items: center; display: grid; gap: .72em; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); height: 100%; }
+      .riffado-layout .case-study-card { max-width: none; }
+      .riffado-features { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; display: grid; font-size: .39em; gap: .24em .8em; grid-template-columns: 1fr 1fr; line-height: 1.28; list-style: none !important; margin: .62em 0 0; padding: .5em 0 0 !important; }
+      .riffado-features li::before { color: #f1b56d; content: "◆"; font-size: .72em; margin-right: .38em; }
+      .riffado-dashboard { background: #292a27; border: 2px solid rgba(120, 184, 255, .78); border-radius: .35em; box-shadow: 0 14px 30px rgba(0, 0, 0, .58); margin: 0; overflow: hidden; transform: rotate(-2.7deg); transform-origin: center; }
+      .riffado-dashboard img { display: block; margin: 0; max-height: none; max-width: 100%; width: 100%; }
+      .shop-layout { align-items: center; display: grid; gap: .72em; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); height: 100%; }
+      .shop-layout .case-study-card { max-width: none; }
+      .shop-caveat { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; font-size: .43em; line-height: 1.35; margin: .62em 0 0; padding-top: .48em; }
+      .shop-caveat strong { color: #f1b56d; }
+      .shop-shots { align-self: center; height: 11.8em; position: relative; }
+      .claude-chat-layout { align-items: center; display: grid; gap: .72em; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); height: 100%; }
+      .claude-chat-layout .case-study-card { max-width: none; }
+      .claude-chat-scope { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; font-size: .43em; line-height: 1.35; margin: .62em 0 0; padding-top: .48em; }
+      .claude-chat-features { border-top: 1px solid rgba(120, 184, 255, .45); color: #d9e3e9; display: grid; font-size: .39em; gap: .24em .8em; grid-template-columns: 1fr 1fr; line-height: 1.28; list-style: none !important; margin: .62em 0 0; padding: .5em 0 0 !important; }
+      .claude-chat-features li::before { color: #f1b56d; content: "◆"; font-size: .72em; margin-right: .38em; }
+      .claude-chat-credits { color: #94aab9; font-size: .34em; margin: .55em 0 0; }
+      .claude-chat-credits strong { color: var(--accent); font-weight: 600; }
+      .claude-chat-quote { font-size: .39em; margin: .62em 0 0 .55em; transform: rotate(-2.1deg); }
+      .claude-chat-shot { background: #222326; border: 2px solid rgba(120, 184, 255, .78); border-radius: .35em; box-shadow: 0 14px 30px rgba(0, 0, 0, .58); margin: 0; overflow: hidden; transform: rotate(2.35deg); transform-origin: center; }
+      .claude-chat-shot img { display: block; margin: 0; max-height: none; max-width: 100%; width: 100%; }
+      .claude-chat-shot figcaption { background: rgba(4, 10, 15, .95); color: #c8d8e2; font-size: .36em; line-height: 1.25; padding: .38em .5em; text-align: left; }
+      .shop-shot { background: #1b1d21; border: 2px solid rgba(120, 184, 255, .78); border-radius: .3em; box-shadow: 0 14px 30px rgba(0, 0, 0, .58); margin: 0; overflow: hidden; position: absolute; }
+      .shop-shot:first-child { right: 0; top: .15em; transform: rotate(3.25deg); width: 74%; z-index: 2; }
+      .shop-shot:last-child { bottom: .05em; left: 0; transform: rotate(-3.55deg); width: 91%; z-index: 1; }
+      .shop-shot img { display: block; height: 5.5em; margin: 0; max-height: none; max-width: 100%; object-fit: cover; object-position: top; width: 100%; }
+      .shop-shot:last-child img { height: 4.6em; }
+      .shop-shot figcaption { background: rgba(4, 10, 15, .94); color: #c8d8e2; font-size: .31em; line-height: 1.2; padding: .28em .45em; text-align: left; }
+      .shop-quote-stage { height: 2.15em; margin: .72em 0 .1em .8em; position: relative; }
+      .shop-quote-stage .case-quote { left: 0; margin: 0; position: absolute; top: 0; }
+      .shop-paraphrase { transition: opacity 220ms ease, transform 220ms ease; }
+      .shop-slide:has(.shop-paraphrase.visible) .shop-original { opacity: 0; transform: rotate(-3.7deg) translateY(-.14em); }
+      .closing-slide .closing-quote { border-left: 4px solid var(--accent); color: #f5f8fa; font-size: .78em; font-style: italic; line-height: 1.34; margin: .8em auto .7em; max-width: 20em; padding: .1em 0 .1em .72em; text-align: left; }
+      .closing-slide .closing-quote cite { color: var(--muted); display: block; font-size: .55em; font-style: normal; margin-top: .6em; }
+      .closing-slide .closing-afterword { color: var(--accent); font-size: 1.12em; font-weight: 700; line-height: 1.16; margin: .55em auto 0; max-width: 17em; }
+      .closing-slide .closing-bio { border-top: 1px solid rgba(120, 184, 255, .55); color: #c8d8e2; font-size: .5em; line-height: 1.4; margin: 1.55em auto 0; max-width: 24em; padding-top: .7em; }
+      .closing-slide .closing-bio strong { color: var(--accent); }
+      .closing-slide .eyebrow,
+      .closing-slide .closing-afterword,
+      .closing-slide .closing-bio strong { color: #f4f8ff; text-shadow: 0 2px 12px rgba(0, 0, 0, .95); }
+      .resource-guru-slide .case-quote { transform: rotate(3.4deg); }
+      .hole-slide .case-quote { transform: rotate(-2.8deg); }
+      .riffado-slide .case-quote { transform: rotate(4.4deg); }
+      .shop-slide .case-quote { transform: rotate(-3.7deg); }
+      .reveal .progress { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section class="title-slide" data-background-image="assets/title-life-is-change-background.png" data-background-size="cover" data-background-position="center">
+          <div class="title-copy">
+            <p class="eyebrow">jOpenSpace 2026</p>
+            <h1>Život je změna</h1>
+            <p class="muted">Jan Novotný · @Novoj · evitaDB / FG Forrest</p>
+            <div class="title-quote">
+              <p>„Život je jako jízda na kole. Musíš se hýbat vpřed, abys neztratil rovnováhu.“</p>
+              <cite>Albert Einstein</cite>
+            </div>
+          </div>
+          <aside class="notes">Čas: 25 s. Začít bez představování: ještě před rokem jsem většinu kódu psal sám, dnes řídím práci flotily agentů. Změna se nejevila jako volba, prostě se stala realitou. Jméno a firmu nechat na slidu. Přechod: „A co se za poslední rok změnilo vám?“</aside>
+        </section>
+
+        <section>
+          <section class="center" data-background-image="assets/agent-workflow-background.png" data-background-size="cover" data-background-position="center">
+            <p class="eyebrow">Otázka pro vás</p>
+            <h2>Co se u vás změnilo<br>za poslední rok?</h2>
+            <p class="source">V neděli po obědě bych rád uspořádal otevřený diskusní kruh: výměnu zkušeností, postřehů, tipů a úvah o tom, co AI prakticky odblokovala ve firmách i jednotlivcům.</p>
+            <aside class="notes">Čas: 20 s. Otázku položit a dvě sekundy mlčet; nečekat na veřejné odpovědi. Pozvat na nedělní diskusní kruh jedinou větou. Přechod: „Já vám teď ukážu, co se změnilo mně.“</aside>
+          </section>
+          <section class="evolution-slide" data-background-image="assets/agent-workflow-background.png" data-background-size="cover" data-background-position="center">
+            <p class="eyebrow">Můj příběh</p>
+            <h2>U mě se změnilo téměř všechno kromě toho podstatného.</h2>
+            <div class="evolution-path">
+              <article class="era-card manual">
+                <div class="era-meta"><span class="era-step">01</span><span class="era-period">09/2024–11/2025</span></div>
+                <h3>Ručně psaný kód</h3>
+                <p class="era-mode">Já píšu.<br>Copilot doplňuje.</p>
+                <p class="era-tool">IDE · autocomplete</p>
+                <div class="era-output"><strong>1 189</strong><span>přidaných řádků / odpracovaný den</span><div class="era-bar"><i style="--level:18.4%"></i></div></div>
+                <div class="era-tests"><strong>103</strong><span>nových testovacích metod / měsíc</span></div>
+              </article>
+              <div class="era-arrow" aria-hidden="true">→</div>
+              <article class="era-card agent">
+                <div class="era-meta"><span class="era-step">02</span><span class="era-period">12/2025–01/2026</span></div>
+                <h3>Jeden agent</h3>
+                <p class="era-mode">Agent píše.<br>Já vedu jeden úkol.</p>
+                <p class="era-tool">Claude Code · agentní vývoj</p>
+                <div class="era-output"><strong>2 132</strong><span>přidaných řádků / odpracovaný den</span><div class="era-bar"><i style="--level:33%"></i></div></div>
+                <div class="era-tests"><strong>279</strong><span>nových testovacích metod / měsíc</span></div>
+              </article>
+              <div class="era-arrow" aria-hidden="true">→</div>
+              <article class="era-card fleet">
+                <div class="era-meta"><span class="era-step">03</span><span class="era-period">02/2026–08/2026</span></div>
+                <h3>Flotila agentů</h3>
+                <p class="era-mode">Agenti píší.<br>Já řídím paralelní práci.</p>
+                <p class="era-tool">subagenti · skills · proces</p>
+                <div class="era-output"><strong>6 462</strong><span>přidaných řádků / odpracovaný den</span><div class="era-bar"><i style="--level:100%"></i></div></div>
+                <div class="era-tests"><strong>2 270</strong><span>nových testovacích metod / měsíc</span></div>
+              </article>
+            </div>
+            <div class="evolution-proof">
+              <div class="methodology-box"><span>Vlastní data ze 16 repozitářů; srovnání úplných měsíců ve třech pracovních érách. Čísla popisují praktickou kapacitu, ne hodnotu programátora.</span><a href="https://claude.ai/artifact/WDnD4yGHDZveRaFU8GQ75j">Metodika<br>a kompletní data →</a></div>
+              <div class="productivity-result"><strong>~5×</strong><span>subjektivní produktivita</span></div>
+            </div>
+            <aside class="notes">Čas: 45 s. Vyprávět zleva doprava jako tři změny pracovního režimu: 1) píšu ručně a Copilot jen doplňuje v IDE; 2) Claude Code už píše celé změny, ale vedu vždy jednoho agenta na jednom úkolu; 3) s flotilou řídím několik agentů a úkolů paralelně. U každé fáze ukázat obě rostoucí metriky: přidané řádky za odpracovaný den 1 189 → 2 132 → 6 462 a nové testovací metody za měsíc 103 → 279 → 2 270. „~5×“ je moje subjektivní zkušenost, kterou data řádově potvrzují; LOC nejsou hodnota programátora. Přechod: „Jenže tahle produktivita nebyla zadarmo.“</aside>
+          </section>
+          <section class="cost-slide" data-background-image="assets/agent-workflow-background-red.png" data-background-size="cover" data-background-position="center">
+            <p class="eyebrow">Odvrácená strana</p>
+            <h2>~5× produktivita má svou cenu.</h2>
+            <p class="cost-subtitle">Práce se mi rozlila do dalších dní, nocí a víkendů.</p>
+            <div class="cost-grid">
+              <div class="cost-card">
+                <p class="cost-label">Odpracované dny / měsíc</p>
+                <strong>+26 %</strong>
+                <p class="cost-series">19,9 <span>→ 22,0 →</span> 25,1</p>
+              </div>
+              <div class="cost-card">
+                <p class="cost-label">Commity v noci</p>
+                <strong>3×</strong>
+                <p class="cost-series">3,6 % <span>→ 5,3 % →</span> 10,9 %</p>
+              </div>
+              <div class="cost-card">
+                <p class="cost-label">Commity o víkendu</p>
+                <strong>2,2×</strong>
+                <p class="cost-series">11,2 % <span>→ 17,4 % →</span> 24,2 %</p>
+              </div>
+            </div>
+            <div class="dopamine-box">
+              <div class="dopamine-head"><strong>Odměnová smyčka</strong><span>Další výsledek je jen jeden prompt daleko.</span></div>
+              <div class="dopamine-loop" aria-label="Zvědavost vede k promptu, prompt k odpovědi, odpověď k výsledku a výsledek k další otázce."><span>zvědavost</span><i>→</i><span>prompt</span><i>→</i><span>odpověď</span><i>→</i><span>výsledek</span><i>→</i><span>další otázka</span><i>↺</i></div>
+              <p class="dopamine-insight">Ne nutně více radosti. <strong>Hlavně větší chuť pokračovat.</strong></p>
+            </div>
+            <p class="cost-caveat">Data neměří odpracované hodiny. Ukazují, že práce obsadila více kalendářních dní a větší podíl nocí a víkendů. Stejné tři éry: ručně → jeden agent → flotila.</p>
+            <aside class="notes">Čas: 40 s. Tohle je osobní přiznání, ne oslava výkonu. Data neumějí změřit skutečně odpracované hodiny, ale jasně ukazují rozpínání práce: 19,9 → 25,1 aktivního dne měsíčně, trojnásobný podíl nočních commitů a více než dvojnásobný podíl víkendových. Pojmenovat vlastní zkušenost: odpověď, výzkum a funkční výsledek jsou tak blízko, že každý výsledek okamžitě otevře další otázku. Agenti nepotřebují spát, ale já mám tendenci je dál zadávat a kontrolovat. „Dopaminový loop“ použít jen jako osobní zkratku, ne jako naměřenou diagnózu: výzkum spojuje zvědavost a hledání informací s dopaminergními okruhy a u dopaminu rozlišuje spíš „wanting“ než „liking“. Přímé měření při práci s coding agenty nemáme. Zdroje: Gruber et al. 2014, Lydon-Staley et al. 2022, Berridge 2016. Přechod: „A přesto je těžké zpomalit, protože ty výsledky nejsou hypotéza.“</aside>
+          </section>
+          <section class="release-slide" data-background-image="assets/agent-workflow-background.png" data-background-size="cover" data-background-position="center">
+            <p class="eyebrow">První agentní release</p>
+            <h2>U <a href="https://evitadb.io">evitaDB</a> už to není hypotéza.</h2>
+            <p class="muted">První reálný release, do kterého šla primárně agentní práce — vlastní zkušenost doplněná veřejným repozitářem a produkční telemetrií.</p>
+            <div class="release-facts">
+              <div class="card"><strong>Stabilizace</strong><div class="release-proof"><b>+119 %</b><small>testovacích metod</small></div><span>Méně problémů a chyb; souvisí to i s výrazně větším množstvím testů.</span></div>
+              <div class="card"><strong>Paměť a data</strong><div class="release-proof dual"><small><b>−35 %</b> špičkový heap</small><small><b>−46 %</b> data na disku</small></div><span>Potvrzeno ve 4 ze 4 upgradovaných prostředí proti kontrolní skupině.</span></div>
+              <div class="card"><strong>Výkon</strong><div class="release-proof"><b>−73 %</b><small>zpoždění zápisu</small></div><span>Násobně rychlejší indexace, rychlejší náročné dotazy — a měřitelně rychlejší zápis.</span></div>
+              <div class="card"><strong>Provoz</strong><span>Problémy dokážeme analyzovat a vyřešit v řádu jednotek hodin.</span></div>
+              <div class="card"><strong>Funkce</strong><div class="release-proof"><b>21 + 71</b><small>funkcí + oprav ve v2026.2.0</small></div><span>Současně jsme dodali výrazně více nových funkcí.</span></div>
+              <div class="card"><strong>Vyřešení záludných problémů</strong><span>Reaktivní úlohy v Armeria, práce na event loopu i gRPC bidi streaming jsme dořešili až s agenty.</span></div>
+            </div>
+            <aside class="notes">Čas: 40 s. Nečíst šest karet. Tři naměřené produkční dopady v2026.2.x proti v2026.1.x: velikost katalogu na disku −46 %, špičkový heap −35 % a zpoždění zápisu −73 %. Všechny se potvrdily ve 4 ze 4 porovnatelných upgradů a oddělily se od kontrolní skupiny. Veřejný repozitář dokládá 21 funkcí, 71 oprav a nárůst počtu testovacích metod z 8 690 na 19 021 (+119 %). Zbytek pojmenovat jako vlastní zkušenost: méně problémů, násobně rychlejší indexace, rychlejší náročné dotazy a rychlé řešení provozních problémů. Produkční telemetrie neumí férově změřit kompletní indexaci ani oddělit náročné typy dotazů. Historická metrika chyb je znečištěná klientskou chybou reportovanou jako serverová; příčina je dnes opravená, stará data ale zůstávají nesrovnatelná. Pro férovost: ne všechno se zlepšilo — na jednom prostředí po upgradu výrazně přibylo hoření zdravotního alertu. Jako konkrétní příklad zmínit reaktivní úlohy v Armeria / event loop / gRPC bidi streaming, na kterých jsme se dříve zasekli. Přechod: „Změnil se výkon práce. Nezměnilo se ale to, kdo za výsledek odpovídá.“</aside>
+          </section>
+          <section class="decision-slide" data-background-image="assets/agent-workflow-background.png" data-background-size="cover" data-background-position="center">
+            <p class="eyebrow">Co zůstalo stejné</p>
+            <h2>AI zrychlila práci.</h2>
+            <p class="subtitle">Neudělala rozhodnutí za mě (zatím).</p>
+            <div class="cards">
+              <div class="card"><strong>Směr</strong><ul class="decision-list"><li>Co má smysl řešit?</li><li>Co chceme řešit?</li><li>O co se chceme starat a kolik nás to bude stát?</li></ul></div>
+              <div class="card"><strong>Odpovědnost</strong><ul class="decision-list"><li>Co pustíme do produkce?</li><li>Jak to zkontrolujeme (reviews, quality gates)?</li><li>Jak to budeme provozovat a monitorovat?</li></ul></div>
+              <div class="card"><strong>Úsudek</strong><ul class="decision-list"><li>Čemu věřit? Co ověřit?</li><li>Co odmítnout a co schválit?</li><li>Jaká data pro kvalifikované rozhodnutí potřebujeme?</li></ul></div>
+              <div class="card"><strong>Zvědavost</strong><ul class="decision-list"><li>Kam se podívat, když už experiment není drahý?</li><li>Jak to dělají jinde, jak to funguje?</li><li>Jde to lépe, rychleji, úsporněji?</li><li>Kde jsou teď moje hranice?</li></ul></div>
+            </div>
+            <aside class="notes">Čas: 30 s. Nečíst otázky. Pojmenovat jen čtyři lidské role: směr, odpovědnost, úsudek a zvědavost. Agent umí udělat obrovské množství práce; pořád ale rozhoduji, co má smysl, čemu věřit a co pustit do produkce. Přechod: „Proto otázka není jen co AI umí, ale co nám brání ji opravdu použít.“</aside>
+          </section>
+        </section>
+
+        <section>
+          <section class="choice-slide" data-background-image="assets/ai-choice-pillars.png" data-background-size="cover" data-background-position="center">
+            <h1 class="eyebrow">AI</h1>
+            <div class="choice-columns">
+              <div class="choice-panel blockers">
+                <h2>Blokátory</h2>
+                <ul>
+                  <li>Strach z neznámého a ztráty kontroly</li>
+                  <li>Nedůvěra, halucinace a obtížná ověřitelnost</li>
+                  <li>Neznalost a podcenění toho, co už umí</li>
+                  <li>Závislost, ztráta dovedností a pracovních míst</li>
+                  <li>Soukromí, bezpečnost, autorská práva</li>
+                  <li>Náklady, energie a dopad na prostředí</li>
+                </ul>
+              </div>
+              <div class="choice-panel accelerators">
+                <h2>Akcelerátory</h2>
+                <ul>
+                  <li>Ulehčení práce a násobení produktivity</li>
+                  <li>Rozšíření znalostí a větší hloubka porozumění</li>
+                  <li>Rychlé experimentování, výzkum a vývoj</li>
+                  <li>Více prostoru pro tvorbu a složité problémy</li>
+                  <li>Rychlejší zpětná vazba — a ano, i dopamin</li>
+                  <li>Schopnost dotáhnout víc věcí do výsledku</li>
+                </ul>
+              </div>
+            </div>
+            <aside class="notes">Čas: 35 s. Nečíst seznamy. Uznat, že rizika vlevo jsou skutečná: halucinace, bezpečnost, soukromí i ztráta dovedností. Provokativní pointa: můžeme je použít jako důvod stát, nebo jako problémy, které je třeba řešit. Přechod: „Ve Forrestu jsme se rozhodli odstranit co nejvíc překážek, aby lidé mohli udělat informovanou volbu.“</aside>
+          </section>
+
+          <section class="adoption-slide" data-background-image="assets/ai-augmented-human-lineage.png" data-background-size="cover" data-background-position="center">
+            <div class="adoption-copy">
+              <p class="eyebrow">Augmentace ve Forrestu</p>
+              <h2>AI je často osobní volba.<br>Naší rolí bylo odstranit překážky.</h2>
+              <p>Jsme firma o zhruba 50 lidech — a právě velikost nám dovolila podmínky změnit rychle a pro všechny.</p>
+              <div class="adoption-grid">
+                <div class="adoption-item"><strong>Předplatné</strong><br>pro všechny</div>
+                <div class="adoption-item"><strong>Otevřené účty</strong><br>OpenAI, ElevenLabs, …</div>
+                <div class="adoption-item"><strong>Vlastní hardware</strong><br>NVIDIA Spark, AMD Strix, open-weight modely</div>
+                <div class="adoption-item"><strong>Školení</strong><br>Petr Soukup / <a href="https://www.souki.cz/">Souki.cz</a></div>
+                <div class="adoption-item"><strong>Bezpečnostní guidelines</strong><br>co smí kam</div>
+                <div class="adoption-item"><strong>Sandbox <a href="https://github.com/lukashornych/hole">Hole</a></strong><br>pro bezpečnou práci s YOLO agenty</div>
+                <div class="adoption-item"><strong>GoTask</strong><br>pro snadný vývoj nad K8S platformou</div>
+                <div class="adoption-item"><strong>Secrets</strong><br>zrevidovaná a přísnější práce</div>
+                <div class="adoption-item"><strong>Claude Marketplace</strong><br>vlastní interní nabídka</div>
+                <div class="adoption-item"><strong>Sdílení</strong><br>pravidelná setkání, tipy, zkušenosti</div>
+                <div class="adoption-item"><strong>Timeline</strong><br>postupně od února 2026</div>
+              </div>
+            </div>
+            <aside class="notes">Čas: 35 s. Nečíst jedenáct položek. Seskupit je do čtyř oblastí: přístup k nástrojům, vzdělání, bezpečné prostředí a sdílení zkušeností. Cílem nebylo lidi tlačit do AI, ale odstranit praktické, finanční a bezpečnostní bariéry. Svobodná volba je skutečná teprve tehdy, když jsou podmínky férové. Přechod: „Bariéry jsme odstranit dokázali. Důsledky ne.“</aside>
+          </section>
+
+          <section class="adoption-slide" data-background-image="assets/ai-augmented-human-lineage-reality.png" data-background-size="cover" data-background-position="center">
+            <div class="adoption-copy">
+              <p class="eyebrow">Realita změny</p>
+              <h2>Odstranili jsme bariéry.<br>Neodstranili jsme důsledky.</h2>
+              <ul class="reality-list">
+                <li>Někteří z nás i tak odešli — AI prostě není pro každého.</li>
+                <li>Nové lidi nenabíráme: s menším počtem zvládáme víc práce.</li>
+                <li>Zákazníci AI očekávají a tlačí na nižší ceny i sazby.</li>
+                <li>Zákazníci chtějí řadu věcí realizovat sami — a nechceme jim stát v cestě.</li>
+                <li>Všechno se děje neuvěřitelně rychle.</li>
+              </ul>
+            </div>
+            <aside class="notes">Čas: 45 s. Zpomalit; tohle je hlavní lidský slide. Nečíst mechanicky, ale jednotlivé důsledky nechat dopadnout. Není to oslava ani strašení: někteří odešli, nenabíráme, zákazníci tlačí na cenu a část práce si chtějí dělat sami. Nic z toho nevysvětlovat pryč ani neuhlazovat. Přechod: „Teď šest konkrétních věcí, na kterých jsem si tu změnu osahal.“</aside>
+          </section>
+        </section>
+
+        <section>
+          <section class="case-study-slide debugger-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="debugger-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 01</p>
+                <h2><a href="https://github.com/FgForrest/mcp-jdwp-java">Java Debugger MCP</a></h2>
+                <p class="case-metric">IntelliJ IDEA debugger za víkend</p>
+                <p class="case-detail">Můj osobní otvírák: agent konečně nečte jen logy a stacktrace — dívá se přímo do běžící JVM.</p>
+                <p class="debugger-capabilities"><strong>47 nástrojů:</strong> stav JVM · breakpointy a watchpointy · evaluace Java výrazů · změna hodnot za běhu · logpointy · vlákna a deadlocky</p>
+                <blockquote class="debugger-quote">„Mám jen matné tušení, co a jak to dělá, ale používám to přes půl roku a funguje to báječně.“<cite>Nejmenovaný vývojář FG Forrest</cite></blockquote>
+              </div>
+              <figure class="debugger-demo">
+                <img src="assets/intellij-set-value.gif" alt="" />
+                <figcaption>IntelliJ IDEA: změna hodnoty za běhu — stejný princip dostává agent přes MCP.</figcaption>
+              </figure>
+            </div>
+            <aside class="notes">Čas: 40 s. První ukázka má změnit představu o agentovi: už nečte jen zdroják, logy a stacktrace, ale může se dívat přímo do běžící JVM. Vypíchnout „za víkend“; 47 nástrojů nečíst. Není to náhrada IDE, ale nový kanál pozorování systému. Citát použít jen jako rychlou lidskou tečku. Přechod: „Nemění se jen schopnosti nástrojů. Mění se ekonomika build versus buy.“</aside>
+          </section>
+
+          <section class="case-study-slide resource-guru-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="resource-guru-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 02</p>
+                <h2><a href="https://resourceguruapp.com/">Resource Guru</a></h2>
+                <p class="case-metric">7 let · ~100 tisíc Kč ročně<br>→ náhrada za 4 hodiny</p>
+                <p class="case-detail">Plánování lidí a projektů, kapacity a vytížení, Gantt, absence, timesheety, rozpočty, reporty a integrace.</p>
+                <p class="resource-guru-features"><strong>Další 4 hodiny:</strong> integrace na naše systémy — tam, kde externí nástroj nikdy sahat neuměl.</p>
+                <blockquote class="case-quote">„Kluci, tohle se mi líbí. Pokračujte!“<cite>Radovan Jelen, CEO</cite></blockquote>
+              </div>
+              <div class="resource-guru-shots">
+                <figure class="resource-guru-shot"><img src="assets/resource-guru-capacity.png" alt="Resource Guru: heatmapa kapacit a vytížení lidí" /><figcaption>Kapacity, vytížení a konflikty</figcaption></figure>
+                <figure class="resource-guru-shot"><img src="assets/resource-guru-gantt.png" alt="Resource Guru: Ganttův plán projektu" /><figcaption>Plán projektů a závislostí</figcaption></figure>
+              </div>
+            </div>
+            <aside class="notes">Čas: 50 s. Resource Guru jsme používali sedm let a stálo nás zhruba 100 tisíc Kč ročně. Za čtyři hodiny jsme pokryli asi 80 % našich skutečných potřeb; za další čtyři hodiny jsme přidali část zbývajících 20 % — integrace na interní systémy, které nám externí SaaS nikdy dodat nemohl. Netvrdit plnou produktovou paritu; pointa je, že pro nás už je náhrada reálná a ekonomika vlastního řešení se dramaticky změnila. Přechod: „A stejné zrychlení lze použít i proti jedné z největších překážek: bezpečnosti.“</aside>
+          </section>
+
+          <section class="case-study-slide hole-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="hole-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 03</p>
+                <h2><a href="https://github.com/lukashornych/hole">Díra</a></h2>
+                <p class="case-metric">Izolovaný agent v Dockeru — jednotky týdnů práce</p>
+                <p class="case-detail">CLI pro spuštění Claude Code, Codexu či Gemini v sandboxu: projekt má k dispozici, hostitele ne.</p>
+                <p class="hole-safety"><strong>Bezpečnostní základ:</strong> síťový gateway <em>default deny</em> · skryté soubory jako <code>.env</code> · non-root kontejner · po skončení vše zmizí.</p>
+                <blockquote class="case-quote">„Na projekt vykopaný za pár dní je Díra nepříjemně blízko Docker Sandboxes.“<cite>ChatGPT 😉</cite></blockquote>
+              </div>
+              <div class="hole-terminal-wrap">
+                <figure class="hole-terminal"><img src="assets/hole-bypass-terminal.png" alt="Terminál Claude Code se zvýrazněným režimem bypass permissions" /></figure>
+                <div class="hole-yolo-zoom" aria-label="Zvětšený režim bypass permissions, tedy YOLO mód"><img src="assets/hole-bypass-terminal.png" alt="" /></div>
+              </div>
+            </div>
+            <aside class="notes">Čas: 40 s. Vrátit se k bezpečnostnímu blockeru z první poloviny talku. Hole pouští agenty v samostatném Docker sandboxu, který po doběhu zmizí; síť jde přes allowlist gateway a citlivé soubory lze skrýt. Nečíst celý bezpečnostní základ. Pointa není nahradit Docker, ale ukázat, že během jednotek týdnů lze postavit cílenou infrastrukturu pro bezpečný YOLO režim. Přechod: „Další dvě ukázky jsou o tom, jak rychle si dnes můžeme postavit vlastní workflow.“</aside>
+          </section>
+
+          <section class="case-study-slide riffado-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="riffado-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 04</p>
+                <h2><a href="https://riffado.com/">Riffado</a></h2>
+                <p class="case-metric">Privátní ekosystém nad Plaud — vyšší jednotky dní</p>
+                <p class="case-detail">Open-source základ pro synchronizaci rekordéru, přepis, vyhledávání, shrnutí a exporty. Vlastní provoz, vlastní data, vlastní volba AI.</p>
+                <ul class="riffado-features">
+                  <li>Plaud + nahrávání online meetingů</li>
+                  <li>ElevenLabs a Speechmatics</li>
+                  <li>Claude a Codex pro zpracování</li>
+                  <li>Export na Google Drive</li>
+                  <li>Knowledge base nad záznamy</li>
+                  <li>Automatické rozpoznání řečníků</li>
+                </ul>
+                <blockquote class="case-quote">„Už nikdy nechci psát žádný záznam z jednání.“<cite>Novoj, Team Lead, FG Forrest</cite></blockquote>
+              </div>
+              <figure class="riffado-dashboard"><img src="assets/riffado-dashboard.png" alt="Riffado: přepis nahrávky, rozpoznaní řečníci a souhrn" /></figure>
+            </div>
+            <aside class="notes">Čas: 30 s. Volitelný slide — při skluzu přeskočit jako první. Říct pouze: z open-source základu jsme za vyšší jednotky dní udělali vlastní workflow pro fyzické i online nahrávky, přepis, shrnutí, vyhledávání a export. Seznam providerů nečíst. Pointa není levnější přepis, ale kontrola nad workflow a citlivým interním know-how. Přechod: „A podobně jsme propojili i informace rozptýlené po celé firmě.“</aside>
+          </section>
+
+          <section class="case-study-slide claude-chat-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="claude-chat-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 05</p>
+                <h2>Claude Chat</h2>
+                <p class="case-metric">Claude vždy po ruce s téměř všemi informacemi z firmy<br>→ jednotky týdnů práce</p>
+                <p class="case-detail">Bot integrovaný do Mattermostu. Každý se může zeptat — a odpověď hledá v kontextu, který byl dosud roztříštěný po firmě.</p>
+                <ul class="claude-chat-features">
+                  <li>interně veřejné informace a zdrojové kódy</li>
+                  <li>metriky, logy a Betterstack</li>
+                  <li>historie komunikace a zápisy ze schůzek</li>
+                  <li>firemní ERP a Google Analytics</li>
+                </ul>
+                <p class="claude-chat-credits"><strong>Credits:</strong> Anthropic · Souki.cz</p>
+                <blockquote class="case-quote claude-chat-quote">„Máme HEX. Jen bez mraveniště — a s Mattermostem.“<cite>Ponder Stibbons, Neviditelná univerzita · volná parafráze</cite></blockquote>
+              </div>
+              <figure class="claude-chat-shot"><img src="assets/claude-chat.png" alt="Claude Chat odpovídá nad firemním kontextem" /><figcaption>Claude Chat: odpověď nad propojeným firemním kontextem</figcaption></figure>
+            </div>
+            <aside class="notes">Čas: 30 s. Volitelný slide — při větším skluzu přeskočit spolu s Riffadem. Claude Chat propojuje veřejné interní informace, kód, logy, schůzky, ERP a analytiku do rozhovoru v Mattermostu. Nečíst zdroje a nevysvětlovat technologii. Není to zdroj absolutní pravdy, ale rychlý orientační bod a cesta k ověření. Přechod: „Poslední příklad je pro mě nejnepříjemnější, protože sahá na samotný základ našeho byznysu.“</aside>
+          </section>
+
+          <section class="case-study-slide shop-slide" data-background-image="assets/market-funnel-background.png" data-background-size="cover" data-background-position="center">
+            <div class="shop-layout">
+              <div class="case-study-card">
+                <p class="eyebrow">Klíčové osobní zkušenosti · 06</p>
+                <h2>E-shop nad evitaDB</h2>
+                <p class="case-metric">15 let vývoje a zkušeností → týden práce</p>
+                <p class="case-detail">Storefront i administrační rozhraní: katalog, filtry, ceny, košík, objednávky a publikace obsahu nad evitaDB.</p>
+                <p class="shop-caveat"><strong>Samozřejmě:</strong> ještě není hotovo. Chce to došlechtit, umět provozovat a převzít za to odpovědnost. Ale výchozí cena se radikálně změnila.</p>
+                <div class="shop-quote-stage">
+                  <blockquote class="case-quote shop-original">„Máte sklep? A mohla bych ho vidět?“<cite>Anežka Jechová, <em>Kulový blesk</em> (1978)</cite></blockquote>
+                  <blockquote class="case-quote shop-paraphrase fragment" data-fragment-index="1">„Zkusili jste si, za jak dlouho AI replikuje váš byznys?“<cite>Anežka Jechová, <em>Kulový blesk</em> (1978) — parafráze</cite></blockquote>
+                </div>
+              </div>
+              <div class="shop-shots">
+                <figure class="shop-shot"><img src="assets/shop-storefront.png" alt="Ukázka storefrontu e-shopu" /><figcaption>Storefront: katalog, filtry, ceny a košík</figcaption></figure>
+                <figure class="shop-shot"><img src="assets/shop-administration.png" alt="Ukázka administrace e-shopu" /><figcaption>Administrace: katalog a publikace</figcaption></figure>
+              </div>
+            </div>
+            <aside class="notes">Čas: 55 s. Tohle bolí nejvíc. Nejdřív říct caveat: týden práce nenahrazuje patnáct let doménových znalostí, rozvoje produktu ani provozu. Pak pointa: za týden jsme ale zhmotnili velkou část funkčního základu, který dřív působil nedostupně. Odkrýt parafrázi a zakončit přesně otázkou: „Zkusili jste si, za jak dlouho AI replikuje váš byznys?“ Po otázce dvě sekundy mlčet a přejít na závěr.</aside>
+          </section>
+        </section>
+
+        <section class="center closing-slide" data-background-image="assets/closing-civilization-transition-background.png" data-background-size="cover" data-background-position="center">
+          <p class="eyebrow">Závěr</p>
+          <blockquote class="closing-quote">„Svět se mění: cítím to ve vodě, v zemi a ve vzduchu.“<cite>J. R. R. Tolkien, <em>Návrat krále</em> · Stromovous</cite></blockquote>
+          <p class="closing-afterword">Svět už nikdy nebude takový, jaký jste znali.</p>
+          <p class="closing-bio"><strong>Jan Novotný · @Novoj</strong><br>Hacker, Speaker, Father, Trainer · Team Lead, FG Forrest</p>
+          <aside class="notes">Čas: 25 s. Nepřidávat nový argument a nečíst bio. Citát nechat zaznít jako ozvěnu titulku. Poslední věta: „Změna už proběhla. Otázka není, jestli se jí vyhneme, ale co s ní uděláme.“ Poděkovat a skončit.</aside>
+        </section>
+      </div>
+    </div>
+    <script src="../dist/reveal.js"></script>
+    <script src="../dist/plugin/notes.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        transition: 'fade',
+        backgroundTransition: 'fade',
+        plugins: [ RevealNotes ]
+      });
+
+    </script>
+  </body>
+</html>
